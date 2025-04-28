@@ -1,0 +1,321 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.digital-time-boxes {
+  display: flex;
+  justify-content: space-around;
+  gap: 25px;
+
+}
+
+
+
+
+
+.clock {
+  position: relative;
+  left: -20px;
+  margin: auto;
+  width: 440px;
+  /* Adjust to your desired size */
+  height: 440px;
+  /* Adjust to your desired size */
+}
+
+.suryoday {
+  position: relative;
+  right: 10%;
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.suryast {
+  position: relative;
+  left: 50%;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+
+.clock-background {
+  width: 550px;
+  height: 550px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.clockcenter {
+  /* width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 265px;
+  left: 377px; */
+  width: 14%;
+  height: 31%;
+  position: relative;
+  top: 20%;
+  left: 5%; 
+ 
+}
+.inner-clock-background {
+  width: 80%;
+  /* Adjust size to fit inside the clock */
+  height: auto;
+  position: absolute;
+  bottom: 1%;
+
+  top: 15%;
+  /* Adjust position as necessary */
+  left: 13%;
+  /* Adjust position as necessary */
+}
+
+.dial {
+  position: absolute;
+  bottom: 16%;
+  left: 54%;
+  
+  width: 2px;
+  /* Adjust the width of the dials */
+  height: 130px;
+  /* Adjust the height of the dials */
+  background-color: rgb(114, 108, 31);
+  /* Dial color */
+  transform-origin: bottom;
+  /* Pivot point for rotation */
+  /*transition: transform 0.01s ease-in-out; /* Smooth rotation transition */
+  transition: all 0.01s linear;
+}
+/* .ghatika {
+  background-color: purple;
+   height: 70px;
+  position: relative;
+  bottom: -243px;
+
+  width: 5px;
+  border: 4px solid white; 
+}  */
+
+.taskata {
+  height: 25px;
+  width: 15px;
+  bottom: -203px;
+  position: absolute;
+   top: -10%; 
+  /* Adjust position as necessary */
+   left: 8%; 
+  /*Adjust position as necessary */
+  
+  
+}
+.minkata {
+  height: 10px;
+  width: 8px;
+  position: absolute;
+   top: 2%; 
+  /* Adjust position as necessary */
+   left: 0%; 
+  /*Adjust position as necessary */
+  
+  
+}
+.table.tithitable td {
+  text-align: left;
+}
+
+.table.indoved td,
+th {
+  text-align: left;
+}
+
+.pal {
+  background-color: rgb(46, 6, 46);
+  width: 8px;
+  border: 2px solid rgb(255, 255, 219);
+
+}
+
+.vipal {
+width: 3px;
+  background-color: rgb(9, 9, 15);
+  border: 1px solid rgb(134, 74, 74);
+  transition: 0.001s ease-out;
+}
+
+
+/* General styles for the table container */
+
+
+/* Styling the table header */
+
+.table thead th {
+  background-color: purple;
+  color: white;
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.table {
+  border: 2px solid purple;
+  background-color: purple;
+  color: white;
+}
+/* tithitable */
+
+
+
+/* Ensure the tables stack on smaller screens */
+@media (max-width: 576px) {
+  .d-flex {
+    flex-direction: column;
+    /* Stack the tables vertically on small screens */
+  }
+}
+
+.card {
+  border-radius: 8px;
+}
+
+.table th,
+td {
+  text-align: center;
+  font-weight: bold;
+}
+
+.div-ved {
+  position: relative;
+  right: 2px;
+  margin-top: 1px;
+  width: 48.5%;
+  border-radius: 20px purple;
+
+}
+
+.div-ved th,
+td {
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+.div-ind th,
+td {
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+.div-ind {
+  width: 48.5%;
+  position: relative;
+  right: -3px;
+  padding: 1px;
+  border-radius: 2px purple;
+}
+
+/* Ensure the parent div and table take full width */
+
+
+
+
+.table.tithitable td {
+  background-color: purple;
+  color: white;
+  word-wrap:normal;
+}
+.tithitd
+
+.custom-border{
+  border-bottom: solid 20px white;
+  margin-bottom: 10px;
+}
+
+/* Remove any margins and padding on body and html */
+html,
+body {
+  width: 100%;
+  margin: 0;
+padding:0
+}
+
+
+.adv {
+  width: 100%;
+margin-top: -2px;
+  padding: 20px;
+
+}
+
+.notification {
+  width: 100%;
+  color: white;
+margin-top: -15px;
+  padding: 10px
+}
+
+.vedind {
+  margin-top: 20px;
+}
+
+.timeinfo {
+  width: 88%;
+  /* position: relative;
+    left:12px */
+}
+
+.suryoast {
+  margin-top: 5px;
+  width: 80%;
+  margin: auto;
+}
+
+
+h3 {
+  font-weight: bolder;
+
+}
+
+.indvedgreg td,th{
+font-size: 1.5rem !important;
+border: 2px solid black;
+}
+
+.indvedgreg{
+  margin-top: auto;
+  height: 250px;
+
+}
+.tithivalue{
+  background-color: purple;
+  color:white;
+  padding:4px;
+  border-radius: 5px;
+  
+}
+.tithitable{
+  margin-top: -15px;
+}
+
+.vedind{
+  margin-top: 2px;
+}
+
+.text-dark{
+  border: none;
+}
+/* .indvedgreg */
+/* .custom-border{} */

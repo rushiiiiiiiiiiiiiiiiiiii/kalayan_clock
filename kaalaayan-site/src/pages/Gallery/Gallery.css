@@ -1,0 +1,39 @@
+/* Gallery.css */
+
+.gallery-page {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    min-height: 100vh;
+    padding: 6rem 2rem;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .gallery-page h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #38bdf8; /* Light blue */
+  }
+  
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .gallery-grid img {
+    width: 100%;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .gallery-grid img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(56, 189, 248, 0.4);
+  }
+  
