@@ -11,7 +11,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://192.168.0.108:5100/Tv_login", {
+      const response = await fetch(process.env.REACT_APP_API_KEY+"/Tv_login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -46,6 +46,7 @@ import React, { useEffect, useState } from "react";
 
 const LocationFetcher = () => {
   const [location, setLocation] = useState("Fetching location...");
+  const [long,setlong]=useState()
   const apiKey = "fbec5f14009e46df8f851d440c4c9e83";
 
   useEffect(() => {
