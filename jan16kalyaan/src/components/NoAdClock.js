@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../css/Clock1.css'; // Assuming this file exists for styling
+import '../css/Clock2.css'; // Assuming this file exists for styling
 import clockImage from '../assets/images/clock.png'; // Update the path accordingly
 import qrcode from '../assets/images/qrcode.svg'
 import innerClockImage from '../assets/images/D1.png'; // Update the path accordingly
@@ -16,7 +16,7 @@ import dialpositioner from './dialposition.js';
 import { useSelector } from 'react-redux';
 //import vedicdatefunction from '../components/dategiver.js';
 
-const Clock = () => {
+const NoAdClock = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notify, stenotify] = useState()
   const [data, setadata] = useState([])
@@ -476,5 +476,5 @@ const Clock = () => {
   );
 };
 // C:\Users\Acer\Downloads\kalayan28\backend\uploads\mediaFile-1730725252308.jpeg
-export default Clock;
+export default NoAdClock;
 

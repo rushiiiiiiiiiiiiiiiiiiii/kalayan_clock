@@ -84,8 +84,8 @@ const LocationFetcher = () => {
 
   return (
     <div>
-      <h2>Your Location:</h2>
-      <p>{location}</p>
+      {/* <h2>Your Location:</h2> */}
+      {/* <p>{location}</p> */}
     </div>
   );
 };
