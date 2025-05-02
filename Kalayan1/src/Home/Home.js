@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import Clock from '../components/Clock1'
 import Location from '../components/Loaction';
 import { useSelector } from 'react-redux';
-
+import NoAdClock from '../components/NoAdClock';
 const Home = () => {
   const theme = useSelector((state) => state.theme.theme)
   const id = sessionStorage.getItem("userid");
@@ -25,7 +24,7 @@ const Home = () => {
   useEffect(() => { console.log(theme) }, [theme])
   return (
     <div className={`${theme == "light" ? "bg-gray-900" : "bg-white"}`}>
-      <Clock />
+      <NoAdClock/>
       <Location />
     </div>
   )

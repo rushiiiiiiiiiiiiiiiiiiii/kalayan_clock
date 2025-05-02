@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Test Route
 app.get("/", (req, res) => {
-  res.send("Server is running...");
+  res.send("Server is running...")
 });
 // app.get("/get-image", (req, res) => {
 //     const imagePath = path.join(__dirname+"/uploads/1740654788944-AVLogo.jpg");
@@ -27,6 +27,6 @@ app.get("/", (req, res) => {
 //   });
   
 // Start Server
-app.listen(PORT,'192.168.0.111',() => {
-  console.log(`Server is running on http://192.168.0.111:${PORT}`)
+app.listen(PORT,'192.168.0.108',() => {
+  console.log(`Server is running on http://192.168.0.108:${PORT}`);
 })

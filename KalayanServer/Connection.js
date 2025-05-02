@@ -12,10 +12,9 @@ conn.connect(function (err){
     else{
         console.log("Connection successfull")
     }
-})
+});
 module.exports=conn
 
-const mysql = require('mysql');
 
 // const conn = mysql.createPool({
 //     host:"sg2nlmysql23plsk.secureserver.net",
