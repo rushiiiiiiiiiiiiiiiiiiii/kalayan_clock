@@ -263,41 +263,46 @@ router.post("/Upload_Plan", async (req, res) => {
 })
 router.post("/uploadCSV", (req, res) => {
     const data = req.body.data;
-
+  
+    if (!Array.isArray(data) || data.length === 0) {
+      return res.status(400).json({ error: "No data received" });
+    }
+  
     const values = data.map((item) => [
-        item['Gregorian Date']?.replace(/"/g, ''),
-        item['Indian Date'],
-        item['Vedic Date']?.replace(/"/g, ''),
-        item['वार'],
-        item['पूर्णिमान्त तिथी'],
-        item['आमान्त तिथी'],
-        item['नक्षत्र'],
-        item['करण'],
-        item['योग'],
-        item['अयन'],
-        item['ऋतू'],
-        item['suryoday'],
-        item['suryasta'],
+      item['Gregorian Date']?.replace(/"/g, '') || null,
+      item['Indian Date'] || null,
+      item['Vedic Date']?.replace(/"/g, '') || null,
+      item['वार'] || null,
+      item['पूर्णिमान्त तिथी'] || null,
+      item['आमान्त तिथी'] || null,
+      item['नक्षत्र'] || null,
+      item['योग'] || null,
+      item['दिवा करण'] || null,
+      item['रात्री करण'] || null,
+      item['suryoday'] || null,
+      item['suryasta'] || null,
+      item['दिनविशेष ']?.trim() || null,
+      item['अयन'] || null,
+      item['ऋतू'] || null
     ]);
-
+  
     const sql = `
-    INSERT INTO vedic_calender_marathi 
-    (
-      gregorian_date, indian_date, vedic_date, war, 
-      purnimant_tithi, amant_tithi, nakshatra, karan, yog, 
-      ayan, Rutu, suryoday, suryasta
-    ) 
-    VALUES ?
-  `
-
+      INSERT INTO vedic_calender_marathi (
+        gregorian_date, indian_date, vedic_date, war, 
+        purnimant_tithi, amant_tithi, nakshatra, yog,
+        DivaKaran, RatriKaran, suryoday, suryasta, 
+        Dinvishesh, ayan, Rutu
+      ) VALUES ?
+    `;
+  
     conn.query(sql, [values], (err, result) => {
-        if (err) {
-            console.error('Insert error:', err);
-            return res.status(500).json({ error: 'Database insert failed' });
-        }
-        res.status(200).json({ message: 'Data Uploaded successfully', result });
+      if (err) {
+        console.error("Insert error:", err);
+        return res.status(500).json({ error: "Database insert failed" });
+      }
+      res.status(200).json({ message: "Data Uploaded successfully", result });
     });
-});
+  });
 router.get("/status/:id", async (req, res) => {
     const id = req.params.id;
     const sql = "UPDATE user SET status = 'Active' WHERE Tv_id = ?;"

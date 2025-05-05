@@ -13,11 +13,13 @@ const ExcelUpload = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target.result;
+
       const rows = text.split("\n").filter(row => row.trim() !== "");
-      const headers = rows[0].split(",").map((h) => h.trim());
+      const delimiter = text.includes("\t") ? "\t" : ","; // Detect tab or comma
+      const headers = rows[0].split(delimiter).map(h => h.trim());
 
       const data = rows.slice(1).map((row) => {
-        const values = row.split(",");
+        const values = row.split(delimiter);
         const obj = {};
         headers.forEach((header, i) => {
           obj[header] = values[i]?.trim();
@@ -26,7 +28,7 @@ const ExcelUpload = () => {
       });
 
       setCsvData(data);
-      console.log("Parsed CSV Data:", data);
+      console.log("Parsed Data:", data);
     };
 
     reader.readAsText(file);
@@ -34,7 +36,7 @@ const ExcelUpload = () => {
 
   const handleUpload = async () => {
     if (!csvData.length) {
-      alert("Please select a CSV file first.");
+      alert("Please select a CSV/TSV file first.");
       return;
     }
 
@@ -64,10 +66,10 @@ const ExcelUpload = () => {
   return (
     <div className="w-full items-center flex flex-col p-6">
       <div className={styles.uploadCard}>
-        <h3 className="text-xl font-semibold mb-4">Upload CSV File</h3>
+        <h3 className="text-xl font-semibold mb-4">Upload CSV/TSV File</h3>
         <input
           type="file"
-          accept=".csv"
+          accept=".csv,.tsv,.txt"
           onChange={handleFileChange}
           className="mb-4"
         />
@@ -84,4 +86,3 @@ const ExcelUpload = () => {
 };
 
 export default ExcelUpload;
- 
