@@ -6,8 +6,8 @@ import klogo from '../assets/images/klogo.jpeg'
 import qrcode from "../assets/images/qrcode.svg";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
 import axios, { getAdapter } from "axios";
-import taaskata from "../assets/images/taskata24.png";
-import minkata from "../assets/images/minkata.png";
+import taaskata from "../assets/images/Hour_Hand.png";
+import minkata from "../assets/images/Minute_Hand.png";
 import spotImage from "../assets/images/spot.png";
 import datefunction from "../components/dategiver.js";
 import converttime from "../components/timeconverter.js";
@@ -295,11 +295,11 @@ const NoAdClock = () => {
   </div>
 </div>
 
-<div style={{position:"absolute",top:"100px" ,left:"5px"}}>
+<div style={{position:"absolute",top:"100px" ,left:"5px"}} className={`${theme == "light" ? "text-gray-100" : "text-gray-700"} font-bold`}>
 अयन :  उत्तरायण
 </div>
 
-<div style={{position:"absolute", top:"100px" ,right:"5px"}}>
+<div style={{position:"absolute", top:"100px" ,right:"5px"}}  className={`${theme == "light" ? "text-gray-100" : "text-gray-700"} font-bold`}>
 ऋतु : ग्रीष्म
 </div>
 <br /><br />
@@ -385,9 +385,9 @@ const NoAdClock = () => {
 
         <div className="container-fluid mb-2 mt-[-80px]">
           <div className="grid grid-cols-2 gap-4">
-            <div className="font-bold text-2xl">सूर्योदय:{data[0]?.Suryoday &&  data[0]?.Suryoday }</div>
-            <div className="flex justify-end font-bold text-2xl">
-              सूर्यास्त:{data[0]?.Suryasta &&   data[0]?.Suryasta}
+            <div className={`font-bold text-2xl ${theme== "light" ? "text-gray-100" : "text-gray-700"}`}>सूर्योदय:-{data[0]?.Suryoday &&  data[0]?.Suryoday }</div>
+            <div className={`flex justify-end font-bold text-2xl  ${theme== "light" ? "text-gray-100" : "text-gray-700"}`}>
+              सूर्यास्त:-{data[0]?.Suryasta &&   data[0]?.Suryasta}
             </div>
           </div>
         </div>
@@ -395,7 +395,7 @@ const NoAdClock = () => {
         {/* Time Tables Section */}
 
         {/* First Table Section */}
-        <div className="d-flex vedind gap-1 justify-content-between w-full h-[211px]">
+        <div className="d-flex vedind gap-1 justify-content-between w-full h-[177px]">
           <table className="table">
             <thead className="custom-header">
               <tr>
@@ -412,6 +412,7 @@ const NoAdClock = () => {
                 <td>{palCount < 10 ? "0" + palCount : palCount}</td>
                 <td>{vipalCount < 10 ? "0" + vipalCount : vipalCount}</td>
               </tr>
+
               <tr className="text-dark">
                 <td>Loc</td>
                 <td>{ghatika_loc < 10 ? "0" + ghatika_loc : ghatika_loc}</td>
@@ -456,49 +457,49 @@ const NoAdClock = () => {
 
         {/* Tithi Table */}
         <table className="table tithitable bg-[light-purple] text-white shadow-lg rounded-lg mt-[-13px]">
-          <tbody>
+          <tbody widrh>
             <tr className="custom-border">
               <td className="tithitd py-3">
-                <strong>पूर्णिमांत तिथी:</strong>
-                <span className="tithivalue">
+                <strong className="!text-[1.2rem]">पूर्णिमांत तिथी:</strong>
+                <span className="tithivalue !text-[1.2rem]">
                   {data.length > 0 ? data[0].Purnimant_tithi : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
-                <strong>आमांत तिथी:</strong>
-                <span className="tithivalue">
+                <strong className="!text-[1.2rem]">आमांत तिथी:</strong>
+                <span className="tithivalue !text-[1.2rem]">
                   {data.length > 0 ? data[0].Amant_tithi : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
-                <strong>नक्षत्र:</strong>
-                <span className="tithivalue">
+                <strong className="!text-[1.2rem]">नक्षत्र:</strong>
+                <span className="tithivalue !text-[1.2rem]">
                   {data.length > 0 ? data[0].Nakshatra : ""}
                 </span>
               </td>
             </tr>
             <tr className="custom-border">
               <td className="tithitd py-3">
-                <strong>दिनकरण:</strong>
-                <span className="tithivalue">
+                <strong className="!text-[1.2rem]">दिनकरण:</strong>
+                <span className="tithivalue !text-[1.2rem]">
                   {data.length > 0 ? data[0].karan : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
-                <strong>रात्रीकरण:</strong>
-                <span className="tithivalue">
+                <strong className="!text-[1.2rem]">रात्रीकरण:</strong>
+                <span className="tithivalue !text-[1.2rem]">
                   {data.length > 0 ? data[0].karan : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
-                <strong>योग:</strong>
-                <span className="tithivalue">
+                <strong className="!text-[1.2rem]">योग:</strong>
+                <span className="tithivalue !text-[1.2rem]">
                   {data.length > 0 ? data[0].Yog : ""}
                 </span>
               </td>
             </tr>
             <tr className="custom-border w-full ">
-              <td className="py-3 tithivalue text-left">दिनविशेष</td>
+              <td className="py-3 tithivalue text-left !text-[1.3rem]">दिनविशेष:</td>
               <td></td>
               <td></td>
             </tr>
@@ -508,31 +509,29 @@ const NoAdClock = () => {
         {/* ind ved greg time section  */}
 
         <div className="d-flex justify-content-between qrindved w-full  mt-[-14px]">
-          <table className="table indvedgreg table-bordered table-striped table-hover max-h-[120px] m-auto">
+          <table className="table indvedgreg table-bordered table-striped table-hover max-h-[80px] m-auto">
             <tbody>
               <tr style={{ Height: "30px" }}>
-                <th className=" py-1">Vikram Samvat Date</th>
+                <th className="!text-[1.2rem]">Vikram Samvat Date</th>
                 <td>{commaSeparatedDate}</td>
               </tr>
               <tr style={{ Height: "30px" }}>
-                <th className=" py-1">Indian Date</th>
+                <th className="!text-[1.2rem]">Indian Date</th>
                 <td>{data.length > 0 ? data[0].Indian_date : ""}</td>
               </tr>
               <tr style={{ Height: "30px" }}>
-                <th className=" py-1">Vedic Date</th>
+                <th className="!text-[1.2rem]">Vedic Date</th>
                 <td>{data.length > 0 ? data[0].Vedic_date : ""}</td>
               </tr>
               <tr style={{ Height: "30px" }}>
-                <th className=" py-1">Greg. Date</th>
+                <th className="!text-[1.2rem]">Greg. Date</th>
                 <td>{commaSeparatedDate}</td>
               </tr>
             </tbody>
           </table>
 
           <div
-            className={`${
-              theme == "light" ? "" : "bg-gray-800"
-            }  h-[190px] m-auto`}
+            className={`bg-white h-[190px] m-auto`}
           >
             <img
               src={qrcode}

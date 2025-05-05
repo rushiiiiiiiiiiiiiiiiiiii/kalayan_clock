@@ -239,7 +239,7 @@ router.get('/image', (req, res) => {
     const query = 'SELECT * from bgimages'
     conn.query(query, (err, results) => {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: err.message })
         }
         if (results.length === 0) {
             return res.status(404).json({ message: 'Image not found' });

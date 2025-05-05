@@ -24,10 +24,10 @@
 .clock {
   position: relative;
   margin: auto;
-  width: 95vw;
-  max-width: 720px;
-  height: 95vw;
-  max-height: 720px;
+  width: 90vw;
+  max-width: 550px;
+  height: 90vw;
+  max-height: 550px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,18 +69,18 @@
 
 .taskata {
   height: 30px;
-  width: 18px;
+  width: 82px;
   position: absolute;
-  top: -10%;
-  left: 8%;
+  top: 0%;
+  left: 28px;
 }
 
 .minkata {
   height: 12px;
-  width: 9px;
+  width: 87px;
   position: absolute;
-  top: 7%;
-  left: -6px;
+  top: -7%;
+  left: -55px;
 }
 
 
@@ -154,7 +154,7 @@ td {
 
 .div-ind th,
 td {
-  font-size: 25px;
+  font-size: 1.3rem;
   text-transform: uppercase;
 }
 
@@ -204,7 +204,7 @@ body {
 
 
 .vedind table {
-  width: 100%;
+  width: 50%;
   border-collapse: collapse; /* Optional: makes borders and spacing tighter */
 }
 
@@ -232,12 +232,6 @@ body {
 h3 {
   font-weight: bolder;
 }
-
-.indvedgreg td,
-th {
-  font-size: 1.5rem !important;
-}
-
 .indvedgreg th {
   background-color: #cb8bcb;
   color: maroon; /* Optional: makes the text readable */

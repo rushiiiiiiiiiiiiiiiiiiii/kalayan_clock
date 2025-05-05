@@ -23,7 +23,7 @@ const Home = () => {
   }, [])
   useEffect(() => { console.log(theme) }, [theme])
   return (
-    <div className={`${theme == "light" ? "bg-gray-900" : "bg-white"}`}>
+    <div className={`${theme == "light" ? "bg-gray-900" : "bg-white"} h-[100vh]`}>
       <NoAdClock/>
       <Location />
     </div>

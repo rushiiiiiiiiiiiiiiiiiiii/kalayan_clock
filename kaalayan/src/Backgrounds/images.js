@@ -10,7 +10,7 @@ const ImageGallery = () => {
   // Fetch images from backend or storage
   const nav = useNavigate()
   const image = async () => {
-    const response = await fetch(process.env.REACT_APP_API_KEY+"/image")
+    const response = await fetch(process.env.REACT_APP_API_KEY+"image")
     const result = await response.json()
 
     setGetimg(result)
@@ -19,7 +19,7 @@ const ImageGallery = () => {
   }
   // Handle save button
   const handleSave = async (name) => {
-    localStorage.setItem("bg", `${process.env.REACT_APP_API_KEY}/uploads/${name}`)
+    localStorage.setItem("bg", `${process.env.REACT_APP_API_KEY}uploads/${name}`)
     nav("/")
   };
  
@@ -35,7 +35,7 @@ const ImageGallery = () => {
           getImg.map((name, id) => (
             <>
             <div>
-              <img src={`${process.env.REACT_APP_API_KEY}/uploads/${name.name}`} alt="err" className="w-full h-full object-contain" />
+              <img src={`${process.env.REACT_APP_API_KEY}uploads/${name.name}`} alt="err" className="w-full h-full object-contain" />
               <button
                 onClick={()=>handleSave(name.name)}
                 className="px-6 py-2 bg-blue-600 text-black  font-semibold rounded-lg hover:bg-blue-700 transition"
