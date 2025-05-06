@@ -296,11 +296,12 @@ const NoAdClock = () => {
 </div>
 
 <div style={{position:"absolute",top:"100px" ,left:"5px"}} className={`${theme == "light" ? "text-gray-100" : "text-gray-700"} font-bold`}>
-अयन :  उत्तरायण
+अयन : {data.length > 0 ? data[0].Ayan : ""}
+
 </div>
 
-<div style={{position:"absolute", top:"100px" ,right:"5px"}}  className={`${theme == "light" ? "text-gray-100" : "text-gray-700"} font-bold`}>
-ऋतु : ग्रीष्म
+<div style={{position:"absolute", top:"100px" ,right:"3%"}}  className={`${theme == "light" ? "text-gray-100" : "text-gray-700"} font-bold`}>
+ऋतु :  {data.length > 0 ? data[0].Rutu : ""}
 </div>
 <br /><br />
 
@@ -379,7 +380,7 @@ const NoAdClock = () => {
         <br />
 
         {/* Ayan Section */}
-        <section className="absolute top-[-23.9%] left-[2%]">
+        <section className="absolute top-[-19%] left-[2%]">
           <VerticalProgressBar />
         </section>
 
@@ -482,13 +483,13 @@ const NoAdClock = () => {
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">दिनकरण:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].karan : ""}
+                  {data.length > 0 ? data[0].DivaKaran : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">रात्रीकरण:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].karan : ""}
+                  {data.length > 0 ? data[0].RatriKaran : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
