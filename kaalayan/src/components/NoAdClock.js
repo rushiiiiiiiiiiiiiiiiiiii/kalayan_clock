@@ -6,8 +6,8 @@ import klogo from '../assets/images/klogo.jpeg'
 import qrcode from "../assets/images/qrcode.svg";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
 import axios, { getAdapter } from "axios";
-import taaskata from "../assets/images/Hour_Hand.png";
-import minkata from "../assets/images/Minute_Hand.png";
+import taaskata from "../assets/images/taskata24.png";
+import minkata from "../assets/images/minkata.png";
 import spotImage from "../assets/images/spot.png";
 import datefunction from "../components/dategiver.js";
 import converttime from "../components/timeconverter.js";
