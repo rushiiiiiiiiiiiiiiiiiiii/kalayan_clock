@@ -3,18 +3,17 @@ const conn=db.createConnection({
     host:"localhost",
     user:"root",
     password:"",
-    database:"Kalayan"
+    database:"Kalyan"
 })
 conn.connect(function (err){
     if(err){
-        console.log("somethingb wrong")
+        console.log("somethingb wrong",err)
     }
     else{
         console.log("Connection successfull")
     }
 });
 module.exports=conn
-
 
 // const conn = mysql.createPool({
 //     host:"sg2nlmysql23plsk.secureserver.net",

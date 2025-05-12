@@ -16,6 +16,17 @@ import adver from "../assets/images/vicco.jpg";
 import VerticalProgressBar from "./Progrressbar.js";
 import dialpositioner from "./dialposition.js";
 import { useSelector } from "react-redux";
+import EarthRotation from "../planets/EarthRotation.js";
+import JupiterRotation from "../planets/JupiterRotation.js";
+import KetuRotation from "../planets/KetuRotation.js";
+import MarsRotation from "../planets/MarsRotation.js";
+import RahuRotation from "../planets/RahuRotation.js";
+import MoonRotation from "../planets/MoonRotation.js";
+import NeptuneRotation from "../planets/NeptuneRotation.js";
+import UranusRotation from "../planets/UranusRotation.js";
+import VenusRotation from "../planets/VenusRotation.js";
+import SunRotation from "../planets/SunRotation.js";
+//import vedicdatefunction from '../components/dategiver.js';
 //import vedicdatefunction from '../components/dategiver.js';
 
 const NoAdClock = () => {
@@ -392,7 +403,16 @@ const NoAdClock = () => {
             </div>
           </div>
         </div>
-
+        <EarthRotation/>
+        <JupiterRotation/>
+        <KetuRotation/>
+        <MarsRotation/>
+        <MoonRotation/>
+        <RahuRotation/>
+        <NeptuneRotation/>
+        <SunRotation/>
+        <UranusRotation/>
+        <VenusRotation/>
         {/* Time Tables Section */}
 
         {/* First Table Section */}
