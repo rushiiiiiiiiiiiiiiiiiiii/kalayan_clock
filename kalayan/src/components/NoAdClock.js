@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../css/Clock3.css"; // Assuming this file exists for styling
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
 import planetRing from "../assets/images/planetring.png";
-import klogo from "../assets/images/klogo.jpeg";
+import klogo from "../assets/images/kalaayan-logo.png";
 import qrcode from "../assets/images/qrcode.svg";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
 import axios, { getAdapter } from "axios";
