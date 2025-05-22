@@ -10,7 +10,6 @@ const Home = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_KEY}status/${id}`);
       const data = await response.json();  // 👈 Parse the JSON response
-      console.log(data);
     } catch (err) {
       console.error("Error updating status:", err);
     }

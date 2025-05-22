@@ -78,45 +78,50 @@ const NoAdClock = () => {
     updateLanguage(); // Run on mountx`
   }, []);
 
-const getdata = async () => {
-  try {
-    const response = await fetch(apiKey + "get_data/"+localStorage.getItem("language"));
-    const result = await response.json();
-    
-    // Store in localStorage
-    localStorage.setItem('data', JSON.stringify(result));
-    const storedData = JSON.parse(localStorage.getItem('data'));
-    const currentDates = new Date(); // or new Date("2025-04-21")
-    const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
-    const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
-  const year = String(currentDates.getFullYear()).slice(-2); // Get last 2 digits of the year (e.g., '25')
+  const getdata = async () => {
+    try {
+      const response = await fetch(apiKey + "get_data/" + localStorage.getItem("language"));
+      const result = await response.json();
 
-  // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
-  const formatted = `${day}/${month}/${year}`;
-  const datas=storedData.filter((name)=>{
-    return name.Gregorian_date==formatted
-  })
-  setdata(datas);
-    // setdata(storedData)
-  } catch (error) {
-    console.log(error);
-  }
-};
+      // Store in localStorage
+      localStorage.setItem('data', JSON.stringify(result));
+      setdata(result[0])
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    setInterval(() => {
+      const storedData = JSON.parse(localStorage.getItem('data'));
+      const currentDates = new Date(); // or new Date("2025-04-21")
+      const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
+      const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
+      const year = String(currentDates.getFullYear()).slice(-2); // Get last 2 digits of the year (e.g., '25')
 
-const Notification = async () => {
-  try {
-    const response = await fetch(apiKey + "Get_notification");
-    const result = await response.json();
-    // setnotify(result[0]);
+      // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
+      const formatted = `${day}/${month}/${year}`;
+      const datas = storedData.filter((name) => {
+        return name.Gregorian_date == formatted
+      })
+      setdata(datas);
+      console.log(datas)
+    }, 3000);
 
-    // Store in localStorage
-    localStorage.setItem('notification', JSON.stringify(result[0]));
-    const storedNotification=JSON.parse(localStorage.getItem('notification'))  ;
-    setnotify(storedNotification[0])
-  } catch (error) {
-    console.log(error);
-  }
-};
+  }, [])
+  const Notification = async () => {
+    try {
+      const response = await fetch(apiKey + "Get_notification");
+      const result = await response.json();
+      // setnotify(result[0]);
+
+      // Store in localStorage
+      localStorage.setItem('notification', JSON.stringify(result[0]));
+      const storedNotification = JSON.parse(localStorage.getItem('notification'));
+      setnotify(storedNotification[0])
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
   useEffect(() => {
@@ -303,7 +308,7 @@ const Notification = async () => {
 
   //for planet selection
 
-    const [selectedPlanets, setSelectedPlanets] = useState(() => {
+  const [selectedPlanets, setSelectedPlanets] = useState(() => {
     const saved = localStorage.getItem("selectedPlanets");
     return saved ? JSON.parse(saved) : [];
   });
@@ -347,18 +352,16 @@ const Notification = async () => {
 
         <div
           style={{ position: "absolute", top: "100px", left: "5px" }}
-          className={`${
-            theme == "light" ? "text-gray-100" : "text-gray-700"
-          } font-bold`}
+          className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
+            } font-bold`}
         >
           अयन : {data.length > 0 ? data[0].Ayan : ""}
         </div>
 
         <div
           style={{ position: "absolute", top: "100px", right: "3%" }}
-          className={`${
-            theme == "light" ? "text-gray-100" : "text-gray-700"
-          } font-bold`}
+          className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
+            } font-bold`}
         >
           ऋतु : {data.length > 0 ? data[0].Rutu : ""}
         </div>
@@ -424,9 +427,8 @@ const Notification = async () => {
               <div
                 className="taskata"
                 style={{
-                  transform: `translate(-50%, 0%) rotate(${
-                    ghatikaRotation + 180
-                  }deg)`,
+                  transform: `translate(-50%, 0%) rotate(${ghatikaRotation + 180
+                    }deg)`,
                 }}
               >
                 <img src={taaskata} alt="Ghatika Hand" />
@@ -447,16 +449,14 @@ const Notification = async () => {
         <div className="container-fluid mb-2 mt-[-80px]">
           <div className="grid grid-cols-2 gap-4">
             <div
-              className={`font-bold text-2xl ${
-                theme == "light" ? "text-gray-100" : "text-gray-700"
-              }`}
+              className={`font-bold text-2xl ${theme == "light" ? "text-gray-100" : "text-gray-700"
+                }`}
             >
               सूर्योदय:-{data[0]?.Suryoday && data[0]?.Suryoday}
             </div>
             <div
-              className={`flex justify-end font-bold text-2xl  ${
-                theme == "light" ? "text-gray-100" : "text-gray-700"
-              }`}
+              className={`flex justify-end font-bold text-2xl  ${theme == "light" ? "text-gray-100" : "text-gray-700"
+                }`}
             >
               सूर्यास्त:-{data[0]?.Suryasta && data[0]?.Suryasta}
             </div>

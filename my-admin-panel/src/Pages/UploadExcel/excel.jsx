@@ -2,9 +2,39 @@ import React, { useState } from "react";
 import styles from "./ExcelUpload.module.css";
 import { API_ENDPOINTS } from "../../config";
 
+const translations = {
+  en: {
+    title: "Upload CSV/TSV File",
+    upload: "Upload",
+    selectFile: "Please select a CSV/TSV file first.",
+    success: "✅ Upload successful!",
+    fail: "❌ Upload failed.",
+    error: "⚠️ Error uploading data.",
+  },
+  hi: {
+    title: "CSV/TSV फ़ाइल अपलोड करें",
+    upload: "अपलोड करें",
+    selectFile: "कृपया पहले एक CSV/TSV फ़ाइल चुनें।",
+    success: "✅ सफलतापूर्वक अपलोड किया गया!",
+    fail: "❌ अपलोड विफल रहा।",
+    error: "⚠️ डेटा अपलोड करने में त्रुटि।",
+  },
+  mr: {
+    title: "CSV/TSV फाइल अपलोड करा",
+    upload: "अपलोड करा",
+    selectFile: "कृपया प्रथम CSV/TSV फाइल निवडा.",
+    success: "✅ यशस्वीरित्या अपलोड झाले!",
+    fail: "❌ अपलोड अयशस्वी.",
+    error: "⚠️ डेटा अपलोड करताना त्रुटी.",
+  },
+};
+
 const ExcelUpload = () => {
   const [csvData, setCsvData] = useState([]);
   const [msg, setMsg] = useState("");
+  const [language, setLanguage] = useState("en");
+
+  const t = translations[language]; // current language strings
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -15,7 +45,7 @@ const ExcelUpload = () => {
       const text = e.target.result;
 
       const rows = text.split("\n").filter(row => row.trim() !== "");
-      const delimiter = text.includes("\t") ? "\t" : ","; // Detect tab or comma
+      const delimiter = text.includes("\t") ? "\t" : ",";
       const headers = rows[0].split(delimiter).map(h => h.trim());
 
       const data = rows.slice(1).map((row) => {
@@ -36,7 +66,7 @@ const ExcelUpload = () => {
 
   const handleUpload = async () => {
     if (!csvData.length) {
-      alert("Please select a CSV/TSV file first.");
+      alert(t.selectFile);
       return;
     }
 
@@ -46,27 +76,37 @@ const ExcelUpload = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: csvData }),
+        body: JSON.stringify({ data: csvData,lan:language }),
       });
-      console.log(csvData)
+
       if (response.ok) {
         const result = await response.json();
-        console.log(result);
-        setMsg("✅ " + result.message);
+        setMsg("✅ " + result.message || t.success);
       } else {
         const errorData = await response.json();
-        setMsg("❌ " + (errorData.message || "Upload failed."));
+        setMsg("❌ " + (errorData.message || t.fail));
       }
     } catch (error) {
       console.error("Error uploading data:", error);
-      setMsg("⚠️ Error uploading data.");
+      setMsg(t.error);
     }
   };
 
   return (
     <div className="w-full items-center flex flex-col p-6">
+      <div className="mb-4">
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="mr">मराठी</option>
+        </select>
+      </div>
       <div className={styles.uploadCard}>
-        <h3 className="text-xl font-semibold mb-4">Upload CSV/TSV File</h3>
+        <h3 className="text-xl font-semibold mb-4">{t.title}</h3>
         <input
           type="file"
           accept=".csv,.tsv,.txt"
@@ -77,7 +117,7 @@ const ExcelUpload = () => {
           onClick={handleUpload}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
         >
-          Upload
+          {t.upload}
         </button>
       </div>
       {msg && <p className="mt-5 text-center text-sm">{msg}</p>}

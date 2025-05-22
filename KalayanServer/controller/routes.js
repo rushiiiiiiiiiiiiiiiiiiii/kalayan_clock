@@ -184,7 +184,7 @@ router.get("/get_data/:id", async (req, res) => {
       if (result.length > 0) {
         return res.status(200).json(result);
       }
-      if (result.length === 0) {
+      if (result.length === 0) {  
         console.warn("No matching record found for", formatted);
       }
       else {
@@ -373,8 +373,7 @@ router.post("/Upload_Plan", async (req, res) => {
 
 
 router.post("/uploadCSV", (req, res) => {
-  const data = req.body.data;
-
+  const {data,lan} = req.body;
   if (!Array.isArray(data) || data.length === 0) {
     return res.status(400).json({ error: "No data received" });
   }
@@ -399,7 +398,42 @@ router.post("/uploadCSV", (req, res) => {
     item["शक संवत"] || null,
   ]);
 
-  const sql = `
+  if(lan=="en"){
+      const sql = `
+      INSERT INTO vedic_calender_english (
+        gregorian_date, indian_date, vedic_date, war, 
+        purnimant_tithi, amant_tithi, nakshatra, yog,
+        DivaKaran, RatriKaran, suryoday, suryasta, 
+        Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
+      ) VALUES ?
+    `;
+     conn.query(sql, [values], (err, result) => {
+    if (err) {
+      console.error("Insert error:", err);
+      return res.status(500).json({ error: "Database insert failed" });
+    }
+    res.status(200).json({ message: "Data Uploaded successfully", result });
+  });
+  }
+  if(lan=="hi"){
+      const sql = `
+      INSERT INTO vedic_calender_hindi (
+        gregorian_date, indian_date, vedic_date, war, 
+        purnimant_tithi, amant_tithi, nakshatra, yog,
+        DivaKaran, RatriKaran, suryoday, suryasta, 
+        Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
+      ) VALUES ?
+    `;
+     conn.query(sql, [values], (err, result) => {
+    if (err) {
+      console.error("Insert error:", err);
+      return res.status(500).json({ error: "Database insert failed" });
+    }
+    res.status(200).json({ message: "Data Uploaded successfully", result });
+  })
+  }
+  if(lan=="mr"){
+      const sql = `
       INSERT INTO vedic_calender_marathi (
         gregorian_date, indian_date, vedic_date, war, 
         purnimant_tithi, amant_tithi, nakshatra, yog,
@@ -407,14 +441,24 @@ router.post("/uploadCSV", (req, res) => {
         Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
       ) VALUES ?
     `;
-
-  conn.query(sql, [values], (err, result) => {
+     conn.query(sql, [values], (err, result) => {
     if (err) {
       console.error("Insert error:", err);
       return res.status(500).json({ error: "Database insert failed" });
     }
     res.status(200).json({ message: "Data Uploaded successfully", result });
   });
+  }
+  // const sql = `
+  //     INSERT INTO vedic_calender_marathi (
+  //       gregorian_date, indian_date, vedic_date, war, 
+  //       purnimant_tithi, amant_tithi, nakshatra, yog,
+  //       DivaKaran, RatriKaran, suryoday, suryasta, 
+  //       Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
+  //     ) VALUES ?
+  //   `;
+
+ 
 });
 
 
