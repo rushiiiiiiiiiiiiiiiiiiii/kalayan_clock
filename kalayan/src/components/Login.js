@@ -22,8 +22,8 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
-        sessionStorage.setItem("userid", result.data.Tv_id);
-        console.log(sessionStorage.getItem("userid")); // Check if userid is stored correctly
+        localStorage.setItem("userid", result.data.Tv_id);
+        console.log(localStorage.getItem("userid")); // Check if userid is stored correctly
         window.location.href="/"; // Ensure navigate is working
 
       } else {

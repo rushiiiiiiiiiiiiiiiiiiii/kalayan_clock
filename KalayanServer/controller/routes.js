@@ -148,7 +148,7 @@ router.get("/get_data/:id", async (req, res) => {
   //   }
   // });
   if (id == "English") {
-    const sql = "SELECT * FROM vedic_calendar_english WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
+    const sql = "SELECT * FROM vedic_calender_english WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
     conn.query(sql, formatted, async (err, result) => {
       if (err) throw err;
       if (result.length > 0) {
@@ -229,6 +229,7 @@ router.post("/update_details", async (req, res) => {
     if (err) throw err;
     return res.json(result);
   });
+  
 });
 // router.post("/notification/:id", async (req, res) => {
 //     const { id } = req.params;
@@ -308,7 +309,7 @@ const storage = multer.diskStorage({
     const timestamp = Date.now();
     const ext = path.extname(file.originalname);
     const baseName = path.basename(file.originalname, ext);
-    cb(null, `${baseName}-${timestamp}${ext}`);
+    cb(null, `${baseName}-${timestamp}${ext}`)
   },
 });
 
@@ -459,7 +460,7 @@ router.post("/uploadCSV", (req, res) => {
   //   `;
 
  
-});
+})
 
 
 router.get("/status/:id", async (req, res) => {
@@ -694,10 +695,37 @@ router.get("/api/user/:user_id", (req, res) => {
     ORDER BY s.end_date DESC
     LIMIT 1
   `;
-  db.query(query, [user_id], (err, results) => {
+  conn.query(query, [user_id], (err, results) => {
     if (err) return res.status(500).json({ error: err });
     res.json(results[0] || {});
   });
+});
+router.get("/Nakshtra", async (req, res) => {
+  try {
+    // 1. Get today's date in local time and format to 'YYYY-MM-DD'
+    const now = new Date();
+    const today = now.toISOString().split('T')[0]; // '2025-06-20'
+
+    // 2. SQL query — assuming `Date` column is DATE (not DATETIME)
+    const query = `SELECT * FROM planets WHERE Date = ?`;
+
+    // 3. Run the query
+    conn.query(query, [today], (err, result) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({ message: "No matching records for today" });
+      }
+
+      return res.json(result);
+    });
+  } catch (err) {
+    console.error("Error in /Nakshtra route:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../css/Clock3.css"; // Assuming this file exists for styling
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
 import planetRing from "../assets/images/planetring.png";
@@ -39,12 +39,14 @@ const NoAdClock = () => {
   const [time, setTime] = useState(new Date());
   const [todaysData, setTodaysData] = useState({});
   const [text, settext] = useState("");
+  const [planetsrotate,setplanetsrotate]=useState()
   const theme = useSelector((state) => state.theme.theme);
   //hooks for advertise
   const [advertisements, setAdvertisements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [adverror, advsetError] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
+  const [Ring_rotation, setRotation] = useState(0);
 
   const labelMap = {
     VikramSamvat: "Vikram Samvat Date",
@@ -104,7 +106,6 @@ const NoAdClock = () => {
         return name.Gregorian_date == formatted
       })
       setdata(datas);
-      console.log(datas)
     }, 3000);
 
   }, [])
@@ -156,7 +157,6 @@ const NoAdClock = () => {
   // logic for notification change
 
   useEffect(() => {
-    console.log(data);
     const timerId = setInterval(() => {
       setTime(new Date());
     }, 200); // Update time every second
@@ -167,7 +167,7 @@ const NoAdClock = () => {
   const fetchNotification = async () => {
     try {
       const response = await fetch(
-        apiKey + "Get_notification/" + sessionStorage.getItem("userid")
+        apiKey + "Get_notification/" + localStorage.getItem("userid")
       );
       const data = await response.json();
       if (data.length > 0) {
@@ -290,12 +290,7 @@ const NoAdClock = () => {
   let originX = -30; // + 20*Math.sin(seconds*6);
   let originY = -25; //Math.sin(seconds*6);
   //var Rangle = Number(ghatikaCount) + 30;
-  let Rangle = Number(ghatikaCount);
-  let Ring_rotation = Rangle * 6;
 
-  [Ring_rotation, originX, originY] = dialpositioner(Rangle);
-
-  Ring_rotation = Ring_rotation;
   let thekaran = "विष्टी";
   let theyog = "he";
   let thenaxatra = "he";
@@ -322,8 +317,62 @@ const NoAdClock = () => {
   };
 
   useEffect(() => {
+    const now = new Date();
+    const secondsSinceMidnight =
+      now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const initialRotation = (secondsSinceMidnight / 86400) * 360;
+
+      // Set the initial rotation
+      setRotation(initialRotation)
+      console.log(initialRotation)
+       ;
+  }, [Ring_rotation]);
+ const makeAPICall = async () => {
+  try {
+    // 1. Calculate rotation at the time of API call
+    const now = new Date();
+    const secondsSinceMidnight =
+      now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const initialRotation = (secondsSinceMidnight / 86400) * 360;
+
+    // 2. Optional: log the time + rotation
+
+    // 3. Set the rotation based on time
+    setRotation(initialRotation);
+
+    // 4. Make your API call
+    const response = await fetch(apiKey + "Nakshtra", {
+      method: "GET",
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      setplanetsrotate(result)
+      // 5. (Optional) Update rotation from response
+      // Example: Use value from DB instead of time if needed
+      if (result[0]?.Nakshatra_mandal) {
+        const dbRotation = parseInt(result[0].Nakshatra_mandal);
+        setRotation(dbRotation);
+      }
+    }
+  } catch (error) {
+    console.log("❌ API call error:", error);
+  }
+};
+
+  useEffect(() => {
     localStorage.setItem("selectedPlanets", JSON.stringify(selectedPlanets));
   }, [selectedPlanets]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      if (now.getHours() === 14 && now.getMinutes() === 2 && now.getSeconds() === 0) {
+        makeAPICall();
+      }
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -374,10 +423,7 @@ const NoAdClock = () => {
           <div className="clock">
             {/* Rotating Background Images */}
             <div
-              className="clock-background"
-              style={{
-                transform: `translate(-50%, -50%) rotate(${Ring_rotation}deg)`,
-              }}
+              className={`clock-background rotate-${Ring_rotation}`} 
             >
               <img
                 src={clockImage}
@@ -463,19 +509,19 @@ const NoAdClock = () => {
           </div>
         </div>
 
-        <JupiterRotation isVisible={selectedPlanets.includes("jupiter")} />
-        <KetuRotation isVisible={selectedPlanets.includes("ketu")} />
-        <MarsRotation isVisible={selectedPlanets.includes("mars")} />
-        <MoonRotation isVisible={selectedPlanets.includes("moon")} />
+        <JupiterRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("jupiter")} />
+        <KetuRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("ketu")} />
+        <MarsRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("mars")} />
+        <MoonRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("moon")} />
         <RahuRotation isVisible={selectedPlanets.includes("rahu")} />
-        <MercuryRotation isVisible={selectedPlanets.includes("mercury")} />
-        <SunRotation isVisible={selectedPlanets.includes("sun")} />
-        <SaturnRotation isVisible={selectedPlanets.includes("saturn")} />
-        <VenusRotation isVisible={selectedPlanets.includes("venus")} />
+        <MercuryRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("mercury")} />
+        <SunRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("sun")} />
+        <SaturnRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("saturn")} />
+        <VenusRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("venus")} />
         {/* Time Tables Section */}
 
         {/* First Table Section */}
-        <div className="d-flex vedind gap-1 justify-content-between w-full h-[177px]">
+        <div className="d-flex vedind gap-1 justify-content-between w-full h-[177px] flex-nowrap">
           <table className="table">
             <thead className="custom-header">
               <tr>
@@ -610,12 +656,15 @@ const NoAdClock = () => {
           </table>
 
           <div className="bg-white h-[190px] m-auto">
-            <img
-              src={qrcode}
-              alt="Kalayan Clock"
-              className="object-cover h-full w-full"
-            />
+            <a href="https://your-link.com" target="_blank" rel="noopener noreferrer">
+              <img
+                src={qrcode}
+                alt="Kalayan Clock"
+                className="object-cover h-full w-full"
+              />
+            </a>
           </div>
+
         </div>
 
         {/* Notification */}

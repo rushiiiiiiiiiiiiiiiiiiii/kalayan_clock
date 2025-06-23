@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import NoAdClock from '../components/NoAdClock';
 const Home = () => {
   const theme = useSelector((state) => state.theme.theme)
-  const id = sessionStorage.getItem("userid");
+  const id = localStorage.getItem("userid");
 
   const status = async () => {
     try {

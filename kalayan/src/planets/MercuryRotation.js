@@ -3,7 +3,7 @@ import PlanetMaker from "../components/PlanetMaker";
 import mercuryImage from "../assets/images/budh-08.png"; // Adjust path if needed
 import dialpositioner from "./dialposition.js";
 const MercuryRotation = ({isVisible=true}) => {
-  const [mercuryRotation, setMercuryRotation] = useState(0);
+  const [mercuryRotation, setMercuryRotation] = useState(8);
   const [apiConfig, setApiConfig] = useState(null);
 
   const config = {

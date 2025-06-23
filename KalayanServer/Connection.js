@@ -1,5 +1,5 @@
-const db=require("mysql");
-const conn=db.createConnection({
+const mysql = require("mysql");
+const conn=mysql.createConnection({
     host:"localhost",
     user:"root",
     password:"",
@@ -16,24 +16,23 @@ conn.connect(function (err){
 module.exports=conn
 
 // const conn = mysql.createPool({
-//     host:"sg2nlmysql23plsk.secureserver.net",
-
-//     user:"kalayanserver",
-//     password:"kalayan@123",
-//     database:"kalayan",
-//   connectionLimit: 10,  // Number of connections in the pool
-//   waitForConnections: true,
-//   queueLimit: 0
+//     host: "sg2nlmysql23plsk.secureserver.net",
+//     user: "kalayanserver",
+//     password: "kalayan@123",
+//     database: "kalayan",
+//     connectionLimit: 10,  // Number of connections in the pool
+//     waitForConnections: true,
+//     queueLimit: 0
 // });
 
 // // Use the pool to query
 // conn.getConnection((err, connection) => {
-//   if (err) {
-//     console.error('Database connection failed:', err);
-//   } else {
-//     console.log('Connected to database');
-//     connection.release(); // Release connection
-//   }
+//     if (err) {
+//         console.error('Database connection failed:', err);
+//     } else {
+//         console.log('Connected to database');
+//         connection.release(); // Release connection
+//     }
 // });
 
 // module.exports = conn;

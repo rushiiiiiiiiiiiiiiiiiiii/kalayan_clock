@@ -3,7 +3,7 @@ import PlanetMaker from "../components/PlanetMaker";
 import earthImage from "../assets/images/earth.webp"; // Adjust path if needed
 
 const EarthRotation = () => {
-  const [earthRotation, setEarthRotation] = useState(0);
+  const [earthRotation, setEarthRotation] = useState(11);
   const [apiConfig, setApiConfig] = useState(null);
 
   const config = {

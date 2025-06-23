@@ -16,7 +16,7 @@ import UserPlayback from './components/UserPlayback';
 import './App.css';
 
 function App() {
-  const isLoggedIn = !!sessionStorage.getItem("userid"); // Boolean cast for safety
+  const isLoggedIn = localStorage.getItem("userid"); // Boolean cast for safety
 
   return (
     <>

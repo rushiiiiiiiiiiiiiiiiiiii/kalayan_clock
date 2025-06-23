@@ -3,7 +3,7 @@ import PlanetMaker from "../components/PlanetMaker";
 import marsImage from "../assets/images/mangal-07.png"; // Adjust path if needed
 import dialpositioner from "./dialposition.js";
 const MarsRotation = ({isVisible=true}) => {
-  const [marsRotation, setMarsRotation] = useState(0);
+  const [marsRotation, setMarsRotation] = useState(13);
   const [apiConfig, setApiConfig] = useState(null);
 
   const config = {

@@ -3,7 +3,7 @@ import PlanetMaker from "../components/PlanetMaker";
 import neptuneImage from "../assets/images/neptune-04.png"; // Adjust path if needed
 
 const NeptuneRotation = ({isVisible=true}) => {
-  const [neptuneRotation, setNeptuneRotation] = useState(0);
+  const [neptuneRotation, setNeptuneRotation] = useState(3);
   const [apiConfig, setApiConfig] = useState(null);
 
   const config = {
