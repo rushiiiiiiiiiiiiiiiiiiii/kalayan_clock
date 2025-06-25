@@ -2,135 +2,74 @@ import React, { useEffect, useState } from "react";
 import PlanetMaker from "../components/PlanetMaker";
 import neptuneImage from "../assets/images/neptune-04.png"; // Adjust path if needed
 
-const NeptuneRotation = ({isVisible=true}) => {
-  const [neptuneRotation, setNeptuneRotation] = useState(3);
+const NeptuneRotation = ({isVisible=true,rotation}) => {
+  const [neptuneRotation, setNeptuneRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
-  const config = {
-    mode: "simulate", // simulate | real | test | custom | api
-    customAngle: 90,
-    datetime: new Date(),
-    latitude: 0, // Neptune's equator (optional for simulation)
-    longitude: 0, // Default for simulation
-    speed: 4, // Degrees per second for simulate/test (adjust for Neptune)
-    apiEndpoint: "" // Fill with a real endpoint if using API mode
-  };
+  // const applyTimeBasedRotation = (initialRotation) => {
+  //   const now = new Date();
 
-  useEffect(() => {
-    let interval;
-    let animationId;
+  //   // Get 5:30 AM today
+  //   const start = new Date(now);
+  //   start.setHours(5, 30, 0, 0);
 
-    if (config.mode === "simulate") {
-      const startTimestamp = new Date(config.datetime).getTime();
+  //   // If now is before 5:30 AM, use 5:30 AM of previous day
+  //   if (now < start) {
+  //     start.setDate(start.getDate() - 1);
+  //   }
 
-      const updateRotation = () => {
-        const now = Date.now();
-        const elapsed = now - startTimestamp;
-        const angle = (elapsed * config.speed) / 1000; // degrees per second
-        setNeptuneRotation(angle);
-        animationId = requestAnimationFrame(updateRotation);
-      };
+  //   // Total seconds in 24 hours
+  //   const totalSeconds = 24 * 3600;
 
-      updateRotation();
-    }
+  //   // Time passed since last 5:30 AM
+  //   const secondsSinceStart = (now.getTime() - start.getTime()) / 1000;
 
-    else if (config.mode === "real") {
-      const startTimestamp = Date.now();
-      const msInNeptuneDay = 16 * 60 * 60 * 1000; // Neptune sidereal day in milliseconds (16 hours)
+  //   // Rotation since 5:30 AM
+  //   const rotationSinceStart = (secondsSinceStart / totalSeconds) * 360;
 
-      const updateRotation = () => {
-        const now = Date.now();
-        const elapsed = now - startTimestamp;
-        const angle = (elapsed / msInNeptuneDay) * 360; // Degrees per full rotation
-        setNeptuneRotation((prev) => (prev + angle) % 360);
-        animationId = requestAnimationFrame(updateRotation);
-      };
-
-      updateRotation();
-    }
-
-    else if (config.mode === "test") {
-      const startTimestamp = Date.now();
-      const initialDatetime = new Date(config.datetime).getTime();
-      const msInNeptuneDay = 16 * 60 * 60 * 1000;
-
-      const updateRotation = () => {
-        const now = Date.now();
-        const elapsedSinceInput = now - initialDatetime;
-        const timeAngle = (elapsedSinceInput / msInNeptuneDay) * 360;
-        const longitudeAngle = -config.longitude; // Adjust for longitude if required
-        const angle = ((timeAngle + longitudeAngle) * config.speed) % 360;
-
-        setNeptuneRotation((angle + 360) % 360);
-        animationId = requestAnimationFrame(updateRotation);
-      };
-
-      updateRotation();
-    }
-
-    else if (config.mode === "custom") {
-      setNeptuneRotation(config.customAngle % 360);
-    }
-
-    else if (config.mode === "api" && config.apiEndpoint) {
-      const fetchApiConfig = async () => {
-        try {
-          const res = await fetch(config.apiEndpoint);
-          const data = await res.json();
-          if (data.neptune) {
-            setApiConfig(data.neptune);
-          }
-        } catch (err) {
-          console.error("API fetch error:", err);
-        }
-      };
-
-      fetchApiConfig();
-      interval = setInterval(fetchApiConfig, 60000); // Poll every 60s
-    }
-
-    return () => {
-      clearInterval(interval);
-      cancelAnimationFrame(animationId);
-    };
-  }, []); // Runs once on mount
-
-  // Handle API-driven animation
-  useEffect(() => {
-    let animationId;
-
-    if (config.mode === "api" && apiConfig) {
-      const {
-        initialAngle = 0,
-        speed = 0.2,
-        startTime,
-        direction = "clockwise"
-      } = apiConfig;
-
-      const startTimestamp = new Date(startTime).getTime();
-      const directionFactor = direction === "counterclockwise" ? -1 : 1;
-
-      const updateRotation = () => {
-        const now = Date.now();
-        const elapsed = (now - startTimestamp) / 1000;
-        const angle = initialAngle + directionFactor * elapsed * speed;
-        setNeptuneRotation((angle % 360 + 360) % 360);
-        animationId = requestAnimationFrame(updateRotation);
-      };
-
-      updateRotation();
-      return () => cancelAnimationFrame(animationId);
-    }
-  }, [apiConfig]);
-
+  //   // Final rotation = saved rotation + time-based rotation
+  //   const finalRotation = (initialRotation + rotationSinceStart) % 360;
+  //   setNeptuneRotation(finalRotation)
+  //   console.log(finalRotation)
+  // };
+  // useEffect(() => {
+  //   applyTimeBasedRotation(parseFloat(rotation?.[0].Neptune ))
+  // }, [rotation])
   if(!isVisible)return null;
   return (
+      <>
+    <style>
+        {`
+      @keyframes revolveNeptune {
+        from {
+          transform: rotate(${40}deg) translateY(-240px);
+        }
+        to {
+          transform: rotate(${40+360}deg) translateY(-240px);
+        }
+      }z  
+    `}
+      </style>
+    <div
+    style={{  
+          
+          position: "absolute",
+          top: "29%",
+          left: "50%",
+          transform: `translate(-50%, -50%) translateY(-240px)`,
+          animation: `revolveNeptune  86400s linear infinite`, // 24h rotation
+
+        }}
+        >
     <PlanetMaker
       rotationAngle={neptuneRotation}
       image={neptuneImage}
       label="Neptune"
-    />
+      />
+      </div>
+      </>
   );
+      
 };
 
 export default NeptuneRotation;

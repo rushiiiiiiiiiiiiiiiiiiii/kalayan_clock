@@ -3,159 +3,72 @@ import PlanetMaker from "../components/PlanetMaker";
 import saturnImage from "../assets/images/shani-01.png"; // Replace with correct Saturn image path
 import dialpositioner from "./dialposition.js";
 
-const SaturnRotation = ({ isVisible = true }) => {
-  const [saturnRotation, setSaturnRotation] = useState(12);
+const SaturnRotation = ({ isVisible = true ,rotation}) => {
+  const [saturnRotation, setSaturnRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
-  // const config = {
-  //   mode: "simulate", // simulate | real | test | custom | api
-  //   customAngle: 55.5,
-  //   datetime: new Date(),
-  //   latitude: 28.6139,
-  //   longitude: 77.2090,
-  //   speed: 0.04,
-  //   apiEndpoint: "" // Add if using real API
-  // };
-
-  // useEffect(() => {
-  //   let interval;
-  //   let animationId;
-
-  //   if (config.mode === "simulate") {
-  //     const startTimestamp = new Date(config.datetime).getTime();
-
-  //     const updateRotation = () => {
-  //       const now = new Date();
-  //       const hours = now.getHours();
-  //       const minutes = now.getMinutes();
-  //       const totalMinutes = hours * 60 + minutes;
-  //       const minutesSince6AM = totalMinutes - 6 * 60;
-
-  //       let adjustedMinutes =
-  //         minutesSince6AM < 0 ? minutesSince6AM + 24 * 60 : minutesSince6AM;
-
-  //       const ghatika = Math.floor(adjustedMinutes / 24);
-  //       let Ring_rotation, originX, originY;
-  //       [Ring_rotation, originX, originY] = dialpositioner(Number(ghatika));
-  //       const angle = Ring_rotation + 110;
-
-  //       setSaturnRotation(angle);
-  //       animationId = requestAnimationFrame(updateRotation);
-  //     };
-
-  //     updateRotation();
-  //   }
-
-  //   else if (config.mode === "real") {
-  //     const startTimestamp = Date.now();
-  //     const msInSaturnDay = 38360000; // Saturn day in milliseconds (~10h 39m)
-
-  //     const updateRotation = () => {
-  //       const now = Date.now();
-  //       const elapsed = now - startTimestamp;
-  //       const angle = (elapsed / msInSaturnDay) * 360;
-  //       setSaturnRotation((prev) => (prev + angle) % 360);
-  //       animationId = requestAnimationFrame(updateRotation);
-  //     };
-
-  //     updateRotation();
-  //   }
-
-  //   else if (config.mode === "test") {
-  //     const startTimestamp = Date.now();
-  //     const initialDatetime = new Date(config.datetime).getTime();
-  //     const msInSaturnDay = 38360000;
-
-  //     const updateRotation = () => {
-  //       const now = Date.now();
-  //       const elapsedSinceInput = now - initialDatetime;
-  //       const timeAngle = (elapsedSinceInput / msInSaturnDay) * 360;
-  //       const longitudeAngle = -config.longitude;
-  //       const angle = ((timeAngle + longitudeAngle) * config.speed) % 360;
-
-  //       setSaturnRotation((angle + 360) % 360);
-  //       animationId = requestAnimationFrame(updateRotation);
-  //     };
-
-  //     updateRotation();
-  //   }
-
-  //   else if (config.mode === "custom") {
-  //     setSaturnRotation(config.customAngle % 360);
-  //   }
-
-  //   else if (config.mode === "api" && config.apiEndpoint) {
-  //     const fetchApiConfig = async () => {
-  //       try {
-  //         const res = await fetch(config.apiEndpoint);
-  //         const data = await res.json();
-  //         if (data.saturn) {
-  //           setApiConfig(data.saturn);
-  //         }
-  //       } catch (err) {
-  //         console.error("API fetch error:", err);
-  //       }
-  //     };
-
-  //     fetchApiConfig();
-  //     interval = setInterval(fetchApiConfig, 60000);
-  //   }
-
-  //   return () => {
-  //     clearInterval(interval);
-  //     cancelAnimationFrame(animationId);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   let animationId;
-
-  //   if (config.mode === "api" && apiConfig) {
-  //     const {
-  //       initialAngle = 0,
-  //       speed = 0.2,
-  //       startTime,
-  //       direction = "clockwise"
-  //     } = apiConfig;
-
-  //     const startTimestamp = new Date(startTime).getTime();
-  //     const directionFactor = direction === "counterclockwise" ? -1 : 1;
-
-  //     const updateRotation = () => {
-  //       const now = Date.now();
-  //       const elapsed = (now - startTimestamp) / 1000;
-  //       const angle = initialAngle + directionFactor * elapsed * speed;
-  //       setSaturnRotation((angle % 360 + 360) % 360);
-  //       animationId = requestAnimationFrame(updateRotation);
-  //     };
-
-  //     updateRotation();
-  //     return () => cancelAnimationFrame(animationId);
-  //   }
-  // }, [apiConfig]);
+   const applyTimeBasedRotation = (initialRotation) => {
+      const now = new Date();
+  
+      // Get 5:30 AM today
+      const start = new Date(now);
+      start.setHours(5, 30, 0, 0);
+  
+      // If now is before 5:30 AM, use 5:30 AM of previous day
+      if (now < start) {
+        start.setDate(start.getDate() - 1);
+      }
+  
+      // Total seconds in 24 hours
+      const totalSeconds = 24 * 3600;
+  
+      // Time passed since last 5:30 AM
+      const secondsSinceStart = (now.getTime() - start.getTime()) / 1000;
+  
+      // Rotation since 5:30 AM
+      const rotationSinceStart = (secondsSinceStart / totalSeconds) * 360;
+  
+      // Final rotation = saved rotation + time-based rotation
+      const finalRotation = (initialRotation + rotationSinceStart) % 360;
+      setSaturnRotation(finalRotation)
+      console.log(finalRotation)
+    };
+    useEffect(() => {
+      applyTimeBasedRotation(parseFloat(rotation?.[0].Shani))
+    }, [rotation])
   if (!isVisible) return null;
   return (
-    // <div
-    //   className="absolute top-[30%]  left-[48%] w-10 h-10"
-    //   style={{
-    //     transform: `rotate(${startingAngle}deg)`,
-    //   }}
-    // >
-    //   <div
-    //     className="origin-center"
-    //     style={{
-    //       animation: `orbit 5s linear infinite`,
-    //     }}
-    //   >  
-    //         <div >
-    //     </div>
-    //   </div>
-    // </div>
+    <>
+    <style>
+        {`
+      @keyframes revolveSaturn {
+        from {
+          transform: rotate(${saturnRotation}deg) translateY(-240px);
+        }
+        to {
+          transform: rotate(${saturnRotation+360}deg) translateY(-240px);
+        }
+      }z  
+    `}
+      </style>
+    <div
+    style={{  
+          
+          position: "absolute",
+          top: "29%",
+          left: "50%",
+          transform: `translate(-50%, -50%) translateY(-240px)`,
+          animation: `revolveSaturn  86400s linear infinite`, // 24h rotation
+
+        }}
+        >
           <PlanetMaker
             rotationAngle={saturnRotation}
             image={saturnImage}
             label="Saturn"
           />
+          </div>
+        </>
   );
 };
 

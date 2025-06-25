@@ -39,7 +39,7 @@ const NoAdClock = () => {
   const [time, setTime] = useState(new Date());
   const [todaysData, setTodaysData] = useState({});
   const [text, settext] = useState("");
-  const [planetsrotate,setplanetsrotate]=useState()
+  const [planetsrotate, setplanetsrotate] = useState()
   const theme = useSelector((state) => state.theme.theme);
   //hooks for advertise
   const [advertisements, setAdvertisements] = useState([]);
@@ -316,61 +316,76 @@ const NoAdClock = () => {
     );
   };
 
-  useEffect(() => {
-    const now = new Date();
-    const secondsSinceMidnight =
-      now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-    const initialRotation = (secondsSinceMidnight / 86400) * 360;
+  // useEffect(() => {
+  //   const now = new Date();
+  //   const secondsSinceMidnight =
+  //     now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  //   const initialRotation = (secondsSinceMidnight / 86400) * 360;
 
-      // Set the initial rotation
-      setRotation(initialRotation)
-      console.log(initialRotation)
-       ;
-  }, [Ring_rotation]);
- const makeAPICall = async () => {
-  try {
-    // 1. Calculate rotation at the time of API call
-    const now = new Date();
-    const secondsSinceMidnight =
-      now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-    const initialRotation = (secondsSinceMidnight / 86400) * 360;
+  //     // Set the initial rotation
+  //     setRotation(initialRotation)
+  //     console.log(initialRotation)
+  //      ;
+  // }, [Ring_rotation]);
+  const makeAPICall = async () => {
+    try {
+      const response = await fetch(apiKey + "Nakshtra", {
+        method: "GET",
+      });
 
-    // 2. Optional: log the time + rotation
+      if (response.ok) {
+        const result = await response.json();
+        setplanetsrotate(result);
 
-    // 3. Set the rotation based on time
-    setRotation(initialRotation);
-
-    // 4. Make your API call
-    const response = await fetch(apiKey + "Nakshtra", {
-      method: "GET",
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      setplanetsrotate(result)
-      // 5. (Optional) Update rotation from response
-      // Example: Use value from DB instead of time if needed
-      if (result[0]?.Nakshatra_mandal) {
-        const dbRotation = parseInt(result[0].Nakshatra_mandal);
-        setRotation(dbRotation);
+        if (result[0]?.Nakshatra_mandal) {
+          const dbRotation = parseFloat(result[0].Nakshatra_mandal); // Initial rotation from DB
+          applyTimeBasedRotation(dbRotation); // Call time-based update
+        }
       }
+    } catch (error) {
+      console.log("❌ API call error:", error);
     }
-  } catch (error) {
-    console.log("❌ API call error:", error);
-  }
-};
+  };
+
+  // Helper to calculate how much to rotate since 5:30 AM based on time
+  const applyTimeBasedRotation = (initialRotation = 0) => {
+    const now = new Date();
+
+    // Get 5:30 AM today
+    const start = new Date(now);
+    start.setHours(5, 30, 0, 0);
+
+    // If now is before 5:30 AM, use 5:30 AM of previous day
+    if (now < start) {
+      start.setDate(start.getDate() - 1);
+    }
+
+    // Total seconds in 24 hours
+    const totalSeconds = 24 * 3600;
+
+    // Time passed since last 5:30 AM
+    const secondsSinceStart = (now.getTime() - start.getTime()) / 1000;
+
+    // Rotation since 5:30 AM
+    const rotationSinceStart = (secondsSinceStart / totalSeconds) * 360;
+
+    // Final rotation = saved rotation + time-based rotation
+    const finalRotation = (initialRotation + rotationSinceStart) % 360;
+    setRotation(finalRotation);
+  };
+
 
   useEffect(() => {
     localStorage.setItem("selectedPlanets", JSON.stringify(selectedPlanets));
-  }, [selectedPlanets]);
+  }, []);
   useEffect(() => {
+    makeAPICall();
     const interval = setInterval(() => {
       const now = new Date();
-      if (now.getHours() === 14 && now.getMinutes() === 2 && now.getSeconds() === 0) {
+      if (now.getHours() === 14 && now.getMinutes() === 5 && now.getSeconds() === 0) {
         makeAPICall();
       }
     }, 1000);
-    
     return () => clearInterval(interval);
   }, []);
 
@@ -422,21 +437,30 @@ const NoAdClock = () => {
           {/* Kalayan Clock Wrapper */}
           <div className="clock">
             {/* Rotating Background Images */}
-            <div
-              className={`clock-background rotate-${Ring_rotation}`} 
+            <style>
+              {
+                `
+              @keyframes rotateClockwise {
+                  from {
+                    transform: rotate(${35+Ring_rotation}deg);
+                  } 
+                  to {
+                    transform: rotate(${360+ Ring_rotation}deg);
+                  }
+                }`
+              }
+            </style>
+            <div className="clock-background" style={{
+              animation: 'rotateClockwise 84600s linear infinite',
+            }}
             >
               <img
                 src={clockImage}
                 alt="Kalayan Clock Background"
-                className="clock-background"
               />
-              {/* <img
-                src={planetRing}
-                alt="Planet Ring"
-                className="clock-background"
-              /> */}
+              {
+              }
             </div>
-
             {/* Inner Circle Image */}
             <img
               src={
@@ -513,7 +537,7 @@ const NoAdClock = () => {
         <KetuRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("ketu")} />
         <MarsRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("mars")} />
         <MoonRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("moon")} />
-        <RahuRotation isVisible={selectedPlanets.includes("rahu")} />
+        <RahuRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("rahu")} />
         <MercuryRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("mercury")} />
         <SunRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("sun")} />
         <SaturnRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("saturn")} />
@@ -689,7 +713,7 @@ const NoAdClock = () => {
              </div>
            ))} */}
         {/* </div> */}
-      </div>
+      </div >
     </>
   );
 };

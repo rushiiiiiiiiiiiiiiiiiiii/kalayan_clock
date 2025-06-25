@@ -133,11 +133,38 @@ const UranusRotation = ({isVisible=true}) => {
 
   if(!isVisible)return null;
   return (
+      <>
+    <style>
+        {`
+      @keyframes revolveUranus {
+        from {
+          transform: rotate(${40}deg) translateY(-240px);
+        }
+        to {
+          transform: rotate(${40+360}deg) translateY(-240px);
+        }
+      }z  
+    `}
+      </style>
+    <div
+    style={{  
+          
+          position: "absolute",
+          top: "29%",
+          left: "50%",
+          transform: `translate(-50%, -50%) translateY(-240px)`,
+          animation: `revolveUranus ${20}s linear infinite`, // 24h rotation
+
+        }}
+        >
+
     <PlanetMaker
       rotationAngle={uranusRotation}
       image={uranusImage}
       label="Uranus"
-    />
+      />
+      </div>
+      </>
   );
 };
 
