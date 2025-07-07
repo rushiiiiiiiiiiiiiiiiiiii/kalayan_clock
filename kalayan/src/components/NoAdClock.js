@@ -128,14 +128,28 @@ const NoAdClock = () => {
   }, [])
   const Notification = async () => {
     try {
-      const response = await fetch(apiKey + "Get_notification");
+      const response = await fetch(apiKey + "Get_notification/" + localStorage.getItem('userid'));
       const result = await response.json();
       // setnotify(result[0]);
 
       // Store in localStorage
       localStorage.setItem('notification', JSON.stringify(result[0]));
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
       const storedNotification = JSON.parse(localStorage.getItem('notification'));
-      setnotify(storedNotification[0])
+      const [startHour, startMinute] = storedNotification.Start_time.split(":").map(Number);
+      const [endHour, endMinute] = storedNotification.End_Time.split(":").map(Number);
+
+      const startMinutes = startHour * 60 + startMinute;
+      const endMinutes = endHour * 60 + endMinute;
+
+      if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
+        console.log("notify");
+        setnotify(storedNotification);
+        console.log(storedNotification)
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -168,7 +182,7 @@ const NoAdClock = () => {
   }, []);
 
   // hooks for notification
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
 
   // logic for notification change
@@ -181,31 +195,31 @@ const NoAdClock = () => {
     return () => clearInterval(timerId); // Cleanup the interval on component unmount
   }, []);
 
-  const fetchNotification = async () => {
-    try {
-      const response = await fetch(
-        apiKey + "Get_notification/" + localStorage.getItem("userid")
-      );
-      const data = await response.json();
-      if (data.length > 0) {
-        console.log(data[0].Marathi_text);
-        setNotifications(data); // Display the most recent notification's info
-      } else {
-        setNotifications("No notifications available");
-      }
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  // const fetchNotification = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       apiKey + "Get_notification/" + localStorage.getItem("userid")
+  //     );
+  //     const data = await response.json();
+  //     if (data.length > 0) {
+  //       console.log(data[0].Marathi_text);
+  //       setNotifications(data); // Display the most recent notification's info
+  //     } else {
+  //       setNotifications("No notifications available");
+  //     }
+  //     if (!response.ok) {
+  //       throw new Error(`Error: ${response.statusText}`);
+  //     }
+  //   } catch (error) {
+  //     setError(error.message);
+  //   }
+  // };
 
 
-  useEffect(() => {
-    // Function to fetch data from the A
-    fetchNotification();
-  }, []);
+  // useEffect(() => {
+  //   // Function to fetch data from the A
+  //   fetchNotification();
+  // }, []);
 
   //this hook is used to show the info related to current date
   useEffect(() => {
@@ -713,7 +727,7 @@ const NoAdClock = () => {
         <div className="container-fluid notification  border border-success  bg-success mt-2">
           {error && <p style={{ color: "red" }}>Error: {error}</p>}
           <p className="text-white w-full text-center">
-            {notifications?.[0]?.Marathi_text}
+            {notify?.Marathi_text}
           </p>
         </div>
 

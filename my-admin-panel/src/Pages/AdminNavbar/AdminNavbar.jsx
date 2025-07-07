@@ -39,6 +39,8 @@ const AdminNavbar = () => {
   <li><Link to="/SunTimings" onClick={toggleSidenav}>Sun Timings</Link></li>
   <li><Link to="/subscription" onClick={toggleSidenav}>Subscription</Link></li>
   <li><Link to="/upload" onClick={toggleSidenav}>Upload Excel</Link></li>
+   <li><Link to="/upload" onClick={toggleSidenav}>UploadPlanet</Link></li>
+
 
    <li>
     <button className="logout-btn" onClick={toggleSidenav}>Logout</button>

@@ -9,7 +9,8 @@ import ExcelUpload from "./Pages/UploadExcel/excel";
 import Dashboard from "./Pages/Dashbaord/Dashboard"; // Your existing Dashboard path
 import AdminLayout from "./Pages/Layout/AdminLayout"; // Import Layout
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
-import SubscriptionForm from "./Pages/subscription/SubscriptionForm"; // ✅ Import Subscription Form
+import SubscriptionForm from "./Pages/subscription/SubscriptionForm"; 
+import UploadPlanet from "./Pages/UploadPlanet/Uploadplanets";
 
 function App() {
   return (
@@ -30,7 +31,8 @@ function App() {
         <Route path="/SendNotification" element={<SendNotification />} />
         <Route path="/SunTimings" element={<SunTimings />} />
         <Route path="/upload" element={<ExcelUpload />} />
-        <Route path="/subscription" element={<SubscriptionForm />} /> {/* ✅ Add Route */}
+        <Route path="/subscription" element={<SubscriptionForm />} />
+        <Route path="/upload" element={<UploadPlanet />} /> {/* ✅ Add Route */}
       </Route>
 
       {/* ✅ Redirect Unknown Routes to Login */}

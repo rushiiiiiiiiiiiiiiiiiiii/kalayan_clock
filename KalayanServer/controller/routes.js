@@ -113,14 +113,14 @@ router.post("/add_person", async (req, res) => {
     sql,
     [email, Mobile_No, password, User_Type],
     async (err, result) => {
-      if (err) throw err;  
+      if (err) throw err;
       return res.json(result);
     }
   );
 });
 router.post("/get_data/:id", async (req, res) => {
   const id = req.params.id
-  const formatted=req.body.date
+  const formatted = req.body.date
   console.log()
   if (id == "English") {
     const sql = "SELECT * FROM vedic_calender_english WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
@@ -159,7 +159,7 @@ router.post("/get_data/:id", async (req, res) => {
       if (result.length > 0) {
         return res.status(200).json(result);
       }
-      if (result.length === 0) {  
+      if (result.length === 0) {
         console.warn("No matching record found for", formatted);
       }
       else {
@@ -204,7 +204,7 @@ router.post("/update_details", async (req, res) => {
     if (err) throw err;
     return res.json(result);
   });
-  
+
 });
 // router.post("/notification/:id", async (req, res) => {
 //     const { id } = req.params;
@@ -217,10 +217,14 @@ router.post("/update_details", async (req, res) => {
 // })
 router.get("/Get_notification/:id", async (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM `notification` WHERE Tv_id=?";
-  conn.query(sql, [id], async (err, result) => {
+  const sql = ` SELECT * 
+    FROM notification 
+    WHERE Tv_id = ? 
+    ORDER BY id DESC 
+    LIMIT 1`;
+
+  conn.query(sql, [id], async(err, result) => { 
     if (err) throw err;
-    console.log(result);
     return res.json(result);
   });
 });
@@ -349,7 +353,7 @@ router.post("/Upload_Plan", async (req, res) => {
 
 
 router.post("/uploadCSV", (req, res) => {
-  const {data,lan} = req.body;
+  const { data, lan } = req.body;
   if (!Array.isArray(data) || data.length === 0) {
     return res.status(400).json({ error: "No data received" });
   }
@@ -374,8 +378,8 @@ router.post("/uploadCSV", (req, res) => {
     item["शक संवत"] || null,
   ]);
 
-  if(lan=="en"){
-      const sql = `
+  if (lan == "en") {
+    const sql = `
       INSERT INTO vedic_calender_english (
         gregorian_date, indian_date, vedic_date, war, 
         purnimant_tithi, amant_tithi, nakshatra, yog,
@@ -383,16 +387,16 @@ router.post("/uploadCSV", (req, res) => {
         Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
       ) VALUES ?
     `;
-     conn.query(sql, [values], (err, result) => {
-    if (err) {
-      console.error("Insert error:", err);
-      return res.status(500).json({ error: "Database insert failed" });
-    }
-    res.status(200).json({ message: "Data Uploaded successfully", result });
-  });
+    conn.query(sql, [values], (err, result) => {
+      if (err) {
+        console.error("Insert error:", err);
+        return res.status(500).json({ error: "Database insert failed" });
+      }
+      res.status(200).json({ message: "Data Uploaded successfully", result });
+    });
   }
-  if(lan=="hi"){
-      const sql = `
+  if (lan == "hi") {
+    const sql = `
       INSERT INTO vedic_calender_hindi (
         gregorian_date, indian_date, vedic_date, war, 
         purnimant_tithi, amant_tithi, nakshatra, yog,
@@ -400,16 +404,16 @@ router.post("/uploadCSV", (req, res) => {
         Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
       ) VALUES ?
     `;
-     conn.query(sql, [values], (err, result) => {
-    if (err) {
-      console.error("Insert error:", err);
-      return res.status(500).json({ error: "Database insert failed" });
-    }
-    res.status(200).json({ message: "Data Uploaded successfully", result });
-  })
+    conn.query(sql, [values], (err, result) => {
+      if (err) {
+        console.error("Insert error:", err);
+        return res.status(500).json({ error: "Database insert failed" });
+      }
+      res.status(200).json({ message: "Data Uploaded successfully", result });
+    })
   }
-  if(lan=="mr"){
-      const sql = `
+  if (lan == "mr") {
+    const sql = `
       INSERT INTO vedic_calender_marathi (
         gregorian_date, indian_date, vedic_date, war, 
         purnimant_tithi, amant_tithi, nakshatra, yog,
@@ -417,13 +421,13 @@ router.post("/uploadCSV", (req, res) => {
         Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
       ) VALUES ?
     `;
-     conn.query(sql, [values], (err, result) => {
-    if (err) {
-      console.error("Insert error:", err);
-      return res.status(500).json({ error: "Database insert failed" });
-    }
-    res.status(200).json({ message: "Data Uploaded successfully", result });
-  });
+    conn.query(sql, [values], (err, result) => {
+      if (err) {
+        console.error("Insert error:", err);
+        return res.status(500).json({ error: "Database insert failed" });
+      }
+      res.status(200).json({ message: "Data Uploaded successfully", result });
+    });
   }
   // const sql = `
   //     INSERT INTO vedic_calender_marathi (
@@ -434,7 +438,7 @@ router.post("/uploadCSV", (req, res) => {
   //     ) VALUES ?
   //   `;
 
- 
+
 })
 
 
@@ -469,96 +473,55 @@ router.get("/All_tv", async (req, res) => {
 });
 
 router.post("/send_notification", (req, res) => {
-  const { TV_id, notificationData, time } = req.body;
-  console.log("Received:", req.body);
+  const { TV_id, Marathi_text, Start_time, End_time } = req.body;
+  // console.log("Received:", req.body);
 
-  // First, check if the record with this TV_id exists
-  const checkSql = "SELECT * FROM notification WHERE TV_id = ?";
-  conn.query(checkSql, [TV_id], (err, results) => {
+  const insertSql =
+    "INSERT INTO notification (TV_id,Marathi_text, Start_time, End_time ) VALUES (?, ?, ? ,?)";
+  conn.query(insertSql, [TV_id, Marathi_text, Start_time, End_time], (err, result) => {
     if (err) {
-      console.error("Error checking TV_id:", err);
-      return res.status(500).json({ error: "Database error" });
+      console.error("Error inserting record:", err);
+      return res
+        .status(500)
+        .json({ error: "Database error during insert" })
     }
-
-    if (results.length > 0) {
-      // Record exists – do UPDATE
-      const updateSql =
-        "UPDATE notification SET Marathi_text = ?, time = ? WHERE TV_id = ?";
-      conn.query(updateSql, [notificationData, time, TV_id], (err, result) => {
-        if (err) {
-          console.error("Error updating record:", err);
-          return res
-            .status(500)
-            .json({ error: "Database error during update" });
-        }
-        return res.json({
-          message: "Notification updated successfully",
-          result,
-        });
-      });
-    } else {
-      // Record doesn't exist – do INSERT
-      const insertSql =
-        "INSERT INTO notification (Marathi_text, TV_id, time) VALUES (?, ?, ?)";
-      conn.query(insertSql, [notificationData, TV_id, time], (err, result) => {
-        if (err) {
-          console.error("Error inserting record:", err);
-          return res
-            .status(500)
-            .json({ error: "Database error during insert" });
-        }
-        return res.json({
-          message: "Notification inserted successfully",
-          result,
-        });
-      });
-    }
+    return res.json({
+      message: "Notification inserted successfully",
+      result,
+    });
   });
+  // First, check if the record with this TV_id exists
+  // const checkSql = "SELECT * FROM notification WHERE TV_id = ?";
+  // conn.query(checkSql, [TV_id], (err, results) => {
+  //   if (err) {
+  //     console.error("Error checking TV_id:", err);
+  //     return res.status(500).json({ error: "Database error" });
+  //   }
+
+  //   if (results.length > 0) {
+  //     // Record exists – do UPDATE
+  //     const updateSql =
+  //       "UPDATE notification SET Marathi_text = ?, time = ? WHERE TV_id = ?";
+  //     conn.query(updateSql, [notificationData, Start_time, End_time, TV_id], (err, result) => {
+  //       if (err) {
+  //         console.error("Error updating record:", err);
+  //         return res
+  //           .status(500)
+  //           .json({ error: "Database error during update" });
+  //       }
+  //       return res.json({
+  //         message: "Notification updated successfully",
+  //         result,
+  //       });
+  //     });
+  //   } else {
+  //     console.log(req.body)
+  //     // Record doesn't exist – do INSERT
+
+  //   }
+  // });
 });
 
-const checkAndDeleteNotifications = () => {
-  setInterval(() => {
-    const getCurrentTime = () => {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0"); // Ensure two digits for hours
-      const minutes = now.getMinutes().toString().padStart(2, "0"); // Ensure two digits for minutes
-      return `${hours}:${minutes}`; // Return time in HH:MM format
-    };
-
-    // Usage
-    const currentTime = getCurrentTime(); // Current time in HH:MM format
-
-    // Query to find notifications where the time is less than or equal to the current time
-    const query = "SELECT * FROM notification WHERE Start_time <= ?";
-    conn.query(query, [currentTime], (err, notifications) => {
-      if (err) {
-        console.error("Error checking notifications:", err);
-      } else {
-        notifications.forEach((notification) => {
-          // Send the notification (for example, logging it here)
-          console.log(
-            `Sending Notification: ${notification.notificationData} to TV_ID: ${notification.TV_id}`
-          );
-
-          // Delete the notification after sending it
-          const deleteQuery = "DELETE FROM notification WHERE id = ?";
-          conn.query(deleteQuery, [notification.id], (err) => {
-            if (err) {
-              console.error("Error deleting notification:", err);
-            } else {
-              console.log(
-                `Notification with ID: ${notification.id} deleted after sending`
-              );
-            }
-          });
-        });
-      }
-    });
-  }, 60000); // Check every minute
-};
-
-// Start the interval to check notifications
-checkAndDeleteNotifications();
 
 router.post("/Tv_login", async (req, res) => {
   try {
@@ -612,18 +575,18 @@ router.get("/media-files", (req, res) => {
   });
 });
 
-  router.get("/user-schedule", (req, res) => {
-    const sql = "Select * from media_schedules";
-    conn.query( sql ,
-      (error, results) => {
-        if (error) {
-          console.error("Database query error:", error);
-          return res.status(500).json({ error: "Internal server error" });
-        }
-        return res.json(results);
+router.get("/user-schedule", (req, res) => {
+  const sql = "Select * from media_schedules";
+  conn.query(sql,
+    (error, results) => {
+      if (error) {
+        console.error("Database query error:", error);
+        return res.status(500).json({ error: "Internal server error" });
       }
-    );
-  });
+      return res.json(results);
+    }
+  );
+});
 
 router.post("/upload-media", upload.single("media"), (req, res) => {
   const { title, mediaType } = req.body;
@@ -674,7 +637,7 @@ router.get("/Nakshtra", async (req, res) => {
     // 3. Run the query
     conn.query(query, [today], (err, result) => {
       if (err) {
-        console.error("Database error:", err) 
+        console.error("Database error:", err)
         return res.status(500).json({ error: "Database query failed" });
       }
 
@@ -688,6 +651,50 @@ router.get("/Nakshtra", async (req, res) => {
     console.error("Error in /Nakshtra route:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
+});
+
+router.post("/add-nakshatra", (req, res) => {
+  const {
+    Date,
+    Nakshatra_mandal,
+    Ravi,
+    Chandra,
+    mangal,
+    Budh,
+    Guru,
+    Shukra,
+    Shani,
+    Rahu,
+    Ketu,
+  } = req.body;
+
+  const sql = `
+    INSERT INTO nakshatra_data 
+    (Date, Nakshatra_mandal, Ravi, Chandra, mangal, Budh, Guru, Shukra, Shani, Rahu, Ketu)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    Date,
+    Nakshatra_mandal,
+    Ravi,
+    Chandra,
+    mangal,
+    Budh,
+    Guru,
+    Shukra,
+    Shani,
+    Rahu,
+    Ketu,
+  ];
+
+  conn.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Insert error:", err);
+      return res.status(500).json({ error: "Failed to insert data" });
+    }
+    return res.status(200).json({ message: "Data inserted successfully", id: result.insertId });
+  });
 });
 
 module.exports = router;
