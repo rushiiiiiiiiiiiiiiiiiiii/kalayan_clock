@@ -113,40 +113,15 @@ router.post("/add_person", async (req, res) => {
     sql,
     [email, Mobile_No, password, User_Type],
     async (err, result) => {
-      if (err) throw err;
+      if (err) throw err;  
       return res.json(result);
     }
   );
 });
-router.get("/get_data/:id", async (req, res) => {
+router.post("/get_data/:id", async (req, res) => {
   const id = req.params.id
-  console.log(id)
-  const currentDates = new Date(); // or new Date("2025-04-21")
-  const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
-  const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
-  const year = String(currentDates.getFullYear()).slice(-2); // Get last 2 digits of the year (e.g., '25')
-
-  // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
-  const formatted = `${day}/${month}/${year}`
-  console.log("Formatted Gregorian Date:", formatted); // Just for debugging
-
-  // const sql = "SELECT * FROM vedic_calender_marathi WHERE Gregorian_date = ?";
-  // conn.query(sql, [formatted], (err, result) => {
-  //   if (err) {
-  //     console.error("DB Error:", err);
-  //     return res.status(500).json({ error: "Database Error" });
-  //   }
-  //   if (result.length === 0) {
-  //     console.warn("No matching record found for", formatted);
-  //   }
-  //   if(result.length>0){
-
-  //     return res.status(200).json(result);
-  //   }
-  //   else{
-  //     return res.status(404).json("Data not founc")
-  //   }
-  // });
+  const formatted=req.body.date
+  console.log()
   if (id == "English") {
     const sql = "SELECT * FROM vedic_calender_english WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
     conn.query(sql, formatted, async (err, result) => {
@@ -155,7 +130,7 @@ router.get("/get_data/:id", async (req, res) => {
         return res.status(200).json(result)
       }
       if (result.length === 0) {
-        console.warn("No matching record found for", formatted);
+        return res.status(404).json("No record found at" + formatted)
       }
       else {
         return res.status(404).json("Data not founc")
@@ -637,31 +612,18 @@ router.get("/media-files", (req, res) => {
   });
 });
 
-router.get("/user-schedule", (req, res) => {
-  conn.query(
-    `
-    SELECT 
-      s.id, 
-      f.title, 
-      f.filename, 
-      f.media_type, 
-      s.schedule_date, 
-      s.schedule_time
-    FROM media_schedules s
-    JOIN media_files f ON s.media_id = f.id
-    WHERE TIMESTAMP(s.schedule_date, s.schedule_time) >= NOW()
-    ORDER BY s.schedule_date ASC, s.schedule_time ASC
-  `,
-    (error, results) => {
-      if (error) {
-        console.error("Database query error:", error);
-        return res.status(500).json({ error: "Internal server error" });
+  router.get("/user-schedule", (req, res) => {
+    const sql = "Select * from media_schedules";
+    conn.query( sql ,
+      (error, results) => {
+        if (error) {
+          console.error("Database query error:", error);
+          return res.status(500).json({ error: "Internal server error" });
+        }
+        return res.json(results);
       }
-
-      res.json(results);
-    }
-  );
-});
+    );
+  });
 
 router.post("/upload-media", upload.single("media"), (req, res) => {
   const { title, mediaType } = req.body;
@@ -705,14 +667,14 @@ router.get("/Nakshtra", async (req, res) => {
     // 1. Get today's date in local time and format to 'YYYY-MM-DD'
     const now = new Date();
     const today = now.toISOString().split('T')[0]; // '2025-06-20'
-
+    console.log(today)
     // 2. SQL query — assuming `Date` column is DATE (not DATETIME)
     const query = `SELECT * FROM planets WHERE Date = ?`;
 
     // 3. Run the query
     conn.query(query, [today], (err, result) => {
       if (err) {
-        console.error("Database error:", err);
+        console.error("Database error:", err) 
         return res.status(500).json({ error: "Database query failed" });
       }
 

@@ -7,7 +7,7 @@ const KetuRotation = ({isVisible=true,rotation}) => {
   const [ketuRotation, setKetuRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
-  const applyTimeBasedRotation = (initialRotation) => {
+  const applyTimeBasedRotation = (initialRotation,refrence) => {
   const now = new Date();
 
   // Get 5:30 AM today
@@ -30,12 +30,14 @@ const KetuRotation = ({isVisible=true,rotation}) => {
 
   // Final rotation = saved rotation + time-based rotation
   const finalRotation = (initialRotation + rotationSinceStart) % 360;
-  setKetuRotation(finalRotation)
-  console.log(finalRotation)
+{
+      setKetuRotation(finalRotation - refrence  - 90)
+
+    }  // console.log(finalRotation)
   
 };
 useEffect(()=>{
-  applyTimeBasedRotation(parseFloat(rotation?.[0].Ketu))
+  applyTimeBasedRotation(parseFloat(rotation?.[0].Ketu),parseFloat(rotation?.[0].Nakshatra_mandal))
 },[rotation])
   if(!isVisible)return true
   return (

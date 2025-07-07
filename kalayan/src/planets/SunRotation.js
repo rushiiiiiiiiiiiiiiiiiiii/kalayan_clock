@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import PlanetMarker from "../components/PlanetMaker";
+import PlanetMarker from "../components/PlanetMaker.js";
 import sunImage from "../assets/images/sun.png"; // Adjust path if needed
-import dialpositioner from "./dialposition.js";
+import dialpositioner from "../components/dialposition.js";
 
 const SunRotation = ({ isVisible = true, rotation }) => {
   const [sunRotation, setSunRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
 
-  const applyTimeBasedRotation = (initialRotation) => {
+  const applyTimeBasedRotation = (initialRotation,refrence) => {
     const now = new Date();
 
     // Get 5:30 AM today
@@ -31,11 +31,16 @@ const SunRotation = ({ isVisible = true, rotation }) => {
 
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-    setSunRotation(finalRotation)
-    console.log(finalRotation)
+    // setSunRotation(finalRotation)
+    // setSunRotation(initialRotation)
+      
+      setSunRotation(finalRotation - refrence  - 90)
+    
+   
+    // console.log(refrence)
   };
   useEffect(() => {
-    applyTimeBasedRotation(parseFloat(rotation?.[0].Ravi))
+    applyTimeBasedRotation(parseFloat(rotation?.[0].Ravi),parseFloat(rotation?.[0].Nakshatra_mandal))
   }, [rotation])
   if (!isVisible) return null;
 
@@ -45,7 +50,7 @@ const SunRotation = ({ isVisible = true, rotation }) => {
         {`
       @keyframes revolveSun {
         from {
-          transform: rotate(${sunRotation - 35}deg) translateY(-240px);
+          transform: rotate(${sunRotation}deg) translateY(-240px);
         }
         to {
           transform: rotate(${sunRotation + 360}deg) translateY(-240px);

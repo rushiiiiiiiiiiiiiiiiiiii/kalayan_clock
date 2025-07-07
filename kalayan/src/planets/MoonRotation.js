@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PlanetMarker from "../components/PlanetMaker";
 import moonImage from "../assets/images/Moon.png"; // Adjust path if needed
 import dialpositioner from "./dialposition.js";
-const MoonRotation = ({ isVisible = true,rotation }) => {
+const MoonRotation = ({ isVisible = true, rotation }) => {
   const [moonRotation, setMoonRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
@@ -24,7 +24,7 @@ const MoonRotation = ({ isVisible = true,rotation }) => {
   //   // Simulate rotation mode - continuous rotation without resetting after a full circle
   //   if (config.mode === "simulate") {
   //     const startTimestamp = new Date(config.datetime).getTime(); // Get the starting point timestamp
-      
+
   //     const updateRotation = () => {
   //        const now = new Date();
   //                // Extract the hours, minutes, and seconds
@@ -34,7 +34,7 @@ const MoonRotation = ({ isVisible = true,rotation }) => {
   //                        const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
   //                const currentTimeInMinutes = totalMinutes;
   //                const minutesSince6AM = currentTimeInMinutes - 6 * 60; // Calculate time passed since 6:00 AM
-               
+
   //                let adjustedMinutes;
   //                if (minutesSince6AM < 0) {
   //                  // If the time is before 6:00 AM, consider it part of the previous day's Vedic time
@@ -51,7 +51,7 @@ const MoonRotation = ({ isVisible = true,rotation }) => {
   //                      [Ring_rotation, originX, originY] = dialpositioner(Rangle);
   //                      //sconst angle = (elapsed * config.speed) / 1000- 93.5; // Adjust speed to match the desired rotation speed
   //                      const angle = Ring_rotation+228;// Adjust speed to match the desired rotation speed
-        
+
   //       // Keep increasing the rotation angle beyond 360° (no modulo here)
   //       setMoonRotation(angle); // No % 360, allowing it to continue beyond 360°
   //       animationId = requestAnimationFrame(updateRotation);
@@ -152,7 +152,7 @@ const MoonRotation = ({ isVisible = true,rotation }) => {
   //     return () => cancelAnimationFrame(animationId);
   //   }
   // }, [apiConfig]);
- const applyTimeBasedRotation = (initialRotation) => {
+  const applyTimeBasedRotation = (initialRotation, refrence) => {
     const now = new Date();
 
     // Get 5:30 AM today
@@ -175,31 +175,33 @@ const MoonRotation = ({ isVisible = true,rotation }) => {
 
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-    setMoonRotation(finalRotation)
-    console.log(finalRotation)
+{
+      setMoonRotation(finalRotation - refrence  - 90)
+
+    }    // console.log(finalRotation)
   };
   useEffect(() => {
-    applyTimeBasedRotation(parseFloat(rotation?.[0].Chandra ))
+    applyTimeBasedRotation(parseFloat(rotation?.[0].Chandra), parseFloat(rotation?.[0].Nakshatra_mandal))
   }, [rotation])
 
-  if (!isVisible) return null; 
+  if (!isVisible) return null;
   return (
-      <>
-    <style>
+    <>
+      <style>
         {`
       @keyframes revolveMoon {
         from {
           transform: rotate(${moonRotation}deg) translateY(-240px);
         }
         to {
-          transform: rotate(${moonRotation+360}deg) translateY(-240px);
+          transform: rotate(${moonRotation + 360}deg) translateY(-240px);
         }
       }z  
     `}
       </style>
-    <div
-    style={{  
-          
+      <div
+        style={{
+
           position: "absolute",
           top: "29%",
           left: "50%",
@@ -207,15 +209,15 @@ const MoonRotation = ({ isVisible = true,rotation }) => {
           animation: `revolveMoon  86400s linear infinite`, // 24h rotation
 
         }}
-        >
+      >
 
-    <PlanetMarker
-      rotationAngle={moonRotation}
-      image={moonImage}
-      label="Moon"
-      />
+        <PlanetMarker
+          rotationAngle={moonRotation}
+          image={moonImage}
+          label="Moon"
+        />
       </div>
-      </>
+    </>
   );
 };
 

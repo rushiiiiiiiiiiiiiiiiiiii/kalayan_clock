@@ -7,18 +7,21 @@ function UserSchedule() {
   const [mediaId, setMediaId] = useState('');
   const [scheduleDate, setScheduleDate] = useState('');
   const [scheduleTime, setScheduleTime] = useState('');
+  const apiKey = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
     axios
-      .get('http://192.168.0.110:5100/media-files')
-      .then((res) => setMediaList(res.data))
+      .get(apiKey+'media-files')
+      .then((res) => {setMediaList(res.data)
+        console.log(res.data)
+      })
       .catch((err) => console.error('Error fetching media:', err));
   }, []);
 
   const handleSchedule = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://192.168.0.110:5100/schedule-media', {
+      await axios.post(apiKey+'schedule-media', {
         mediaId,
         scheduleDate,
         scheduleTime,

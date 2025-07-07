@@ -20,7 +20,7 @@ export default function MediaSettingsCard() {
         </li> */}
         <li>
           <Link
-            to="/schedule"
+            to="/ "
             className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline"
           >
             <FaCalendarAlt />

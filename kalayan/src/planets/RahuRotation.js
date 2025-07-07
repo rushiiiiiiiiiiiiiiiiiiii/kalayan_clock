@@ -6,7 +6,7 @@ const RahuRotation = ({ isVisible = true,rotation }) => {
   const [rahuRotation, setRahuRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
- const applyTimeBasedRotation = (initialRotation) => {
+ const applyTimeBasedRotation = (initialRotation , refrence) => {
     const now = new Date();
 
     // Get 5:30 AM today
@@ -29,11 +29,13 @@ const RahuRotation = ({ isVisible = true,rotation }) => {
 
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-    setRahuRotation(finalRotation)
-    console.log(finalRotation)
+{
+      setRahuRotation(finalRotation - refrence  - 90)
+
+    }    // console.log(finalRotation)
   };
   useEffect(() => {
-    applyTimeBasedRotation(parseFloat(rotation?.[0].Rahu))
+    applyTimeBasedRotation(parseFloat(rotation?.[0].Rahu),parseFloat(rotation?.[0].Nakshatra_mandal))
   }, [rotation])
 
   if (!isVisible) return null;

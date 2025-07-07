@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import PlanetMaker from "../components/PlanetMaker";
 import marsImage from "../assets/images/mangal-07.png"; // Adjust path if needed
 import dialpositioner from "./dialposition.js";
-const MarsRotation = ({ isVisible = true ,rotation}) => {
+const MarsRotation = ({ isVisible = true, rotation }) => {
   const [marsRotation, setMarsRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
-  const applyTimeBasedRotation = (initialRotation) => {
+  const applyTimeBasedRotation = (initialRotation, refrence) => {
     const now = new Date();
 
     // Get 5:30 AM today
@@ -29,12 +29,14 @@ const MarsRotation = ({ isVisible = true ,rotation}) => {
 
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-    setMarsRotation(finalRotation)
-    console.log(finalRotation)
+   {
+      setMarsRotation(finalRotation - refrence - 90)
+
+    }    // console.log(finalRotation)
 
   };
   useEffect(() => {
-    applyTimeBasedRotation(parseFloat(rotation?.[0].mangal))
+    applyTimeBasedRotation(parseFloat(rotation?.[0].mangal), parseFloat(rotation?.[0].Nakshatra_mandal))
   }, [rotation])
   if (!isVisible) return null
   return (

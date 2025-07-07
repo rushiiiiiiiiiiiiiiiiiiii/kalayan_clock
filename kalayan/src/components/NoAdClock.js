@@ -81,8 +81,25 @@ const NoAdClock = () => {
   }, []);
 
   const getdata = async () => {
+    const currentDates = new Date(); // or new Date("2025-04-21")
+    const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
+    const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
+    const year = String(currentDates.getFullYear()).slice(-2); // Get last 2 digits of the year (e.g., '25')
+
+    // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')  
+    const formatted = `${day}/${month}/${year}`
+    console.log("Formatted Gregorian Date:", formatted); // Just for debugging
     try {
-      const response = await fetch(apiKey + "get_data/" + localStorage.getItem("language"));
+      const response = await fetch(apiKey + "get_data/" + localStorage.getItem("language"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          date: formatted
+        })
+
+      });
       const result = await response.json();
 
       // Store in localStorage
@@ -372,6 +389,7 @@ const NoAdClock = () => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
     setRotation(finalRotation);
+    console.log(finalRotation);
   };
 
 
@@ -442,16 +460,16 @@ const NoAdClock = () => {
                 `
               @keyframes rotateClockwise {
                   from {
-                    transform: rotate(${35+Ring_rotation}deg);
+                    transform: rotate(${Ring_rotation + 180}deg);
                   } 
                   to {
-                    transform: rotate(${360+ Ring_rotation}deg);
+                    transform: rotate(${360 + Ring_rotation + 180}deg);
                   }
                 }`
               }
             </style>
             <div className="clock-background" style={{
-              animation: 'rotateClockwise 84600s linear infinite',
+              animation: 'rotateClockwise 86400s linear infinite',
             }}
             >
               <img
