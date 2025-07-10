@@ -69,7 +69,7 @@ const UploadPlanet = () => {
       alert(t.selectFile);
       return;
     }
-
+    console.log(csvData)
     try {
       const response = await fetch(BASE_URL+"/add-nakshatra", {
         method: "POST",
@@ -116,8 +116,8 @@ const UploadPlanet = () => {
         <button
           onClick={handleUpload}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
-        >
-          {t.upload}
+        > 
+          uploads
         </button>
       </div>
       {msg && <p className="mt-5 text-center text-sm">{msg}</p>}

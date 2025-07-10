@@ -1,4 +1,4 @@
-const BASE_URL = "http://118.139.164.222:5100";
+const BASE_URL = "http://192.168.0.117:5100";
 
 const API_ENDPOINTS = {
   STORE_NOTIFICATION: `${BASE_URL}/store_notify`,

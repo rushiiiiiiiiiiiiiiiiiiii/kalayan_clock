@@ -7,7 +7,7 @@ const SendNotification = () => {
     Start_time: "", // Start time
     End_time: "",   // End time
   });
-  const [tvid, settvid] = useState();
+  const [TV_id, settvid] = useState();
   const [showForm, setShowForm] = useState(false);
   const [clockData, setClockData] = useState([]);
 
@@ -42,7 +42,7 @@ const SendNotification = () => {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({tvid,...notificationData}),
+        body: JSON.stringify({TV_id,...notificationData}),
       });
     } catch (error) {
       console.log(error);

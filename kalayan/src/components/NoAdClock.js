@@ -119,7 +119,7 @@ const NoAdClock = () => {
 
       // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
       const formatted = `${day}/${month}/${year}`;
-      const datas = storedData.filter((name) => {
+      const datas = storedData?.filter((name) => {
         return name.Gregorian_date == formatted
       })
       setdata(datas);
@@ -451,7 +451,7 @@ const NoAdClock = () => {
           className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
             } font-bold`}
         >
-          अयन : {data.length > 0 ? data[0].Ayan : ""}
+          अयन : {data?.length > 0 ? data[0].Ayan : ""}
         </div>
 
         <div
@@ -459,7 +459,7 @@ const NoAdClock = () => {
           className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
             } font-bold`}
         >
-          ऋतु : {data.length > 0 ? data[0].Rutu : ""}
+          ऋतु : {data?.length > 0 ? data?.[0].Rutu : ""}
         </div>
         <br />
         <br />
@@ -554,13 +554,12 @@ const NoAdClock = () => {
               className={`font-bold text-2xl ${theme == "light" ? "text-gray-100" : "text-gray-700"
                 }`}
             >
-              सूर्योदय:-{data[0]?.Suryoday && data[0]?.Suryoday}
+              सूर्योदय:-{data?.[0]?.Suryoday && data?.[0]?.Suryoday}
             </div>
             <div
-              className={`flex justify-end font-bold text-2xl  ${theme == "light" ? "text-gray-100" : "text-gray-700"
-                }`}
+              className={`flex justify-end font-bold text-2xl  ${theme == "light" ? "text-gray-100" : "text-gray-700"}`}
             >
-              सूर्यास्त:-{data[0]?.Suryasta && data[0]?.Suryasta}
+              सूर्यास्त:-{data?.[0]?.Suryasta && data?.[0]?.Suryasta}
             </div>
           </div>
         </div>
@@ -645,19 +644,19 @@ const NoAdClock = () => {
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">पूर्णिमांत तिथी:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].Purnimant_tithi : ""}
+                  {data?.length > 0 ? data?.[0].Purnimant_tithi : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">आमांत तिथी:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].Amant_tithi : ""}
+                  {data?.length > 0 ? data?.[0].Amant_tithi : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">नक्षत्र:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].Nakshatra : ""}
+                  {data?.length > 0 ? data?.[0].Nakshatra : ""}
                 </span>
               </td>
             </tr>
@@ -665,19 +664,19 @@ const NoAdClock = () => {
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">दिनकरण:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].DivaKaran : ""}
+                  {data?.length > 0 ? data?.[0].DivaKaran : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">रात्रीकरण:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].RatriKaran : ""}
+                  {data?.length > 0 ? data?.[0].RatriKaran : ""}
                 </span>
               </td>
               <td className="tithitd py-3">
                 <strong className="!text-[1.2rem]">योग:</strong>
                 <span className="tithivalue !text-[1.2rem]">
-                  {data.length > 0 ? data[0].Yog : ""}
+                  {data?.length > 0 ? data?.[0].Yog : ""}
                 </span>
               </td>
             </tr>
@@ -699,7 +698,7 @@ const NoAdClock = () => {
               {selectedDates.map((key) => (
                 <tr key={key} style={{ height: "30px" }}>
                   <th className="!text-[1.2rem]">{labelMap[key]}</th>
-                  <td>{data.length > 0 ? data[0][key] : ""}</td>
+                  <td>{data?.length > 0 ? data?.[0][key] : ""}</td>
                 </tr>
               ))}
 

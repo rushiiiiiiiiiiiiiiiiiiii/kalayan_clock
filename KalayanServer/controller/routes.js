@@ -120,8 +120,8 @@ router.post("/add_person", async (req, res) => {
 });
 router.post("/get_data/:id", async (req, res) => {
   const id = req.params.id
+  console.log(id)
   const formatted = req.body.date
-  console.log()
   if (id == "English") {
     const sql = "SELECT * FROM vedic_calender_english WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
     conn.query(sql, formatted, async (err, result) => {
@@ -662,12 +662,12 @@ router.post("/add-nakshatra", (req, res) => {
     mangal,
     Budh,
     Guru,
-    Shukra,
+    Shukra,  
     Shani,
     Rahu,
     Ketu,
   } = req.body;
-
+  console.log(req.body)
   const sql = `
     INSERT INTO nakshatra_data 
     (Date, Nakshatra_mandal, Ravi, Chandra, mangal, Budh, Guru, Shukra, Shani, Rahu, Ketu)
@@ -697,4 +697,4 @@ router.post("/add-nakshatra", (req, res) => {
   });
 });
 
-module.exports = router;
+  module.exports = router;
