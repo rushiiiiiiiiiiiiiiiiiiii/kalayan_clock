@@ -654,28 +654,27 @@ router.get("/Nakshtra", async (req, res) => {
 });
 
 router.post("/add-nakshatra", (req, res) => {
-  const {
-    Date,
-    Nakshatra_mandal,
-    Ravi,
-    Chandra,
-    mangal,
-    Budh,
-    Guru,
-    Shukra,  
-    Shani,
-    Rahu,
-    Ketu,
-  } = req.body;
-  console.log(req.body)
+  const data = req.body;
+
+
+  const Nakshatra_mandal = data["Nakshatra mandal"];
+  const Ravi = data["रवि"];
+  const Chandra = data["चंद्र"];
+  const mangal = data["मंगल"];
+  const Budh = data["बुध"];
+  const Guru = data["गुरु"];
+  const Shukra = data["शुक्र"];
+  const Shani = data["शनि"];
+  const Rahu = data["राहू"];
+  const Ketu = data["केतु"];
+
   const sql = `
-    INSERT INTO nakshatra_data 
-    (Date, Nakshatra_mandal, Ravi, Chandra, mangal, Budh, Guru, Shukra, Shani, Rahu, Ketu)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO planets 
+    (Nakshatra_mandal, Ravi, Chandra, mangal, Budh, Guru, Shukra, Shani, Rahu, Ketu)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
-    Date,
     Nakshatra_mandal,
     Ravi,
     Chandra,
