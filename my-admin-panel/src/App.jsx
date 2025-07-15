@@ -32,7 +32,7 @@ function App() {
         <Route path="/SunTimings" element={<SunTimings />} />
         <Route path="/upload" element={<ExcelUpload />} />
         <Route path="/subscription" element={<SubscriptionForm />} />
-        <Route path="/upload" element={<UploadPlanet />} /> {/* ✅ Add Route */}
+        <Route path="/Uploadplanet" element={<UploadPlanet />} /> {/* ✅ Add Route */}
       </Route>
 
       {/* ✅ Redirect Unknown Routes to Login */}

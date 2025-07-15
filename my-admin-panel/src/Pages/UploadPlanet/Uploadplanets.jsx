@@ -32,9 +32,9 @@ const translations = {
 const UploadPlanet = () => {
   const [csvData, setCsvData] = useState([]);
   const [msg, setMsg] = useState("");
-  const [language, setLanguage] = useState("en");
+  
 
-  const t = translations[language]; // current language strings
+   // current language strings
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -76,37 +76,27 @@ const UploadPlanet = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: csvData,lan:language }),
+        body: JSON.stringify(csvData ),
       });
 
       if (response.ok) {
         const result = await response.json();
-        setMsg("✅ " + result.message || t.success);
+        setMsg("✅ " + result.message);
       } else {
         const errorData = await response.json();
-        setMsg("❌ " + (errorData.message || t.fail));
+        setMsg("❌ " + (errorData.message));
       }
     } catch (error) {
       console.error("Error uploading data:", error);
-      setMsg(t.error);
+      setMsg(error);
     }
   };
 
   return (
     <div className="w-full items-center flex flex-col p-6">
-      <div className="mb-4">
-        <select
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="en">English</option>
-          <option value="hi">हिंदी</option>
-          <option value="mr">मराठी</option>
-        </select>
-      </div>
-      <div className={styles.uploadCard}>
-        <h3 className="text-xl font-semibold mb-4">{t.title}</h3>
+
+      <div className={"uploadCard"}>
+        {/* <h3 className="text-xl font-semibold mb-4">{t.title}</h3> */}
         <input
           type="file"
           accept=".csv,.tsv,.txt"
