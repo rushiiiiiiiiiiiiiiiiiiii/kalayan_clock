@@ -36,6 +36,7 @@ const NeptuneRotation = ({isVisible=true,rotation}) => {
   //   applyTimeBasedRotation(parseFloat(rotation?.[0].Neptune ))
   // }, [rotation])
   if(!isVisible)return null;
+
   return (
       <>
     <style>

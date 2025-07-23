@@ -8,7 +8,7 @@ const SunRotation = ({ isVisible = true, rotation }) => {
   const [apiConfig, setApiConfig] = useState(null);
 
 
-  const applyTimeBasedRotation = (initialRotation,refrence) => {
+  const applyTimeBasedRotation = (initialRotation, refrence) => {
     const now = new Date();
 
     // Get 5:30 AM today
@@ -28,19 +28,15 @@ const SunRotation = ({ isVisible = true, rotation }) => {
 
     // Rotation since 5:30 AM
     const rotationSinceStart = (secondsSinceStart / totalSeconds) * 360;
-
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-    // setSunRotation(finalRotation)
-    // setSunRotation(initialRotation)
-      
-      setSunRotation(finalRotation - refrence  - 90)
     
-   
-    // console.log(refrence)
+    setSunRotation(finalRotation - refrence - 90 - 23)
+
+
   };
   useEffect(() => {
-    applyTimeBasedRotation(parseFloat(rotation?.[0].Ravi),parseFloat(rotation?.[0].Nakshatra_mandal))
+    applyTimeBasedRotation(parseFloat(rotation?.[0].Ravi), parseFloat(rotation?.[0].Nakshatra_mandal))
   }, [rotation])
   if (!isVisible) return null;
 

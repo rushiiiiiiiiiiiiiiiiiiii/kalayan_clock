@@ -223,7 +223,7 @@ router.get("/Get_notification/:id", async (req, res) => {
     ORDER BY id DESC 
     LIMIT 1`;
 
-  conn.query(sql, [id], async(err, result) => { 
+  conn.query(sql, [id], async (err, result) => {
     if (err) throw err;
     return res.json(result);
   });
@@ -629,7 +629,11 @@ router.get("/Nakshtra", async (req, res) => {
   try {
     // 1. Get today's date in local time and format to 'YYYY-MM-DD'
     const now = new Date();
-    const today = now.toISOString().split('T')[0]; // '2025-06-20'
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = now.getFullYear();
+
+    const today = `${day}/${month}/${year}`; // '2025-06-20'
     console.log(today)
     // 2. SQL query — assuming `Date` column is DATE (not DATETIME)
     const query = `SELECT * FROM planets WHERE Date = ?`;
@@ -654,46 +658,42 @@ router.get("/Nakshtra", async (req, res) => {
 });
 
 router.post("/add-nakshatra", (req, res) => {
-  const data = req.body;
+  const dataArray = req.body; // expecting array of objects
 
-
-  const Nakshatra_mandal = data["Nakshatra mandal"];
-  const Ravi = data["रवि"];
-  const Chandra = data["चंद्र"];
-  const mangal = data["मंगल"];
-  const Budh = data["बुध"];
-  const Guru = data["गुरु"];
-  const Shukra = data["शुक्र"];
-  const Shani = data["शनि"];
-  const Rahu = data["राहू"];
-  const Ketu = data["केतु"];
+  if (!Array.isArray(dataArray) || dataArray.length === 0) {
+    return res.status(400).json({ error: "Invalid data format" });
+  }
 
   const sql = `
     INSERT INTO planets 
-    (Nakshatra_mandal, Ravi, Chandra, mangal, Budh, Guru, Shukra, Shani, Rahu, Ketu)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (Nakshatra_mandal, date, Ravi, Chandra, mangal, Budh, Guru, Shukra, Shani, Rahu, Ketu)
+    VALUES ?
   `;
 
-  const values = [
-    Nakshatra_mandal,
-    Ravi,
-    Chandra,
-    mangal,
-    Budh,
-    Guru,
-    Shukra,
-    Shani,
-    Rahu,
-    Ketu,
-  ];
+  // Build a 2D array of values
+  const values = dataArray.map(data => [
+    data["Nakshatra mandal"],
+    data["दिनांक"],
+    data["रवि"],
+    data["चंद्र"],
+    data["मंगल"],
+    data["बुध"],
+    data["गुरु"],
+    data["शुक्र"],
+    data["शनि"],
+    data["राहू"],
+    data["केतु"]
+  ]);
 
-  conn.query(sql, values, (err, result) => {
+  conn.query(sql, [values], (err, result) => {
     if (err) {
       console.error("Insert error:", err);
       return res.status(500).json({ error: "Failed to insert data" });
     }
-    return res.status(200).json({ message: "Data inserted successfully", id: result.insertId });
+    return res.status(200).json({ message: "Bulk insert successful", rowsInserted: result.affectedRows });
   });
 });
 
-  module.exports = router;
+
+
+module.exports = router;

@@ -119,9 +119,10 @@ const NoAdClock = () => {
 
       // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
       const formatted = `${day}/${month}/${year}`;
-      const datas = storedData?.filter((name) => {
-        return name.Gregorian_date == formatted
-      })
+      const datas = Array.isArray(storedData)
+        ? storedData.filter((name) => name.Gregorian_date == formatted)
+        : []; 
+
       setdata(datas);
     }, 3000);
 

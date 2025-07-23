@@ -31,13 +31,14 @@ const SaturnRotation = ({ isVisible = true, rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
  
-      setSaturnRotation(finalRotation - refrence - 90)
+      setSaturnRotation(finalRotation - refrence - 90 -23)
 
   };
   useEffect(() => {
     applyTimeBasedRotation(parseFloat(rotation?.[0].Shani), parseFloat(rotation?.[0].Nakshatra_mandal))
   }, [rotation])
   if (!isVisible) return null;
+
   return (
     <>
       <style>

@@ -132,6 +132,8 @@ const UranusRotation = ({isVisible=true}) => {
   // }, [apiConfig]);
 
   if(!isVisible)return null;
+console.log(uranusRotation)
+
   return (
       <>
     <style>

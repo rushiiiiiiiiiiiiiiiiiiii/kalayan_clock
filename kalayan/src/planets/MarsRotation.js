@@ -30,7 +30,7 @@ const MarsRotation = ({ isVisible = true, rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
    {
-      setMarsRotation(finalRotation - refrence - 90)
+      setMarsRotation(finalRotation - refrence - 90-23)
 
     }    // console.log(finalRotation)
 
@@ -38,7 +38,9 @@ const MarsRotation = ({ isVisible = true, rotation }) => {
   useEffect(() => {
     applyTimeBasedRotation(parseFloat(rotation?.[0].mangal), parseFloat(rotation?.[0].Nakshatra_mandal))
   }, [rotation])
+  
   if (!isVisible) return null
+
   return (
     <>
       <style>

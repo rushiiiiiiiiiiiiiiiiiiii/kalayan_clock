@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PlanetMaker from "../components/PlanetMaker";
 import venusImage from "../assets/images/shukra-06.png"; // Adjust path if needed
 import dialpositioner from "./dialposition.js";
+import SunRotation from "./SunRotation.js";
 const VenusRotation = ({isVisible=true,rotation}) => {
   const [venusRotation, setVenusRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
@@ -36,9 +37,11 @@ const VenusRotation = ({isVisible=true,rotation}) => {
       applyTimeBasedRotation(parseFloat(rotation?.[0].Shukra ))
     }, [rotation])
   if(!isVisible)return null
+
   return (
       <>
     <style>
+  
         {`
       @keyframes revolveVenus {
         from {

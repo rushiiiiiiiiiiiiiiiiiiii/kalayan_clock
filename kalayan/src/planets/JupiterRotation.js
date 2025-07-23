@@ -30,7 +30,7 @@ const JupiterRotation = ({ isVisible = true, rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
      {
-      setJupiterRotation(finalRotation - refrence - 90)
+      setJupiterRotation(finalRotation - refrence - 90-23)
 
     }  // console.log(finalRotation)
 
@@ -42,6 +42,7 @@ const JupiterRotation = ({ isVisible = true, rotation }) => {
   }, [rotation])
 
   if (!isVisible) return null;
+
   return (
     <>
       <style>

@@ -22,7 +22,7 @@ const Home = () => {
   }, [])
   useEffect(() => { console.log(theme) }, [theme])
   return (
-    <div className={`${theme == "light" ? "bg-gray-900" : "bg-white"} h-[100vh] overflow-hidd    en`}>
+    <div className={`${theme == "light" ? "bg-gray-900" : "bg-white"} h-[100vh] overflow-hidden`}>
 
       <NoAdClock/>
       <Location />

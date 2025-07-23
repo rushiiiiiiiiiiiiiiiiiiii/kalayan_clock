@@ -122,7 +122,6 @@ const EarthRotation = () => {
   //     return () => cancelAnimationFrame(animationId);
   //   }
   // }, [apiConfig]);
-
   return (
      <>
     <style>
