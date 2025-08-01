@@ -351,9 +351,9 @@ router.post("/Upload_Plan", async (req, res) => {
   });
 });
 
-
 router.post("/uploadCSV", (req, res) => {
   const { data, lan } = req.body;
+
   if (!Array.isArray(data) || data.length === 0) {
     return res.status(400).json({ error: "No data received" });
   }
@@ -378,68 +378,50 @@ router.post("/uploadCSV", (req, res) => {
     item["शक संवत"] || null,
   ]);
 
-  if (lan == "en") {
-    const sql = `
-      INSERT INTO vedic_calender_english (
-        gregorian_date, indian_date, vedic_date, war, 
-        purnimant_tithi, amant_tithi, nakshatra, yog,
-        DivaKaran, RatriKaran, suryoday, suryasta, 
-        Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
-      ) VALUES ?
-    `;
-    conn.query(sql, [values], (err, result) => {
-      if (err) {
-        console.error("Insert error:", err);
-        return res.status(500).json({ error: "Database insert failed" });
-      }
-      res.status(200).json({ message: "Data Uploaded successfully", result });
-    });
-  }
-  if (lan == "hi") {
-    const sql = `
-      INSERT INTO vedic_calender_hindi (
-        gregorian_date, indian_date, vedic_date, war, 
-        purnimant_tithi, amant_tithi, nakshatra, yog,
-        DivaKaran, RatriKaran, suryoday, suryasta, 
-        Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
-      ) VALUES ?
-    `;
-    conn.query(sql, [values], (err, result) => {
-      if (err) {
-        console.error("Insert error:", err);
-        return res.status(500).json({ error: "Database insert failed" });
-      }
-      res.status(200).json({ message: "Data Uploaded successfully", result });
-    })
-  }
-  if (lan == "mr") {
-    const sql = `
-      INSERT INTO vedic_calender_marathi (
-        gregorian_date, indian_date, vedic_date, war, 
-        purnimant_tithi, amant_tithi, nakshatra, yog,
-        DivaKaran, RatriKaran, suryoday, suryasta, 
-        Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
-      ) VALUES ?
-    `;
-    conn.query(sql, [values], (err, result) => {
-      if (err) {
-        console.error("Insert error:", err);
-        return res.status(500).json({ error: "Database insert failed" });
-      }
-      res.status(200).json({ message: "Data Uploaded successfully", result });
-    });
-  }
-  // const sql = `
-  //     INSERT INTO vedic_calender_marathi (
-  //       gregorian_date, indian_date, vedic_date, war, 
-  //       purnimant_tithi, amant_tithi, nakshatra, yog,
-  //       DivaKaran, RatriKaran, suryoday, suryasta, 
-  //       Dinvishesh, ayan, Rutu,VikramSamvat,shaksavant
-  //     ) VALUES ?
-  //   `;
+  const table = lan === "en" ? "vedic_calender_english"
+              : lan === "hi" ? "vedic_calender_hindi"
+              : lan === "mr" ? "vedic_calender_marathi"
+              : null;
 
+  if (!table) {
+    return res.status(400).json({ error: "Invalid language" });
+  }
 
-})
+  const sql = `
+    INSERT INTO ${table} (
+      gregorian_date, indian_date, vedic_date, war,
+      purnimant_tithi, amant_tithi, nakshatra, yog,
+      DivaKaran, RatriKaran, suryoday, suryasta,
+      Dinvishesh, ayan, Rutu, VikramSamvat, shaksavant
+    ) VALUES ?
+    ON DUPLICATE KEY UPDATE
+      indian_date = VALUES(indian_date),
+      vedic_date = VALUES(vedic_date),
+      war = VALUES(war),
+      purnimant_tithi = VALUES(purnimant_tithi),
+      amant_tithi = VALUES(amant_tithi),
+      nakshatra = VALUES(nakshatra),
+      yog = VALUES(yog),
+      DivaKaran = VALUES(DivaKaran),
+      RatriKaran = VALUES(RatriKaran),
+      suryoday = VALUES(suryoday),
+      suryasta = VALUES(suryasta),
+      Dinvishesh = VALUES(Dinvishesh),
+      ayan = VALUES(ayan),
+      Rutu = VALUES(Rutu),
+      VikramSamvat = VALUES(VikramSamvat),
+      shaksavant = VALUES(shaksavant)
+  `;
+
+  conn.query(sql, [values], (err, result) => {
+    if (err) {
+      console.error("Insert error:", err);
+      return res.status(500).json({ error: "Database insert failed" });
+    }
+    res.status(200).json({ message: "Data uploaded successfully", result });
+  });
+});
+
 
 
 router.get("/status/:id", async (req, res) => {
