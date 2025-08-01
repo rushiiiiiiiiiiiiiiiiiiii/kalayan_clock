@@ -31,7 +31,8 @@ const SaturnRotation = ({ isVisible = true, rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
  
-      setSaturnRotation(finalRotation - refrence - 90 -23)
+      setSaturnRotation(refrence-finalRotation - 90)
+      
 
   };
   useEffect(() => {

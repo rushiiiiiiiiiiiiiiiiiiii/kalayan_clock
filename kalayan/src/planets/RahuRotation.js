@@ -30,7 +30,7 @@ const RahuRotation = ({ isVisible = true,rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
 {
-      setRahuRotation(finalRotation - refrence  - 90-23)
+      setRahuRotation(refrence-finalRotation  - 90)
 
     }    // console.log(finalRotation)
   };

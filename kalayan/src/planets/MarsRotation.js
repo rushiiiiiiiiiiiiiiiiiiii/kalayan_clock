@@ -30,7 +30,7 @@ const MarsRotation = ({ isVisible = true, rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
    {
-      setMarsRotation(finalRotation - refrence - 90-23)
+      setMarsRotation(refrence-finalRotation - 90)
 
     }    // console.log(finalRotation)
 

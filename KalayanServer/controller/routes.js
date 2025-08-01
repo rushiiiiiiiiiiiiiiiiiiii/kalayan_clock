@@ -629,11 +629,11 @@ router.get("/Nakshtra", async (req, res) => {
   try {
     // 1. Get today's date in local time and format to 'YYYY-MM-DD'
     const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = now.getDate(); // No padStart, gives single-digit if needed
+    const month = now.getMonth() + 1; // Months are 0-based
     const year = now.getFullYear();
 
-    const today = `${day}/${month}/${year}`; // '2025-06-20'
+    const today = `${month}/${day}/${year}`
     console.log(today)
     // 2. SQL query — assuming `Date` column is DATE (not DATETIME)
     const query = `SELECT * FROM planets WHERE Date = ?`;
@@ -672,8 +672,8 @@ router.post("/add-nakshatra", (req, res) => {
 
   // Build a 2D array of values
   const values = dataArray.map(data => [
-    data["Nakshatra mandal"],
-    data["दिनांक"],
+    data["Nakshatra Mandal"],
+    data["Date"],
     data["रवि"],
     data["चंद्र"],
     data["मंगल"],

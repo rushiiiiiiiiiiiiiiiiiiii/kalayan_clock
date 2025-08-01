@@ -1,12 +1,14 @@
 
 export default function dialpositioner(Rangle) 
 {
-   let ringangle = 1200;
+   let ringangle = 120;
    let xorigin;
    let yorigin ;
    var Rangleint = parseInt(Rangle);
  //  Rangleint =Number(48);
-   ringangle = Rangleint * 6 -145    
+   ringangle = Rangleint * 6 -145
+
+
     xorigin = -45; yorigin = -35; 
   
   //  switch (Rangleint){

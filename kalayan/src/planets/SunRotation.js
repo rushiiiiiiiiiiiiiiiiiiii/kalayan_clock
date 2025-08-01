@@ -30,8 +30,8 @@ const SunRotation = ({ isVisible = true, rotation }) => {
     const rotationSinceStart = (secondsSinceStart / totalSeconds) * 360;
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-    
-    setSunRotation(finalRotation - refrence - 90 - 23)
+
+    setSunRotation(refrence - finalRotation - 90)
 
 
   };

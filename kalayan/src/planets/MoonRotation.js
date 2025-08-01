@@ -176,7 +176,8 @@ const MoonRotation = ({ isVisible = true, rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
 {
-      setMoonRotation(finalRotation - refrence  - 90-23)
+      setMoonRotation(refrence-finalRotation   - 90)
+      console.log(finalRotation-refrence   - 90)
 
     }    // console.log(finalRotation)
   };
@@ -191,7 +192,7 @@ const MoonRotation = ({ isVisible = true, rotation }) => {
         {`
       @keyframes revolveMoon {
         from {
-          transform: rotate(${moonRotation}deg) translateY(-240px);
+          transform: rotate(${moonRotation>90?moonRotation:moonRotation+2}deg) translateY(-240px);
         }
         to {
           transform: rotate(${moonRotation + 360}deg) translateY(-240px);

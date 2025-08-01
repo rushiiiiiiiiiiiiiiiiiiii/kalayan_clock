@@ -475,7 +475,7 @@ const NoAdClock = () => {
                 `
               @keyframes rotateClockwise {
                   from {
-                    transform: rotate(${Ring_rotation + 180}deg);
+                    transform: rotate(${Ring_rotation+180}deg);
                   } 
                   to {
                     transform: rotate(${360 + Ring_rotation + 180}deg);
