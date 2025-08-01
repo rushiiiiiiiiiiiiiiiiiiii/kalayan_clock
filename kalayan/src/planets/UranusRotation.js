@@ -6,6 +6,8 @@ const UranusRotation = ({isVisible=true}) => {
   const [uranusRotation, setUranusRotation] = useState(5);
   const [apiConfig, setApiConfig] = useState(null);
 
+  
+
   // 🪐 Internal configuration
   // const config = {
   //   mode: "simulate", // <---- SET MODE HERE: simulate, real, test, custom, api

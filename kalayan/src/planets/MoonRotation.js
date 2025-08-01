@@ -176,8 +176,18 @@ const MoonRotation = ({ isVisible = true, rotation }) => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
 {
-      setMoonRotation(refrence-finalRotation   - 90)
-      console.log(finalRotation-refrence   - 90)
+      // setMoonRotation(refrence-finalRotation   - 90)
+      // console.log(finalRotation-refrence   - 90)
+
+       if (refrence - finalRotation - 90 > 0) {
+      setMoonRotation(refrence - finalRotation - 90)
+    }
+    else {
+      setMoonRotation(finalRotation - refrence - 90)
+
+    }
+
+
 
     }    // console.log(finalRotation)
   };

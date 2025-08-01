@@ -30,7 +30,14 @@ const VenusRotation = ({ isVisible = true, rotation }) => {
 
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-    setVenusRotation(refrence - finalRotation - 90)
+ if (refrence - finalRotation - 90 > 0) {
+      setVenusRotation(refrence - finalRotation - 90)
+    }
+    else {
+      setVenusRotation(finalRotation - refrence - 90)
+
+    }
+
 
     // console.log(finalRotation)
   };
