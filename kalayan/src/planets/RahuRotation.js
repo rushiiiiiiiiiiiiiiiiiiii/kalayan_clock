@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PlanetMaker from "../components/PlanetMaker";
 import rahuImage from "../assets/images/rahu-09.png"; // Adjust path if needed
 import dialpositioner from "./dialposition.js";
-const RahuRotation = ({ isVisible = true,rotation }) => {
+const RahuRotation = ({ isVisible = true,rotation ,mandal}) => {
   const [rahuRotation, setRahuRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
@@ -32,13 +32,14 @@ const RahuRotation = ({ isVisible = true,rotation }) => {
 {
       // setRahuRotation(refrence-finalRotation  - 90)
       
-       if (refrence - finalRotation - 90 > 0) {
-      setRahuRotation(refrence - finalRotation - 90)
-    }
-    else {
-      setRahuRotation(finalRotation - refrence - 90)
+    //    if (refrence - finalRotation - 90 > 0) {
+    //   setRahuRotation(refrence - finalRotation - 90)
+    // }
+    // else {
+    //   setRahuRotation(finalRotation - refrence - 90)
 
-    }
+    // }
+    setRahuRotation(mandal-initialRotation-90 );
 
 
 

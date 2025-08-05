@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PlanetMarker from "../components/PlanetMaker";
 import moonImage from "../assets/images/Moon.png"; // Adjust path if needed
 import dialpositioner from "./dialposition.js";
-const MoonRotation = ({ isVisible = true, rotation }) => {
+const MoonRotation = ({ isVisible = true, rotation, mandal }) => {
   const [moonRotation, setMoonRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
@@ -175,17 +175,20 @@ const MoonRotation = ({ isVisible = true, rotation }) => {
 
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-{
+    {
       // setMoonRotation(refrence-finalRotation   - 90)
       // console.log(finalRotation-refrence   - 90)
 
-       if (refrence - finalRotation - 90 > 0) {
-      setMoonRotation(refrence - finalRotation - 90)
-    }
-    else {
-      setMoonRotation(finalRotation - refrence - 90)
+      //    if (refrence - finalRotation - 90 > 0) {
+      //   setMoonRotation(refrence - finalRotation - 90)
+      // }
+      // else {
+      //   setMoonRotation(finalRotation - refrence - 90)
 
-    }
+      // }
+      setMoonRotation(mandal - initialRotation - 90);
+      console.log(mandal)
+      console.log(mandal-initialRotation-90)
 
 
 
@@ -202,7 +205,7 @@ const MoonRotation = ({ isVisible = true, rotation }) => {
         {`
       @keyframes revolveMoon {
         from {
-          transform: rotate(${moonRotation>90?moonRotation:moonRotation+2}deg) translateY(-240px);
+          transform: rotate(${moonRotation > 90 ? moonRotation : moonRotation + 2}deg) translateY(-240px);
         }
         to {
           transform: rotate(${moonRotation + 360}deg) translateY(-240px);

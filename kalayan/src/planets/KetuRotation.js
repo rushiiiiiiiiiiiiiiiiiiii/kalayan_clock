@@ -3,7 +3,7 @@ import PlanetMaker from "../components/PlanetMaker";
 import ketuImage from "../assets/images/ketu-10.png";
 import dialpositioner from "./dialposition.js";
 import { Divide } from "lucide-react";
-const KetuRotation = ({isVisible=true,rotation}) => {
+const KetuRotation = ({isVisible=true,rotation,mandal}) => {
   const [ketuRotation, setKetuRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
@@ -32,14 +32,15 @@ const KetuRotation = ({isVisible=true,rotation}) => {
   const finalRotation = (initialRotation + rotationSinceStart) % 360;
 {
       // setKetuRotation(refrence-finalRotation  - 90)
-       if (refrence - finalRotation - 90 > 0) {
-      setKetuRotation(refrence - finalRotation - 90)
-    }
-    else {
-      setKetuRotation(finalRotation - refrence - 90)
+    //    if (refrence - finalRotation - 90 > 0) {
+    //   setKetuRotation(refrence - finalRotation - 90)
+    // }
+    // else {
+    //   setKetuRotation(finalRotation - refrence - 90)
 
-    }
+    // }
 
+    setKetuRotation(mandal-initialRotation-90 );
 
 
     }  // console.log(finalRotation)

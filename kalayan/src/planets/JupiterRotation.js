@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PlanetMarker from "../components/PlanetMaker";
 import jupiterImage from "../assets/images/Jupiter.png";
 import dialpositioner from "./dialposition.js";
-const JupiterRotation = ({ isVisible = true, rotation }) => {
+const JupiterRotation = ({ isVisible = true, rotation,mandal }) => {
   const [jupiterRotation, setJupiterRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
@@ -29,19 +29,18 @@ const JupiterRotation = ({ isVisible = true, rotation }) => {
 
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
-     {
       // setJupiterRotation(refrence -finalRotation - 90)
 
-       if (refrence - finalRotation - 90 > 0) {
-      setJupiterRotation(refrence - finalRotation - 90)
-    }
-    else {
-      setJupiterRotation(finalRotation - refrence - 90)
+    //    if (refrence - finalRotation - 90 > 0) {
+    //   setJupiterRotation(refrence - finalRotation - 90)
+    // }
+    // else {
+    //   setJupiterRotation(finalRotation - refrence - 90)
 
-    }
+    // }
       
+    setJupiterRotation(mandal-initialRotation-90 );
 
-    }  // console.log(finalRotation)
 
   };
   useEffect(() => {

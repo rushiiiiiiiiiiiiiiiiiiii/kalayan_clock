@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PlanetMaker from "../components/PlanetMaker";
-import saturnImage from "../assets/images/shani-01.jpg"; // Replace with correct Saturn image path
+import saturnImage from "../assets/images/shani-01.png"; // Replace with correct Saturn image path
 import dialpositioner from "./dialposition.js";
 
-const SaturnRotation = ({ isVisible = true, rotation }) => {
+const SaturnRotation = ({ isVisible = true, rotation ,mandal}) => {
   const [saturnRotation, setSaturnRotation] = useState(0);
   const [apiConfig, setApiConfig] = useState(null);
 
@@ -32,13 +32,15 @@ const SaturnRotation = ({ isVisible = true, rotation }) => {
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
  
       // setSaturnRotation(refrence-finalRotation - 90)
-       if (refrence - finalRotation - 90 > 0) {
-      setSaturnRotation(refrence - finalRotation - 90)
-    }
-    else {
-      setSaturnRotation(finalRotation - refrence - 90)
+    //    if (refrence - finalRotation - 90 > 0) {
+    //   setSaturnRotation(refrence - finalRotation - 90)
+    // }
+    // else {
+    //   setSaturnRotation(finalRotation - refrence - 90)
 
-    }
+    // }
+    setSaturnRotation(mandal-initialRotation-90 );
+
 
 
       

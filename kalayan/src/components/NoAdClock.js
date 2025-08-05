@@ -121,7 +121,7 @@ const NoAdClock = () => {
       const formatted = `${day}/${month}/${year}`;
       const datas = Array.isArray(storedData)
         ? storedData.filter((name) => name.Gregorian_date == formatted)
-        : []; 
+        : [];
 
       setdata(datas);
     }, 3000);
@@ -404,7 +404,6 @@ const NoAdClock = () => {
     // Final rotation = saved rotation + time-based rotation
     const finalRotation = (initialRotation + rotationSinceStart) % 360;
     setRotation(finalRotation);
-    console.log(finalRotation);
   };
 
 
@@ -475,13 +474,13 @@ const NoAdClock = () => {
                 `
               @keyframes rotateClockwise {
                   from {
-                    transform: rotate(${Ring_rotation+180}deg);
+                    transform: rotate(${Ring_rotation + 180}deg);
                   } 
                   to {
                     transform: rotate(${360 + Ring_rotation + 180}deg);
                   }
                 }`
-              }
+              } 
             </style>
             <div className="clock-background" style={{
               animation: 'rotateClockwise 86400s linear infinite',
@@ -565,15 +564,15 @@ const NoAdClock = () => {
           </div>
         </div>
 
-        <JupiterRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("jupiter")} />
-        <KetuRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("ketu")} />
-        <MarsRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("mars")} />
-        <MoonRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("moon")} />
-        <RahuRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("rahu")} />
-        <MercuryRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("mercury")} />
-        <SunRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("sun")} />
-        <SaturnRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("saturn")} />
-        <VenusRotation rotation={planetsrotate} isVisible={selectedPlanets.includes("venus")} />
+        <JupiterRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("jupiter")} />
+        <KetuRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("ketu")} />
+        <MarsRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("mars")} />
+        <MoonRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("moon")} />
+        <RahuRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("rahu")} />
+        <MercuryRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("mercury")} />
+        <SunRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("sun")} />
+        <SaturnRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("saturn")} />
+        <VenusRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("venus")} />
         {/* Time Tables Section */}
 
         {/* First Table Section */}
