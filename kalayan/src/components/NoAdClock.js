@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../css/Clock3.css"; // Assuming this file exists for styling
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
-import planetRing from "../assets/images/planetring.png";
 import klogo from "../assets/images/kalaayan-logo.png";
 import qrcode from "../assets/images/qrcode.svg";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
 import axios, { getAdapter } from "axios";
 import taaskata from "../assets/images/taskata24.png";
 import minkata from "../assets/images/minkata.png";
-import spotImage from "../assets/images/spot.png";
 import datefunction from "../components/dategiver.js";
 import converttime from "../components/timeconverter.js";
-import Modal from "./Modal.js";
-import adver from "../assets/images/vicco.jpg";
 import VerticalProgressBar from "./Progrressbar.js";
-import dialpositioner from "./dialposition.js";
 import { useSelector } from "react-redux";
 import EarthRotation from "../planets/EarthRotation.js";
 import JupiterRotation from "../planets/JupiterRotation.js";

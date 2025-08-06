@@ -3,13 +3,12 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Home from './Home/Home';
 import ImageGallery from './Backgrounds/images';
-import WheelComponent from './components/Wheel';
+// import WheelComponent from './components/Wheel';
 import Login from './components/Login';
 import Theme from './Home/Theme';
 import NoAdClock from './components/NoAdClock';
 import SettingsPage from './components/SettingPage';
 import NavBar from './components/Navbar'; // Hover navbar
-import AdminUpload from './components/AdminUpload'
 import UserSchedule from './components/UserSchedule'
 import UserPlayback from './components/UserPlayback';
 
@@ -30,11 +29,10 @@ function App() {
         {/* Protected Routes */}
         <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
         <Route path="/Bg" element={isLoggedIn ? <ImageGallery /> : <Navigate to="/login" />} />
-        <Route path="/whell" element={isLoggedIn ? <WheelComponent /> : <Navigate to="/login" />} />
+        {/* <Route path="/whell" element={isLoggedIn ? <WheelComponent /> : <Navigate to="/login" />} /> */}
         <Route path="/settings" element={isLoggedIn ? <SettingsPage /> : <Navigate to="/login" />} />
         <Route path="/theme" element={isLoggedIn ? <Theme /> : <Navigate to="/login" />} />
         <Route path="/new" element={isLoggedIn ? <NoAdClock /> : <Navigate to="/login" />} />
-        <Route path="/upload" element={isLoggedIn ? <AdminUpload /> : <Navigate to="/login" />} />
         <Route path="/schedule" element={isLoggedIn ? <UserSchedule /> : <Navigate to="/login" />} />
         <Route path="/play" element={isLoggedIn ? <UserPlayback /> : <Navigate to="/login" />} />
 
