@@ -1,0 +1,272 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.clockContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+/* .clock-background {
+  animation: rotateClockwise 86400s linear infinite;
+  
+  } */
+
+.digital-time-boxes {
+  display: flex;
+  justify-content: space-around;
+  gap: 25px;
+}
+
+/* Make clock bigger */
+.clock {
+  position: relative;
+  margin: auto;
+  width: 90vw;
+  max-width: 550px;
+  height: 90vw;
+  max-height: 550px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+@keyframes rotateClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.clockBackground {
+  /* animation: rotateClockwise 86400s linear infinite; */
+  transform-origin: center center;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+
+/* Make inner image also scale up slightly */
+.innerClockBackground {
+  width: 70%;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dial {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 160px;
+  /* Increased hand length */
+  transform-origin: bottom center;
+  transition: all 0.01s linear;
+}
+
+.taskata {
+  height: 30px;
+  width: 23px;
+  position: absolute;
+  top: -12%;
+  left: 4px;
+}
+
+.minkata {
+  height: 12px;
+  width: 20px;
+  position: absolute;
+  top: 7%;
+  left: -5px;
+}
+
+
+.table.tithitable td {
+  text-align: left;
+}
+
+.table.indoved td,
+th {
+  text-align: left;
+}
+
+.pal {
+  background-color: rgb(46, 6, 46);
+  width: 8px;
+  border: 2px solid rgb(255, 255, 219);
+}
+
+.vipal {
+  width: 3px;
+  background-color: rgb(9, 9, 15);
+  border: 1px solid rgb(134, 74, 74);
+  transition: 0.001s ease-out;
+}
+
+.table thead th {
+  background-color: #cb8bcb;
+  color: maroon;
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.table {
+  border: 2px solid purple;
+  background-color: white;
+  color: maroon;
+}
+
+/* tithitable */
+
+/* Ensure the tables stack on smaller screens */
+@media (max-width: 576px) {
+  .d-flex {
+    flex-direction: column;
+    /* Stack the tables vertically on small screens */
+  }
+}
+
+.card {
+  border-radius: 8px;
+}
+
+.table th,
+td {
+  text-align: center;
+  font-weight: bold;
+}
+
+.div-ved {
+  position: relative;
+  right: 2px;
+  margin-top: 1px;
+  width: 48.5%;
+  border-radius: 20px purple;
+}
+
+.div-ved th,
+td {
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+.div-ind th,
+td {
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
+
+.div-ind {
+  width: 48.5%;
+  position: relative;
+  right: -3px;
+  padding: 1px;
+  border-radius: 2px purple;
+}
+
+.table.tithitable td {
+  background-color: #cb8bcb;
+  /* color: white; */
+  word-wrap: normal;
+  color: maroon;
+}
+
+.tithitd .customBorder {
+  border-bottom: solid 20px black;
+  margin-bottom: 10px;
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.adv {
+  width: 100%;
+  margin-top: -2px;
+  padding: 20px;
+}
+
+.notification {
+  width: 100%;
+  color: white;
+  margin-top: -15px;
+  padding: 10px;
+}
+
+.vedind {
+  margin-top: 20px;
+}
+
+
+.vedind table {
+  width: 50%;
+  border-collapse: collapse;
+  /* Optional: makes borders and spacing tighter */
+}
+
+.vedind table td,
+.vedind table th {
+  /* Reduce vertical padding for smaller height */
+  text-align: center;
+  /* Center horizontally */
+  vertical-align: middle;
+  /* Center vertically */
+}
+
+.vedind table tr {
+  height: 50px;
+  border: 2px solid;
+}
+
+.timeinfo {
+  width: 88%;
+}
+
+.suryoast {
+  margin-top: 5px;
+  width: 80%;
+  margin: auto;
+}
+
+h3 {
+  font-weight: bolder;
+}
+
+.indvedgreg th {
+  background-color: #cb8bcb;
+  color: maroon;
+  /* Optional: makes the text readable */
+}
+
+.tithivalue {
+  background-color: #cb8bcb;
+  color: maroon;
+  padding: 4px;
+  border-radius: 5px;
+}
+
+.custom-border td strong,
+.custom-border td span {
+  color: maroon;
+}
+
+.vedind {
+  margin-top: 2px;
+}

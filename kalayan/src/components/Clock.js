@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "../css/Clock3.module.css";
+import styles from "../css/Clock2.module.css";
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
 import klogo from "../assets/images/kalaayan-logo.png";
 import qrcode from "../assets/images/qrcode.svg";
@@ -12,17 +12,17 @@ import converttime from "../components/timeconverter.js";
 import VerticalProgressBar from "./Progrressbar.js";
 import { useSelector } from "react-redux";
 import EarthRotation from "../planets/EarthRotation.js";
-import JupiterRotation from "../planets/JupiterRotation.js";
-import KetuRotation from "../planets/KetuRotation.js";
-import MarsRotation from "../planets/MarsRotation.js";
-import RahuRotation from "../planets/RahuRotation.js";
-import MoonRotation from "../planets/MoonRotation.js";
-import NeptuneRotation from "../planets/NeptuneRotation.js";
-import UranusRotation from "../planets/UranusRotation.js";
-import VenusRotation from "../planets/VenusRotation.js";
-import SunRotation from "../planets/SunRotation.js";
-import MercuryRotation from "../planets/MercuryRotation.js";
-import SaturnRotation from "../planets/SatturnRotation.js";
+import JupiterRotation from "../planets_Ad/JupiterRotation.js";
+import KetuRotation from "../planets_Ad/KetuRotation.js";
+import MarsRotation from "../planets_Ad/MarsRotation.js";
+import RahuRotation from "../planets_Ad/RahuRotation.js";
+import MoonRotation from "../planets_Ad/MoonRotation.js";
+import NeptuneRotation from "../planets_Ad/NeptuneRotation.js";
+import UranusRotation from "../planets_Ad/UranusRotation.js";
+import VenusRotation from "../planets_Ad/VenusRotation.js";
+import SunRotation from "../planets_Ad/SunRotation.js";
+import MercuryRotation from "../planets_Ad/MercuryRotation.js";
+import SaturnRotation from "../planets_Ad/SatturnRotation.js";
 import PlanetSelector from "./PlanetSelector.js";
 //import vedicdatefunction from '../components/dategiver.js';
 //import vedicdatefunction from '../components/dategiver.js';
@@ -402,7 +402,7 @@ const NoAdClock = () => {
 
             {/* Center Column: Image or Text */}
             <div className="flex justify-center items-center">
-              <img src={klogo} alt="Kalayan" className="w-30 h-[60px]" />
+              <img src={klogo} alt="Kalayan" className="w-30 h-[40px]" />
               {/* Or use text instead of image: */}
               {/* <h3 className="text-danger text-4xl font-bold">|| कालायन ||</h3> */}
             </div>
@@ -542,8 +542,8 @@ const NoAdClock = () => {
         {/* Time Tables Section */}
 
         {/* First Table Section */}
-        <div className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[177px] flex-nowrap`}>
-          <table className={`${styles.table}`}>
+        <div className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[177px] max-md:flex-wrap flex-nowrap`}>
+          <table className={`${styles.table}  w-full md:w-auto`}>
             <thead className="custom-header">
               <tr>
                 <th></th>
@@ -569,7 +569,7 @@ const NoAdClock = () => {
             </tbody>
           </table>
 
-          <table className={`${styles.table}`}>
+          <table className={`${styles.table}  w-full md:w-auto`}>
             <thead className="custom-header">
               <tr>
                 <th></th>
@@ -604,50 +604,50 @@ const NoAdClock = () => {
         </div>
 
         {/* Tithi Table */}
-        <table className={`${styles.table} ${styles.tithitable} bg-[light-purple] text-white shadow-lg w-full rounded-lg mt-[-13px]`}>
+        <table className={`${styles.table} ${styles.tithitable} bg-[light-purple] text-white shadow-lg w-full rounded-lg mt-[13px]`}>
           <tbody className="w-full h-full">
             <tr className={`${styles.customBorder}`}>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">पूर्णिमांत तिथी:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
+              <td className={`${styles.tithitd} py-1`}>
+                <strong className="">पूर्णिमांत तिथी:</strong>
+                <span className={`${styles.tithivalue}`}>
                   {data?.length > 0 ? data?.[0].Purnimant_tithi : ""}
                 </span>
               </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">आमांत तिथी:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
+              <td className={`${styles.tithitd} py-1`}>
+                <strong className="">आमांत तिथी:</strong>
+                <span className={`${styles.tithivalue} `}>
                   {data?.length > 0 ? data?.[0].Amant_tithi : ""}
                 </span>
               </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">नक्षत्र:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
+              <td className={`${styles.tithitd} py-1`}>
+                <strong className="">नक्षत्र:</strong>
+                <span className={`${styles.tithivalue} `}>
                   {data?.length > 0 ? data?.[0].Nakshatra : ""}
                 </span>
               </td>
             </tr>
-            <tr className={`${styles.customBorder}`}>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">दिनकरण:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
+            <tr className={`${styles.customBorder} py-1`}>
+              <td className={`${styles.tithitd}`}>
+                <strong className="">दिनकरण:</strong>
+                <span className={`${styles.tithivalue} `}>
                   {data?.length > 0 ? data?.[0].DivaKaran : ""}
                 </span>
               </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">रात्रीकरण:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
+              <td className={`${styles.tithitd} py-1`}>
+                <strong className="">रात्रीकरण:</strong>
+                <span className={`${styles.tithivalue} `}>
                   {data?.length > 0 ? data?.[0].RatriKaran : ""}
                 </span>
               </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">योग:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
+              <td className={`${styles.tithitd} py-1`}>
+                <strong className="">योग:</strong>
+                <span className={`${styles.tithivalue} `}>
                   {data?.length > 0 ? data?.[0].Yog : ""}
                 </span>
               </td>
             </tr>
             <tr className={`${styles.customBorder} w-full`}>
-              <td className={`py-3 ${styles.tithivalue} text-left !text-[1.3rem]`}>
+              <td className={`${styles.tithivalue} text-left`}>
                 दिनविशेष:
               </td>
               <td></td>

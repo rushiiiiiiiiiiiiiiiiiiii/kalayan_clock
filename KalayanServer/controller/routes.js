@@ -676,6 +676,13 @@ router.post("/add-nakshatra", (req, res) => {
   });
 });
 
-
+router.post("/Add_Advertisment",(err,res)=>{
+  try {
+    const sql = ''
+  } catch (error) {
+    console.log(error)
+  }
+})
+conn.query()
 
 module.exports = router;

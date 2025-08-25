@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.clock-container {
+.clockContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,9 +28,9 @@
   position: relative;
   margin: auto;
   width: 90vw;
-  max-width: 550px;
+  max-width: 400px;
   height: 90vw;
-  max-height: 550px;
+  max-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,7 +46,7 @@
   }
 }
 
-.clock-background {
+.clockBackground {
   /* animation: rotateClockwise 86400s linear infinite; */
   transform-origin: center center;
   position: absolute;
@@ -58,7 +58,7 @@
 
 
 /* Make inner image also scale up slightly */
-.inner-clock-background {
+.innerClockBackground {
   width: 70%;
   height: auto;
   position: absolute;
@@ -126,7 +126,7 @@ th {
 
 .table {
   border: 2px solid purple;
-  background-color: purple;
+  background-color: white;
   color: maroon;
 }
 
@@ -166,7 +166,6 @@ td {
 
 .div-ind th,
 td {
-  font-size: 1.3rem;
   text-transform: uppercase;
 }
 
@@ -180,13 +179,13 @@ td {
 
 .table.tithitable td {
   background-color: #cb8bcb;
-  color: white;
+  /* color: white; */
   word-wrap: normal;
   color: maroon;
 }
 
-.tithitd .custom-border {
-  border-bottom: solid 20px white;
+.tithitd .customBorder {
+  border-bottom: solid 20px black;
   margin-bottom: 10px;
 }
 
@@ -232,6 +231,7 @@ body {
 
 .vedind table tr {
   height: 50px;
+  border: 2px solid;
 }
 
 .timeinfo {
@@ -256,7 +256,7 @@ h3 {
 
 .tithivalue {
   background-color: #cb8bcb;
-  color: white;
+  color: maroon;
   padding: 4px;
   border-radius: 5px;
 }
