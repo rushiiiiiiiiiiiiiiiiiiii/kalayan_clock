@@ -10,6 +10,24 @@ const fs = require("fs");
 //     fs.mkdirSync(uploadDir, { recursive: true });
 // }
 
+function parseCustomDate(dateStr) {
+  if (!dateStr) return null;
+
+  const [day, monthStr, yearStr] = dateStr.split("/");
+
+  const months = {
+    Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+    May: "05", Jun: "06", Jul: "07", Aug: "08",
+    Sep: "09", Sept: "09", Oct: "10",
+    Nov: "11", Dec: "12"
+  };
+
+  const month = months[monthStr];
+  const year = `20${yearStr}`; // "25" → "2025"
+
+  return `${year}-${month}-${day.padStart(2, "0")}`;
+}
+
 router.get("/getdata", async (_req, res) => {
   const sql = "SELECT * FROM login";
   try {
@@ -92,7 +110,6 @@ router.post("/update_pass", async (req, res) => {
 router.post("/add_customer", async (req, res) => {
   const { Tv_id, Name, Mobile_No, Location, Language, Created_at, Updated_at } =
     req.body;
-  console.log(req.body);
   const sql = `INSERT INTO user 
                  (Tv_id, Name, Mobile_No, Location, Language,  Created_at) 
                  VALUES (?, ?, ?, ?, ?, ?)`;
@@ -120,10 +137,33 @@ router.post("/add_person", async (req, res) => {
 });
 router.post("/get_data/:id", async (req, res) => {
   const id = req.params.id
-  console.log(id)
-  const formatted = req.body.date
+  const formatted = parseCustomDate(req.body.date);
+  // console.log("formatted",formatted)
   if (id == "English") {
-    const sql = "SELECT * FROM vedic_calender_english WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
+    const sql = `SELECT 
+    DATE_FORMAT(Gregorian_date, '%Y-%m-%d') AS Gregorian_date,
+    Id,
+    Indian_date,
+    Vedic_date,
+    War,
+    Purnimant_tithi,
+    Amant_tithi,
+    Nakshatra,
+    Yog,
+    DivaKaran,
+    RatriKaran,
+    Suryoday,
+    Suryasta,
+    Dinvishesh,
+    Ayan,
+    Rutu,
+    VikramSamvat,
+    shaksavant
+FROM vedic_calender_english
+WHERE Gregorian_date >= ?
+ORDER BY Gregorian_date ASC
+LIMIT 10;
+`;
     conn.query(sql, formatted, async (err, result) => {
       if (err) throw err;
       if (result.length > 0) {
@@ -197,7 +237,6 @@ router.get("/get_all_data/:id", async (req, res) => {
 });
 router.post("/update_details", async (req, res) => {
   const { Suryoday, Suryasta, id } = req.body;
-  console.log(req.body);
   const query =
     "UPDATE vedic_calender_marathi SET Suryoday = ?, Suryasta = ? WHERE id = ?;";
   conn.query(query, [Suryoday, Suryasta, id], (err, result) => {
@@ -243,7 +282,6 @@ router.post("/store_notify", async (req, res) => {
     return res.status(400).json({ error: "Text is required" });
   }
   conn.query(sql, [data.text], (err, result) => {
-    console.log(data);
     if (err) throw err;
     return res.json("added successfully");
   });
@@ -379,9 +417,9 @@ router.post("/uploadCSV", (req, res) => {
   ]);
 
   const table = lan === "en" ? "vedic_calender_english"
-              : lan === "hi" ? "vedic_calender_hindi"
-              : lan === "mr" ? "vedic_calender_marathi"
-              : null;
+    : lan === "hi" ? "vedic_calender_hindi"
+      : lan === "mr" ? "vedic_calender_marathi"
+        : null;
 
   if (!table) {
     return res.status(400).json({ error: "Invalid language" });
@@ -534,7 +572,6 @@ router.post("/Tv_login", async (req, res) => {
 
 router.post("/schedule-media", (req, res) => {
   const { mediaId, scheduleDate, scheduleTime } = req.body;
-  console.log(req.body);
   conn.query(
     "INSERT INTO media_schedules (media_id, schedule_date, schedule_time) VALUES (?, ?, ?)",
     [mediaId, scheduleDate, scheduleTime],
@@ -616,7 +653,6 @@ router.get("/Nakshtra", async (req, res) => {
     const year = now.getFullYear();
 
     const today = `${month}/${day}/${year}`
-    console.log(today)
     // 2. SQL query — assuming `Date` column is DATE (not DATETIME)
     const query = `SELECT * FROM planets WHERE Date = ?`;
 
@@ -676,13 +712,67 @@ router.post("/add-nakshatra", (req, res) => {
   });
 });
 
-router.post("/Add_Advertisment",(err,res)=>{
-  try {
-    const sql = ''
-  } catch (error) {
-    console.log(error)
-  }
-})
-conn.query()
+// router.post("/Add_Advertisment",(err,res)=>{
+//   try {
+//     const sql = ''
+//   } catch (error) {
+//     console.log(error)
+//   }
+// })
+// conn.query()
+// router.get("/fix-english-dates", async (_req, res) => {
+//   try {
+//     // Step 1: Convert strings like '13/Jul/25' into real dates (YYYY-MM-DD)
+//     const updateSql = `
+//       UPDATE vedic_calender_english
+//       SET Gregorian_date = STR_TO_DATE(Gregorian_date, '%d/%b/%y')
+//     `;
+//     await conn.query(updateSql);
+
+//     // Step 2: Change type to DATE (but keep the name Gregorian_date)
+//     const alterSql = `
+//       ALTER TABLE vedic_calender_english
+//       MODIFY COLUMN Gregorian_date DATE
+//     `;
+//     await conn.query(alterSql)
+
+//     res.json({ message: "Gregorian_date converted to DATE type, name unchanged" });
+//   } catch (err) {
+//     console.error("Migration error:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// const sql = `
+//   SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE
+//   FROM INFORMATION_SCHEMA.COLUMNS
+//   WHERE TABLE_NAME = 'vedic_calender_english'
+//     AND COLUMN_NAME = 'Gregorian_date'
+// `;
+
+// conn.query(sql, (err, result) => {
+//   if (err) {
+//     console.error("Error fetching column info:", err);
+//     return;
+//   }
+//   console.log("Column info:", result);
+// });
+
+// const sql = "TRUNCATE TABLE vedic_calender_english";
+
+// conn.query(sql, (err, result) => {
+//   if (err) {
+//     console.error("Error truncating table:", err);
+//     return;
+//   }
+//   console.log("All data deleted, table reset:", result);
+// });
+
+// const sql = "SELECT DATE_FORMAT(Gregorian_date, '%Y-%m-%d') AS Gregorian_date FROM vedic_calender_english";
+// conn.query(sql, (err, results) => {
+//   if (err) throw err;
+//   console.log(results);
+// });
+
 
 module.exports = router;

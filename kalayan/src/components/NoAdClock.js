@@ -107,17 +107,16 @@ const NoAdClock = () => {
   useEffect(() => {
     setInterval(() => {
       const storedData = JSON.parse(localStorage.getItem('data'));
-      const currentDates = new Date(); // or new Date("2025-04-21")
-      const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
-      const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
-      const year = String(currentDates.getFullYear()).slice(-2); // Get last 2 digits of the year (e.g., '25')
+      const currentDate = new Date(); // or new Date("2025-09-20")
 
-      // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
-      const formatted = `${day}/${month}/${year}`;
+      const year = currentDate.getFullYear(); // '2025'
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // '09' (months are 0-indexed)
+      const day = String(currentDate.getDate()).padStart(2, "0"); // '20'
+
+      const formattedDate = `${year}-${month}-${day}`; // '2025-09-20'
       const datas = Array.isArray(storedData)
-        ? storedData.filter((name) => name.Gregorian_date == formatted)
+        ? storedData.filter((name) => name.Gregorian_date == formattedDate)
         : [];
-
       setdata(datas);
     }, 3000);
 
@@ -446,7 +445,7 @@ const NoAdClock = () => {
                     transform: rotate(${360 + Ring_rotation + 180}deg);
                   }
                 }`
-              } 
+              }
             </style>
             <div className={`${styles.clockBackground}`} style={{
               animation: 'rotateClockwise 86400s linear infinite',
@@ -654,7 +653,7 @@ const NoAdClock = () => {
               <td></td>
             </tr>
           </tbody>
-        </table>  
+        </table>
 
         {/* ind ved greg time section  */}
 
@@ -696,7 +695,7 @@ const NoAdClock = () => {
           </p>
         </div>
 
-       
+
       </div >
     </>
   );

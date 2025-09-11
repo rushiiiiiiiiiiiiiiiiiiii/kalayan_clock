@@ -32,6 +32,6 @@
 // Admin: manually enable or disable TV access
 
   // Start Server
-  app.listen(PORT,'192.168.0.117',() => {
-    console.log(`Server is running on http://192.168.0.117:${PORT}`);
+  app.listen(PORT,'192.168.0.114',() => {
+    console.log(`Server is running on http://192.168.0.114:${PORT}`);
   });
