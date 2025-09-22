@@ -219,7 +219,10 @@ const NoAdClock = () => {
   const seconds = now.getSeconds();
 
   //diff = 1611 seconds
-  const now_loc = new Date(now - 1611000);
+  const loc_time = localStorage.getItem("localtime")
+
+  const timestamp = parseInt(loc_time) * 60 * 1000
+  const now_loc = new Date(now - timestamp);
   const hours_loc = now_loc.getHours();
   const minutes_loc = now_loc.getMinutes();
   const seconds_loc = now_loc.getSeconds();
@@ -647,7 +650,7 @@ const NoAdClock = () => {
             </tr>
             <tr className={`${styles.customBorder} w-full`}>
               <td className={`py-3 ${styles.tithivalue} text-left !text-[1.3rem]`}>
-                दिनविशेष:
+                दिनविशेष:{data?.[0]?.Dinvishesh}
               </td>
               <td></td>
               <td></td>
