@@ -773,6 +773,12 @@ router.post("/add-nakshatra", (req, res) => {
 //   if (err) throw err;
 //   console.log(results);
 // });
-
+  // const updateQuery = 'UPDATE kalayan SET Dinvishesh = ? WHERE gregorian_date = 2025-09-26 ';
+  // conn.query(updateQuery,["विनायक चतुर्थी"],(err,result)=>{
+  //   if(err) return err;
+  //   if(result){
+  //     console.log("data upadted successfully")
+  //   }
+  // })
 
 module.exports = router;
