@@ -395,7 +395,6 @@ router.post("/uploadCSV", (req, res) => {
   if (!Array.isArray(data) || data.length === 0) {
     return res.status(400).json({ error: "No data received" });
   }
-
   const values = data.map((item) => [
     item["Gregorian Date"]?.replace(/"/g, "") || null,
     item["Indian Date"] || null,
@@ -409,12 +408,16 @@ router.post("/uploadCSV", (req, res) => {
     item["रात्री करण"] || null,
     item["suryoday"] || null,
     item["suryasta"] || null,
-    item["दिनविशेष "]?.trim() || null,
+    typeof item["दिनविशेष"] === 'string' ? item["दिनविशेष"].trim() : null, // Dinvishesh
     item["अयन"] || null,
     item["ऋतू"] || null,
     item["विक्रम संवत"] || null,
     item["शक संवत"] || null,
   ]);
+
+  console.log("Sample row for insert:");
+  console.log(values);
+
 
   const table = lan === "en" ? "vedic_calender_english"
     : lan === "hi" ? "vedic_calender_hindi"
@@ -459,8 +462,6 @@ router.post("/uploadCSV", (req, res) => {
     res.status(200).json({ message: "Data uploaded successfully", result });
   });
 });
-
-
 
 router.get("/status/:id", async (req, res) => {
   const id = req.params.id;
@@ -773,12 +774,25 @@ router.post("/add-nakshatra", (req, res) => {
 //   if (err) throw err;
 //   console.log(results);
 // });
-  // const updateQuery = 'UPDATE kalayan SET Dinvishesh = ? WHERE gregorian_date = 2025-09-26 ';
-  // conn.query(updateQuery,["विनायक चतुर्थी"],(err,result)=>{
-  //   if(err) return err;
-  //   if(result){
-  //     console.log("data upadted successfully")
-  //   }
-  // })
+// const updateQuery = 'UPDATE kalayan SET Dinvishesh = ? WHERE gregorian_date = 2025-09-26 ';
+// conn.query(updateQuery,["विनायक चतुर्थी"],(err,result)=>{
+//   if(err) return err;
+//   if(result){
+//     console.log("data upadted successfully")
+//   }
+// })
+// const sql = "DELETE FROM vedic_calender_english";
+
+// conn.query(sql, (err, result) => {
+//   if (err) {
+//     console.error("Error deleting data:", err);
+//     // handle error
+//   } else {
+//     console.log("All data deleted successfully");
+//     // handle success
+//   }
+// });
+// ;
+
 
 module.exports = router;

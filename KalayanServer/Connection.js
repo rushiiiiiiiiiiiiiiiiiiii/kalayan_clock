@@ -22,7 +22,7 @@ const conn = mysql.createPool({
     database: "kalayan",
     connectionLimit: 10,  // Number of connections in the pool
     waitForConnections: true,
-    queueLimit: 0
+    queueLimit: 0,
 });
 
 // Use the pool to query
