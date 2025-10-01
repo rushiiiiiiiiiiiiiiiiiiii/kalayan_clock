@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "../css/Clock3.module.css";
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
 import klogo from "../assets/images/kalaayan-logo.png";
-import qrcode from "../assets/images/qrcode.svg";
+import qrcode from "../assets/images/kalayanqr.png";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
 import axios, { getAdapter } from "axios";
 import taaskata from "../assets/images/taskata24.png";
@@ -28,7 +28,6 @@ import PlanetSelector from "./PlanetSelector.js";
 //import vedicdatefunction from '../components/dategiver.js';
 
 const NoAdClock = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [notify, setnotify] = useState();
   const [data, setdata] = useState([]);
   const [time, setTime] = useState(new Date());
@@ -76,6 +75,10 @@ const NoAdClock = () => {
   }, []);
 
   const getdata = async () => {
+    const data = localStorage.getItem('language');
+    if (!data) {
+      localStorage.setItem('language', 'English');
+    }; // Exit if language is not set
     const currentDates = new Date(); // or new Date("2025-04-21")
     const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
     const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
@@ -119,7 +122,8 @@ const NoAdClock = () => {
         : [];
       setdata(datas);
     }, 3000);
-
+    localStorage.setItem("localtime", "38")
+    localStorage.setItem("city", "Mumbai")
   }, [])
   const Notification = async () => {
     try {
@@ -679,13 +683,11 @@ const NoAdClock = () => {
           </table>
 
           <div className="bg-white h-[190px] m-auto">
-            <a href="https://your-link.com" target="_blank" rel="noopener noreferrer">
               <img
                 src={qrcode}
                 alt="Kalayan Clock"
                 className="object-cover h-full w-full"
               />
-            </a>
           </div>
 
         </div>

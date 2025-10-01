@@ -26,26 +26,12 @@ export default function SettingsPanel() {
     { name: "Ahmedabad", longitude: 72.5714 },
     { name: "Jaipur", longitude: 75.7873 },
     { name: "Surat", longitude: 72.8311 },
+    { name: "Nagpur", longitude: 79.08811 },
   ];
   useEffect(() => {
     localStorage.setItem("language", language);
   }, [language]);
 
-  const fetchLocation = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-        }
-      );
-    }
-  };
   const handleChange = (e) => {
     const cityName = e.target.value;
     localStorage.setItem("city", cityName)
@@ -60,7 +46,6 @@ export default function SettingsPanel() {
       })
     } catch (error) {
       console.log(error)
-
     }
   }
   const handleToggle = () => {
@@ -102,7 +87,7 @@ export default function SettingsPanel() {
         </div>
 
         {/* Location Setting */}
-        <div>
+        {/* <div>
           <button
             onClick={fetchLocation}
             className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
@@ -114,7 +99,7 @@ export default function SettingsPanel() {
               Latitude: {location.latitude}, Longitude: {location.longitude}
             </p>
           )}
-        </div>
+        </div> */}
 
         {/* Language Selector */}
         <div>

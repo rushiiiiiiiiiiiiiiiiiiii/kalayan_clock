@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "../css/Clock2.module.css";
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
 import klogo from "../assets/images/kalaayan-logo.png";
-import qrcode from "../assets/images/qrcode.svg";
+import qrcode from "../assets/images/kalayanqr.png";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
 import axios, { getAdapter } from "axios";
 import taaskata from "../assets/images/taskata24.png";
@@ -677,13 +677,11 @@ const NoAdClock = () => {
           </table>
 
           <div className="bg-white h-[190px] m-auto">
-            <a href="https://your-link.com" target="_blank" rel="noopener noreferrer">
               <img
                 src={qrcode}
-                alt="Kalayan Clock"
+                alt="Kalayan Clock Brochure"
                 className="object-cover h-full w-full"
               />
-            </a>
           </div>
 
         </div>

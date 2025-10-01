@@ -3,7 +3,7 @@ const mysql = require("mysql");
 //     host:"localhost",
 //     user:"root",
 //     password:"",
-//     database:"Kalyan"
+//     database:"Kalayan"
 // })
 // conn.connect(function (err){
 //     if(err){
