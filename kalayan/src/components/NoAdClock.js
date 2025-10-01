@@ -122,8 +122,12 @@ const NoAdClock = () => {
         : [];
       setdata(datas);
     }, 3000);
-    localStorage.setItem("localtime", "38")
-    localStorage.setItem("city", "Mumbai")
+    if(!localStorage.getItem('localtime')){
+      localStorage.setItem('localtime','38')
+    } 
+    if(!localStorage.getItem('city')){
+      localStorage.setItem('city','Mumbai')
+    }
   }, [])
   const Notification = async () => {
     try {
