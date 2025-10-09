@@ -27,6 +27,11 @@ export default function SettingsPanel() {
     { name: "Jaipur", longitude: 75.7873 },
     { name: "Surat", longitude: 72.8311 },
     { name: "Nagpur", longitude: 79.08811 },
+    { name: "Varanasi", longitude: 82.9739 },
+    { name: "Lucknow", longitude: 80.9462 },
+    { name: "Prayagraj", longitude: 81.8463 },
+    { name: "Ujjain", longitude: 75.7804 },
+    { name: "Jodhpur", longitude: 73.0243 },
   ];
   useEffect(() => {
     localStorage.setItem("language", language);

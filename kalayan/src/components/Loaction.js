@@ -37,9 +37,9 @@ const LocationFetcher = () => {
 
   return (
     <div>
-      <h2>Your Location:</h2>
+      {/* <h2>Your Location:</h2>
       <p>{location}</p>
-      <p>Local Time Difference from IST (in minutes): {localTime}</p>
+      <p>Local Time Difference from IST (in minutes): {localTime}</p> */}
     </div>
   );
 };
