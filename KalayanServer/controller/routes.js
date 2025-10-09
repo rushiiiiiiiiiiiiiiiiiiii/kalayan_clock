@@ -416,7 +416,6 @@ router.post("/uploadCSV", (req, res) => {
   ]);
 
   console.log("Sample row for insert:");
-  console.log(values);
 
 
   const table = lan === "en" ? "vedic_calender_english"
@@ -665,6 +664,7 @@ router.get("/Nakshtra", async (req, res) => {
       }
 
       if (result.length === 0) {
+        console.log(today)
         return res.status(404).json({ message: "No matching records for today" });
       }
 
@@ -682,6 +682,20 @@ router.post("/add-nakshatra", (req, res) => {
   if (!Array.isArray(dataArray) || dataArray.length === 0) {
     return res.status(400).json({ error: "Invalid data format" });
   }
+
+  const requiredFields = [
+    "Nakshatra Mandal",
+    "Date",
+    "रवि",
+    "चंद्र",
+    "मंगल",
+    "बुध",
+    "गुरु",
+    "शुक्र",
+    "शनि",
+    "राहू",
+    "केतु"
+  ];
 
   const sql = `
     INSERT INTO planets 
@@ -703,6 +717,16 @@ router.post("/add-nakshatra", (req, res) => {
     data["राहू"],
     data["केतु"]
   ]);
+  for (let i = 0; i < dataArray.length; i++) {
+    const data = dataArray[i];
+    for (const field of requiredFields) {
+      if (!data[field] && data[field] !== 0) { // treat 0 as valid
+        return res.status(400).json({
+          error: `Missing value for field "${field}" in record at index ${i}`
+        });
+      }
+    }
+  }
 
   conn.query(sql, [values], (err, result) => {
     if (err) {
@@ -713,86 +737,17 @@ router.post("/add-nakshatra", (req, res) => {
   });
 });
 
-// router.post("/Add_Advertisment",(err,res)=>{
-//   try {
-//     const sql = ''
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
-// conn.query()
-// router.get("/fix-english-dates", async (_req, res) => {
-//   try {
-//     // Step 1: Convert strings like '13/Jul/25' into real dates (YYYY-MM-DD)
-//     const updateSql = `
-//       UPDATE vedic_calender_english
-//       SET Gregorian_date = STR_TO_DATE(Gregorian_date, '%d/%b/%y')
-//     `;
-//     await conn.query(updateSql);
+router.get('/delete-usn-express', (req, res) => {
+  const sql = 'DELETE FROM vedic_calender_english';
 
-//     // Step 2: Change type to DATE (but keep the name Gregorian_date)
-//     const alterSql = `
-//       ALTER TABLE vedic_calender_english
-//       MODIFY COLUMN Gregorian_date DATE
-//     `;
-//     await conn.query(alterSql)
-
-//     res.json({ message: "Gregorian_date converted to DATE type, name unchanged" });
-//   } catch (err) {
-//     console.error("Migration error:", err);
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
-// const sql = `
-//   SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE
-//   FROM INFORMATION_SCHEMA.COLUMNS
-//   WHERE TABLE_NAME = 'vedic_calender_english'
-//     AND COLUMN_NAME = 'Gregorian_date'
-// `;
-
-// conn.query(sql, (err, result) => {
-//   if (err) {
-//     console.error("Error fetching column info:", err);
-//     return;
-//   }
-//   console.log("Column info:", result);
-// });
-
-// const sql = "TRUNCATE TABLE vedic_calender_english";
-
-// conn.query(sql, (err, result) => {
-//   if (err) {
-//     console.error("Error truncating table:", err);
-//     return;
-//   }
-//   console.log("All data deleted, table reset:", result);
-// });
-
-// const sql = "SELECT DATE_FORMAT(Gregorian_date, '%Y-%m-%d') AS Gregorian_date FROM vedic_calender_english";
-// conn.query(sql, (err, results) => {
-//   if (err) throw err;
-//   console.log(results);
-// });
-// const updateQuery = 'UPDATE kalayan SET Dinvishesh = ? WHERE gregorian_date = 2025-09-26 ';
-// conn.query(updateQuery,["विनायक चतुर्थी"],(err,result)=>{
-//   if(err) return err;
-//   if(result){
-//     console.log("data upadted successfully")
-//   }
-// })
-// const sql = "DELETE FROM vedic_calender_english";
-
-// conn.query(sql, (err, result) => {
-//   if (err) {
-//     console.error("Error deleting data:", err);
-//     // handle error
-//   } else {
-//     console.log("All data deleted successfully");
-//     // handle success
-//   }
-// });
-// ;
+  conn.query(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error deleting data');
+    }
+    res.send('All data deleted successfully');
+  });
+});
 
 
 module.exports = router;

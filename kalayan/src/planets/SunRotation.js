@@ -51,7 +51,7 @@ const SunRotation = ({ isVisible = true, rotation ,mandal}) => {
       <div
         style={{
           position: "absolute",
-          top: "29%",
+          top: "27%",
           left: "50%",
           transform: `translate(-50%, -50%) rotate(${sunRotation}deg) translateY(-240px)`,
           animation: `revolveSun 86400s linear infinite`, // Full 360° in 24 hours

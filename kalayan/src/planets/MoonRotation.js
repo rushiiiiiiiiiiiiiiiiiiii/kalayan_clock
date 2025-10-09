@@ -217,7 +217,7 @@ const MoonRotation = ({ isVisible = true, rotation, mandal }) => {
         style={{
 
           position: "absolute",
-          top: "29%",
+          top: "27%",
           left: "50%",
           transform: `translate(-50%, -50%) translateY(-240px)`,
           animation: `revolveMoon  86400s linear infinite`, // 24h rotation

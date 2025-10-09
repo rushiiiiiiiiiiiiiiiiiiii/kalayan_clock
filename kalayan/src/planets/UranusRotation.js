@@ -154,7 +154,7 @@ console.log(uranusRotation)
     style={{  
           
           position: "absolute",
-          top: "29%",
+          top: "27%",
           left: "50%",
           transform: `translate(-50%, -50%) translateY(-240px)`,
           animation: `revolveUranus ${20}s linear infinite`, // 24h rotation

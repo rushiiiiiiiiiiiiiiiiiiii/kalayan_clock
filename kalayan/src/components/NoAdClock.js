@@ -122,11 +122,11 @@ const NoAdClock = () => {
         : [];
       setdata(datas);
     }, 3000);
-    if(!localStorage.getItem('localtime')){
-      localStorage.setItem('localtime','38')
-    } 
-    if(!localStorage.getItem('city')){
-      localStorage.setItem('city','Mumbai')
+    if (!localStorage.getItem('localtime')) {
+      localStorage.setItem('localtime', '38')
+    }
+    if (!localStorage.getItem('city')) {
+      localStorage.setItem('city', 'Mumbai')
     }
   }, [])
   const Notification = async () => {
@@ -520,7 +520,7 @@ const NoAdClock = () => {
         <br />
 
         {/* Ayan Section */}
-        <section className="absolute top-[-19%] left-[2%]">
+        <section className="absolute top-[-23%] left-[-3%]">
           <VerticalProgressBar />
         </section>
 
@@ -552,7 +552,7 @@ const NoAdClock = () => {
         {/* Time Tables Section */}
 
         {/* First Table Section */}
-        <div className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[177px] flex-nowrap`}>
+        <div className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[157px] flex-nowrap`}>
           <table className={`${styles.table}`}>
             <thead className="custom-header">
               <tr>
@@ -614,87 +614,94 @@ const NoAdClock = () => {
         </div>
 
         {/* Tithi Table */}
-        <table className={`${styles.table} ${styles.tithitable} bg-[light-purple] text-white shadow-lg w-full rounded-lg mt-[-13px]`}>
-          <tbody className="w-full h-full">
-            <tr className={`${styles.customBorder}`}>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">पूर्णिमांत तिथी:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
-                  {data?.length > 0 ? data?.[0].Purnimant_tithi : ""}
-                </span>
-              </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">आमांत तिथी:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
-                  {data?.length > 0 ? data?.[0].Amant_tithi : ""}
-                </span>
-              </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">नक्षत्र:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
-                  {data?.length > 0 ? data?.[0].Nakshatra : ""}
-                </span>
-              </td>
-            </tr>
-            <tr className={`${styles.customBorder}`}>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">दिनकरण:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
-                  {data?.length > 0 ? data?.[0].DivaKaran : ""}
-                </span>
-              </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">रात्रीकरण:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
-                  {data?.length > 0 ? data?.[0].RatriKaran : ""}
-                </span>
-              </td>
-              <td className={`${styles.tithitd} py-3`}>
-                <strong className="!text-[1.2rem]">योग:</strong>
-                <span className={`${styles.tithivalue} !text-[1.2rem]`}>
-                  {data?.length > 0 ? data?.[0].Yog : ""}
-                </span>
-              </td>
-            </tr>
-            <tr className={`${styles.customBorder} w-full`}>
-              <td className={`py-3 ${styles.tithivalue} text-left !text-[1.3rem]`}>
-                दिनविशेष:{data?.[0]?.Dinvishesh}
-              </td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="grid grid-cols-3 gap-1 shadow-lg rounded-lg  p-2 bg-pink">
+          {/* Row 1 */}
+          <div className="py-1 flex flex-col">
+            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>पूर्णिमांत तिथी:</strong>
+            <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+              {data?.length > 0 ? data?.[0].Purnimant_tithi : ""}
+            </span>
+          </div>
+          <div className="py-1 flex flex-col">
+            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>आमांत तिथी:</strong>
+            <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+              {data?.length > 0 ? data?.[0].Amant_tithi : ""}
+            </span>
+          </div>
+          <div className="py-1 flex flex-col">
+            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>नक्षत्र:</strong>
+            <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+              {data?.length > 0 ? data?.[0].Nakshatra : ""}
+            </span>
+          </div>
+
+          {/* Row 2 */}
+          <div className="py-1 flex flex-col">
+            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>दिनकरण:</strong>
+            <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+              {data?.length > 0 ? data?.[0].DivaKaran : ""}
+            </span>
+          </div>
+          <div className="py-1 flex flex-col">
+            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>रात्रीकरण:</strong>
+            <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+              {data?.length > 0 ? data?.[0].RatriKaran : ""}
+            </span>
+          </div>
+          <div className="py-1 flex flex-col">
+            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>योग:</strong>
+            <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+              {data?.length > 0 ? data?.[0].Yog : ""}
+            </span>
+          </div>
+
+          {/* Row 3 (full width) */}
+          <div className="col-span-3 text-left !text-[1.3rem]">
+            <div className="py-1 flex gap-1">
+              <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>दिनविशेष:</strong>
+              {
+                // data?.[0]?.Dinvishesh ?
+                  < span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+                    {data?.[0]?.Dinvishesh}
+                  </span>
+                  //  : ""
+              }
+            </div>
+          </div>
+        </div>
+
 
         {/* ind ved greg time section  */}
 
-        <div className="d-flex justify-between qrindved w-full mt-[-14px]">
-          <table className={`${styles.table} ${styles.indvedgreg} table-bordered table-striped table-hover w-full max-h-[80px] m-auto`}>
+        <div className="flex mt-2 justify-between items-center w-[100%] mx-auto gap-2">
+          {/* Table */}
+          <table className={`${styles.table} ${styles.indvedgreg} table-bordered table-striped table-hover w-full max-h-[80px]`}>
             <tbody>
               {selectedDates.map((key) => (
                 <tr key={key} style={{ height: "30px" }}>
-                  <th className="!text-[1.2rem]">{labelMap[key]}</th>
+                  <th className="text-[1.2rem]">{labelMap[key]}</th>
                   <td>{data?.length > 0 ? data?.[0][key] : ""}</td>
                 </tr>
               ))}
 
               {/* Always show Gregorian date */}
               <tr style={{ height: "30px" }}>
-                <th className="!text-[1.2rem]">Greg. Date</th>
+                <th className="text-[1.2rem]">Greg. Date</th>
                 <td>{commaSeparatedDate}</td>
               </tr>
             </tbody>
           </table>
 
-          <div className="bg-white h-[190px] m-auto">
-              <img
-                src={qrcode}
-                alt="Kalayan Clock"
-                className="object-cover h-full w-full"
-              />
+          {/* QR Code */}
+          <div className="bg-white h-[150px] w-[150px] flex-shrink-0">
+            <img
+              src={qrcode}
+              alt="Kalayan Clock"
+              className="object-cover h-full w-full"
+            />
           </div>
-
         </div>
+
 
         {/* Notification */}
         <div className="container-fluid notification  border border-success  bg-success mt-2">
