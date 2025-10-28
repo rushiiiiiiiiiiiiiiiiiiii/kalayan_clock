@@ -37,7 +37,6 @@ const NoAdClock = () => {
   const theme = useSelector((state) => state.theme.theme);
   //hooks for advertise
   const [advertisements, setAdvertisements] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [adverror, advsetError] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
   const [Ring_rotation, setRotation] = useState(0);
@@ -108,18 +107,20 @@ const NoAdClock = () => {
     }
   };
   useEffect(() => {
-    setInterval(() => {
-      const storedData = JSON.parse(localStorage.getItem('data'));
-      const currentDate = new Date(); // or new Date("2025-09-20")
+    const interval = setInterval(() => {
+      const storedData = JSON.parse(localStorage.getItem("data"));
+      const currentDate = new Date();
 
-      const year = currentDate.getFullYear(); // '2025'
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // '09' (months are 0-indexed)
-      const day = String(currentDate.getDate()).padStart(2, "0"); // '20'
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const day = String(currentDate.getDate()).padStart(2, "0");
+      const month = months[currentDate.getMonth()];
+      const year = String(currentDate.getFullYear()).slice(2);
+      const formattedDate = `${day}/${month}/${year}`; // "28/Oct/25"
 
-      const formattedDate = `${year}-${month}-${day}`; // '2025-09-20'
       const datas = Array.isArray(storedData)
-        ? storedData.filter((name) => name.Gregorian_date == formattedDate)
+        ? storedData.filter((item) => item.Gregorian_date === formattedDate)
         : [];
+
       setdata(datas);
     }, 3000);
     if (!localStorage.getItem('localtime')) {
@@ -140,7 +141,7 @@ const NoAdClock = () => {
       const now = new Date();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-      const storedNotification = JSON.parse(localStorage.getItem('notification'));
+      const storedNotification = JSON.parse(localStorage.getItem('notification')) || [];
       const [startHour, startMinute] = storedNotification.Start_time.split(":").map(Number);
       const [endHour, endMinute] = storedNotification.End_Time.split(":").map(Number);
 
@@ -162,7 +163,6 @@ const NoAdClock = () => {
   useEffect(() => {
     getdata();
     Notification();
-    console.log(notify);
   }, []);
 
   useEffect(() => {
@@ -177,7 +177,7 @@ const NoAdClock = () => {
             : "Error fetching advertisements"
         );
       } finally {
-        setLoading(false);
+
       }
     };
 
@@ -661,10 +661,10 @@ const NoAdClock = () => {
               <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>दिनविशेष:</strong>
               {
                 // data?.[0]?.Dinvishesh ?
-                  < span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
-                    {data?.[0]?.Dinvishesh}
-                  </span>
-                  //  : ""
+                < span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+                  {data?.[0]?.Dinvishesh}
+                </span>
+                //  : ""
               }
             </div>
           </div>

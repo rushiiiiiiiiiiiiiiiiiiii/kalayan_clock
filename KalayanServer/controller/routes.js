@@ -136,79 +136,65 @@ router.post("/add_person", async (req, res) => {
   );
 });
 router.post("/get_data/:id", async (req, res) => {
-  const id = req.params.id
-  const formatted = parseCustomDate(req.body.date);
-  // console.log("formatted",formatted)
-  if (id == "English") {
-    const sql = `SELECT 
-    DATE_FORMAT(Gregorian_date, '%Y-%m-%d') AS Gregorian_date,
-    Id,
-    Indian_date,
-    Vedic_date,
-    War,
-    Purnimant_tithi,
-    Amant_tithi,
-    Nakshatra,
-    Yog,
-    DivaKaran,
-    RatriKaran,
-    Suryoday,
-    Suryasta,
-    Dinvishesh,
-    Ayan,
-    Rutu,
-    VikramSamvat,
-    shaksavant
-FROM vedic_calender_english
-WHERE Gregorian_date >= ?
-ORDER BY Gregorian_date ASC
-LIMIT 10;
-`;
-    conn.query(sql, formatted, async (err, result) => {
-      if (err) throw err;
-      if (result.length > 0) {
-        return res.status(200).json(result)
-      }
-      if (result.length === 0) {
-        return res.status(404).json("No record found at" + formatted)
-      }
-      else {
-        return res.status(404).json("Data not founc")
-      }
-    });
-  }
-  else if (id == "Hindi") {
-    const sql = "SELECT * FROM vedic_calender_hindi WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
-    conn.query(sql, formatted, async (err, result) => {
-      if (err) throw err
-      if (result.length > 0) {
-        return res.status(200).json(result);
-      }
-      if (result.length === 0) {
-        console.warn("No matching record found for", formatted);
-      }
-      else {
-        return res.status(404).json("Data not founc")
-      }
-    });
-  }
-  else {
-    const sql = "SELECT * FROM vedic_calender_marathi WHERE Gregorian_date >= ? ORDER BY Gregorian_date ASC LIMIT 10;";
-    conn.query(sql, formatted, async (err, result) => {
-      if (err) throw err;
-      if (result.length > 0) {
-        return res.status(200).json(result);
-      }
-      if (result.length === 0) {
-        console.warn("No matching record found for", formatted);
-      }
-      else {
-        return res.status(404).json("Data not founc")
-      }
-    });
-  }
+  const id = req.params.id;
+  const { date } = req.body; // e.g. "28/Oct/25"
 
+  // Make sure date exists
+  if (!date) return res.status(400).json({ error: "Date is required" });
+
+  // Common SQL (works for English, Hindi, and Marathi tables)
+  const sql = `
+    SELECT 
+      Id,
+      Gregorian_date,
+      Indian_date,
+      Vedic_date,
+      War,
+      Purnimant_tithi,
+      Amant_tithi,
+      Nakshatra,
+      Yog,
+      DivaKaran,
+      RatriKaran,
+      Suryoday,
+      Suryasta,
+      Dinvishesh,
+      Ayan,
+      Rutu,
+      VikramSamvat,
+      shaksavant
+    FROM ?? 
+    WHERE STR_TO_DATE(Gregorian_date, '%d/%b/%y') >= STR_TO_DATE(?, '%d/%b/%y')
+    ORDER BY STR_TO_DATE(Gregorian_date, '%d/%b/%y') ASC
+    LIMIT 10;
+  `;
+
+  // Select table name based on ID
+  let tableName;
+  if (id === "English") tableName = "vedic_calender_english";
+  else if (id === "Hindi") tableName = "vedic_calender_hindi";
+  else tableName = "vedic_calender_marathi";
+
+  try {
+    // Use parameterized query — avoids SQL injection
+    conn.query(sql, [tableName, date], (err, result) => {
+      if (err) {
+        console.error("SQL Error:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+
+      if (!result.length) {
+        return res.status(404).json({ message: `No record found for date ${date}` });
+      }
+
+      return res.status(200).json(result);
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 });
+
 
 router.get("/get_all_data/:id", async (req, res) => {
   const id = req.params.id
@@ -749,5 +735,15 @@ router.get('/delete-usn-express', (req, res) => {
   });
 });
 
+
+// const sql =` DESCRIBE vedic_calender_marathi;`
+
+// conn.query(sql, (err, result) => {
+//   if (err) {
+//     console.error("Error describing table:", err);  
+//   } else {
+//     console.log("Table Structure:", result);  
+//   }
+// });
 
 module.exports = router;
