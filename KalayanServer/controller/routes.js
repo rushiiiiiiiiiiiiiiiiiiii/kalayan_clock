@@ -2,13 +2,27 @@ const express = require("express");
 const router = express.Router();
 const conn = require("../Connection");
 const multer = require("multer");
-
+const jwt = require("jsonwebtoken");
+// const cookieParser = require('cookie-parser')
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const fs = require("fs");
 // const uploadDir = path.join(__dirname, "uploads");
 // if (!fs.existsSync(uploadDir)) {
 //     fs.mkdirSync(uploadDir, { recursive: true });
 // }
+function auth(req, res, next) {
+  const token = req.cookies.login_token || req.cookies.tv_token;
+  if (!token) return res.status(401).json({ message: "Not logged in" });
+
+  const secret = req.cookies.login_token ? "LOGIN_SECRET_KEY" : "TV_SECRET_KEY";
+
+  jwt.verify(token, secret, (err, user) => {
+    if (err) return res.status(403).json({ message: "Invalid token" });
+    req.user = user;
+    next();
+  });
+}
 
 function parseCustomDate(dateStr) {
   if (!dateStr) return null;
@@ -16,10 +30,19 @@ function parseCustomDate(dateStr) {
   const [day, monthStr, yearStr] = dateStr.split("/");
 
   const months = {
-    Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-    May: "05", Jun: "06", Jul: "07", Aug: "08",
-    Sep: "09", Sept: "09", Oct: "10",
-    Nov: "11", Dec: "12"
+    Jan: "01",
+    Feb: "02",
+    Mar: "03",
+    Apr: "04",
+    May: "05",
+    Jun: "06",
+    Jul: "07",
+    Aug: "08",
+    Sep: "09",
+    Sept: "09",
+    Oct: "10",
+    Nov: "11",
+    Dec: "12",
   };
 
   const month = months[monthStr];
@@ -44,25 +67,55 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     const sql = "SELECT * FROM login WHERE email = ? AND password = ?";
+
     conn.query(sql, [email, password], (err, result) => {
       if (err) {
         console.error("Database error:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      if (result.length > 0) {
-        return res.status(200).json({
-          data: result[0],
-          message: "Login Successful",
-        });
-      } else {
+      if (result.length === 0) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
+
+      const user = result[0];
+
+      // ✅ Create JWT TOKEN
+      const token = jwt.sign(
+        {
+          id: user.id,
+          email: user.email,
+          role: user.User_Type,
+        },
+        "LOGIN_SECRET_KEY"
+      );
+
+      // ✅ Save cookie for browser login
+      res.cookie("login_token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+      });
+
+      return res.status(200).json({
+        message: "Login Successful",
+      });
     });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ error: "Something went wrong" });
   }
+});
+router.get("/tv-check-auth", (req, res) => {
+  const token = req.cookies.tv_token;
+
+  if (!token) return res.json({ auth: false });
+
+  jwt.verify(token, "TV_SECRET_KEY", (err, decoded) => {
+    if (err) return res.json({ auth: false });
+    res.json({ auth: true, user: decoded });
+  });
 });
 
 router.post("/forgetPassword", async (req, res) => {
@@ -107,7 +160,7 @@ router.post("/update_pass", async (req, res) => {
     console.log(error);
   }
 });
-router.post("/add_customer", async (req, res) => {
+router.post("/add_customer", auth, async (req, res) => {
   const { Tv_id, Name, Mobile_No, Location, Language, Created_at, Updated_at } =
     req.body;
   const sql = `INSERT INTO user 
@@ -135,7 +188,7 @@ router.post("/add_person", async (req, res) => {
     }
   );
 });
-router.post("/get_data/:id", async (req, res) => {
+router.post("/get_data/:id", auth, async (req, res) => {
   const id = req.params.id;
   const { date } = req.body; // e.g. "28/Oct/25"
 
@@ -184,7 +237,9 @@ router.post("/get_data/:id", async (req, res) => {
       }
 
       if (!result.length) {
-        return res.status(404).json({ message: `No record found for date ${date}` });
+        return res
+          .status(404)
+          .json({ message: `No record found for date ${date}` });
       }
 
       return res.status(200).json(result);
@@ -195,25 +250,21 @@ router.post("/get_data/:id", async (req, res) => {
   }
 });
 
-
 router.get("/get_all_data/:id", async (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
   if (id == "English") {
     const sql = "SELECT * FROM vedic_calender_english";
     conn.query(sql, async (err, result) => {
       if (err) throw err;
       return res.json(result);
     });
-  }
-  else if (id == "Hindi") {
+  } else if (id == "Hindi") {
     const sql = "SELECT * FROM vedic_calender_Hindi";
     conn.query(sql, async (err, result) => {
       if (err) throw err;
       return res.json(result);
     });
-  }
-  else {
-
+  } else {
     const sql = "SELECT * FROM vedic_calender_marathi";
     conn.query(sql, async (err, result) => {
       if (err) throw err;
@@ -229,7 +280,6 @@ router.post("/update_details", async (req, res) => {
     if (err) throw err;
     return res.json(result);
   });
-
 });
 // router.post("/notification/:id", async (req, res) => {
 //     const { id } = req.params;
@@ -273,7 +323,6 @@ router.post("/store_notify", async (req, res) => {
   });
 });
 
-
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
 //     const uploadDir = path.join(__dirname, "./uploads");
@@ -312,13 +361,13 @@ const storage = multer.diskStorage({
     const timestamp = Date.now();
     const ext = path.extname(file.originalname);
     const baseName = path.basename(file.originalname, ext);
-    cb(null, `${baseName}-${timestamp}${ext}`)
+    cb(null, `${baseName}-${timestamp}${ext}`);
   },
 });
 
 const upload = multer({ storage: storage });
 
-router.post("/uploadbg", upload.single("image"), (req, res) => {
+router.post("/uploadbg", auth, upload.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
@@ -333,13 +382,11 @@ router.post("/uploadbg", upload.single("image"), (req, res) => {
       console.log("MySQL Error:", err);
       return res.status(500).json({ error: err.message });
     }
-    res
-      .status(201)
-      .json({
-        message: "Image uploaded successfully",
-        id: result.insertId,
-        path: filePath,
-      });
+    res.status(201).json({
+      message: "Image uploaded successfully",
+      id: result.insertId,
+      path: filePath,
+    });
   });
 });
 
@@ -357,8 +404,7 @@ router.get("/image", (req, res) => {
   });
 });
 
-
-router.post("/Upload_Plan", async (req, res) => {
+router.post("/Upload_Plan", auth, async (req, res) => {
   const { TV_id, Subscription_type, amount, date } = req.body;
   const sql =
     "INSERT INTO subscriptions (TV_id, Subscription_type, amount, date) VALUES (?, ?, ?, ?)";
@@ -394,7 +440,7 @@ router.post("/uploadCSV", (req, res) => {
     item["रात्री करण"] || null,
     item["suryoday"] || null,
     item["suryasta"] || null,
-    typeof item["दिनविशेष"] === 'string' ? item["दिनविशेष"].trim() : null, // Dinvishesh
+    typeof item["दिनविशेष"] === "string" ? item["दिनविशेष"].trim() : null, // Dinvishesh
     item["अयन"] || null,
     item["ऋतू"] || null,
     item["विक्रम संवत"] || null,
@@ -403,11 +449,14 @@ router.post("/uploadCSV", (req, res) => {
 
   console.log("Sample row for insert:");
 
-
-  const table = lan === "en" ? "vedic_calender_english"
-    : lan === "hi" ? "vedic_calender_hindi"
-      : lan === "mr" ? "vedic_calender_marathi"
-        : null;
+  const table =
+    lan === "en"
+      ? "vedic_calender_english"
+      : lan === "hi"
+      ? "vedic_calender_hindi"
+      : lan === "mr"
+      ? "vedic_calender_marathi"
+      : null;
 
   if (!table) {
     return res.status(400).json({ error: "Invalid language" });
@@ -457,20 +506,19 @@ router.get("/status/:id", async (req, res) => {
   });
 });
 
-
 const updateStatus = () => {
   const sql = "UPDATE user SET status = 'Inactive' WHERE status = 'Active'";
   conn.query(sql, (err, result) => {
     if (err) {
       console.error("Error updating status:", err);
     } else {
-      return
+      return;
     }
   });
 };
 setInterval(updateStatus, 60000); // 10 minutes in ms
 
-router.get("/All_tv", async (req, res) => {
+router.get("/All_tv", auth, async (req, res) => {
   const sql = "SELECT * FROM user";
   conn.query(sql, (err, result) => {
     if (err) throw err;
@@ -478,24 +526,26 @@ router.get("/All_tv", async (req, res) => {
   });
 });
 
-router.post("/send_notification", (req, res) => {
+router.post("/send_notification", auth, (req, res) => {
   const { TV_id, Marathi_text, Start_time, End_time } = req.body;
   // console.log("Received:", req.body);
 
   const insertSql =
     "INSERT INTO notification (TV_id,Marathi_text, Start_time, End_time ) VALUES (?, ?, ? ,?)";
-  conn.query(insertSql, [TV_id, Marathi_text, Start_time, End_time], (err, result) => {
-    if (err) {
-      console.error("Error inserting record:", err);
-      return res
-        .status(500)
-        .json({ error: "Database error during insert" })
+  conn.query(
+    insertSql,
+    [TV_id, Marathi_text, Start_time, End_time],
+    (err, result) => {
+      if (err) {
+        console.error("Error inserting record:", err);
+        return res.status(500).json({ error: "Database error during insert" });
+      }
+      return res.json({
+        message: "Notification inserted successfully",
+        result,
+      });
     }
-    return res.json({
-      message: "Notification inserted successfully",
-      result,
-    });
-  });
+  );
   // First, check if the record with this TV_id exists
   // const checkSql = "SELECT * FROM notification WHERE TV_id = ?";
   // conn.query(checkSql, [TV_id], (err, results) => {
@@ -528,26 +578,45 @@ router.post("/send_notification", (req, res) => {
   // });
 });
 
-
 router.post("/Tv_login", async (req, res) => {
   try {
     const { Mobile_No, password } = req.body;
 
-    const sql = "SELECT * FROM user WHERE Mobile_No	 = ?  AND password = ?";
+    const sql = "SELECT * FROM user WHERE Mobile_No = ? AND password = ?";
+
     conn.query(sql, [Mobile_No, password], (err, result) => {
       if (err) {
         console.error("Database error:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      if (result.length > 0) {
-        return res.status(200).json({
-          data: result[0],
-          message: "Login Successful",
-        });
-      } else {
+      if (result.length === 0) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
+
+      const user = result[0];
+
+      // ✅ Create JWT TOKEN (NO EXPIRY for MANDIR TV)
+      const token = jwt.sign(
+        {
+          Tv_id: user.Tv_id,
+          Mobile_No: user.Mobile_No,
+        },
+        "TV_SECRET_KEY" // ✅ no spaces
+      );
+
+      // ✅ Store token in HttpOnly cookie (10 YEARS)
+      res.cookie("tv_token", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        // ✅ REQUIRED for cross-IP
+        maxAge: 10 * 365 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.status(200).json({
+        message: "Login Successful",
+      });
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -555,8 +624,7 @@ router.post("/Tv_login", async (req, res) => {
   }
 });
 
-
-router.post("/schedule-media", (req, res) => {
+router.post("/schedule-media", auth, (req, res) => {
   const { mediaId, scheduleDate, scheduleTime } = req.body;
   conn.query(
     "INSERT INTO media_schedules (media_id, schedule_date, schedule_time) VALUES (?, ?, ?)",
@@ -582,18 +650,16 @@ router.get("/media-files", (req, res) => {
 
 router.get("/user-schedule", (req, res) => {
   const sql = "Select * from media_schedules";
-  conn.query(sql,
-    (error, results) => {
-      if (error) {
-        console.error("Database query error:", error);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      return res.json(results);
+  conn.query(sql, (error, results) => {
+    if (error) {
+      console.error("Database query error:", error);
+      return res.status(500).json({ error: "Internal server error" });
     }
-  );
+    return res.json(results);
+  });
 });
 
-router.post("/upload-media", upload.single("media"), (req, res) => {
+router.post("/upload-media", auth, upload.single("media"), (req, res) => {
   const { title, mediaType } = req.body;
   const filename = req.file.filename;
 
@@ -612,10 +678,9 @@ router.post("/upload-media", upload.single("media"), (req, res) => {
       .status(200)
       .json({ message: "Media uploaded successfully", id: result.insertId });
   });
-})
+});
 
-
-router.get("/api/user/:user_id", (req, res) => {
+router.get("/api/user/:user_id", auth, (req, res) => {
   const user_id = req.params.user_id;
   const query = `
     SELECT s.*, tv.is_enabled
@@ -638,20 +703,22 @@ router.get("/Nakshtra", async (req, res) => {
     const month = now.getMonth() + 1; // Months are 0-based
     const year = now.getFullYear();
 
-    const today = `${month}/${day}/${year}`
+    const today = `${month}/${day}/${year}`;
     // 2. SQL query — assuming `Date` column is DATE (not DATETIME)
     const query = `SELECT * FROM planets WHERE Date = ?`;
 
     // 3. Run the query
     conn.query(query, [today], (err, result) => {
       if (err) {
-        console.error("Database error:", err)
+        console.error("Database error:", err);
         return res.status(500).json({ error: "Database query failed" });
       }
 
       if (result.length === 0) {
-        console.log(today)
-        return res.status(404).json({ message: "No matching records for today" });
+        console.log(today);
+        return res
+          .status(404)
+          .json({ message: "No matching records for today" });
       }
 
       return res.json(result);
@@ -680,7 +747,7 @@ router.post("/add-nakshatra", (req, res) => {
     "शुक्र",
     "शनि",
     "राहू",
-    "केतु"
+    "केतु",
   ];
 
   const sql = `
@@ -690,7 +757,7 @@ router.post("/add-nakshatra", (req, res) => {
   `;
 
   // Build a 2D array of values
-  const values = dataArray.map(data => [
+  const values = dataArray.map((data) => [
     data["Nakshatra Mandal"],
     data["Date"],
     data["रवि"],
@@ -701,14 +768,15 @@ router.post("/add-nakshatra", (req, res) => {
     data["शुक्र"],
     data["शनि"],
     data["राहू"],
-    data["केतु"]
+    data["केतु"],
   ]);
   for (let i = 0; i < dataArray.length; i++) {
     const data = dataArray[i];
     for (const field of requiredFields) {
-      if (!data[field] && data[field] !== 0) { // treat 0 as valid
+      if (!data[field] && data[field] !== 0) {
+        // treat 0 as valid
         return res.status(400).json({
-          error: `Missing value for field "${field}" in record at index ${i}`
+          error: `Missing value for field "${field}" in record at index ${i}`,
         });
       }
     }
@@ -719,30 +787,32 @@ router.post("/add-nakshatra", (req, res) => {
       console.error("Insert error:", err);
       return res.status(500).json({ error: "Failed to insert data" });
     }
-    return res.status(200).json({ message: "Bulk insert successful", rowsInserted: result.affectedRows });
+    return res.status(200).json({
+      message: "Bulk insert successful",
+      rowsInserted: result.affectedRows,
+    });
   });
 });
 
-router.get('/delete-usn-express', (req, res) => {
-  const sql = 'DELETE FROM vedic_calender_english';
+router.get("/delete-usn-express", (req, res) => {
+  const sql = "DELETE FROM vedic_calender_english";
 
   conn.query(sql, (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).send('Error deleting data');
+      return res.status(500).send("Error deleting data");
     }
-    res.send('All data deleted successfully');
+    res.send("All data deleted successfully");
   });
 });
-
 
 // const sql =` DESCRIBE vedic_calender_marathi;`
 
 // conn.query(sql, (err, result) => {
 //   if (err) {
-//     console.error("Error describing table:", err);  
+//     console.error("Error describing table:", err);
 //   } else {
-//     console.log("Table Structure:", result);  
+//     console.log("Table Structure:", result);
 //   }
 // });
 

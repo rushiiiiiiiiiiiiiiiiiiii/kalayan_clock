@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 
 const LocationFetcher = () => {
   const [location, setLocation] = useState("Fetching location...");
-  const [localTime, setLocalTime] = useState(null); // To store calculated time
+  // const [localTime, setLocalTime] = useState(null); // To store calculated time
 
-
+console.log(location)
+// console.log(localTime)
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
@@ -12,7 +13,7 @@ const LocationFetcher = () => {
         const longitude = position.coords.longitude;
 
         // Calculate time based on longitude
-        let time = 0;
+        // let time = 0;
         // if (longitude > 82.5) {
         //   time = (82.5 - longitude) * 4;  // Time behind IST
         // } else if (longitude < 82.5) {

@@ -1,38 +1,38 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // use API_ENDPOINTS.LOGIN in your fetch()
 
 const Login = () => {
   const [Mobile_No, setMobile_No] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(process.env.REACT_APP_API_KEY+"Tv_login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", 
-        },
-        body: JSON.stringify({ Mobile_No, password }),
-      });
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-      const result = await response.json();
+  try {
+    const response = await fetch(process.env.REACT_APP_API_KEY + "Tv_login", {
+      method: "POST",
+      credentials: "include", // ✅ IMPORTANT for cookies
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ Mobile_No, password })
+    });
 
-      if (response.ok) {
-        localStorage.setItem("userid", result.data.Tv_id);
-        console.log(localStorage.getItem("userid")); // Check if userid is stored correctly
-        window.location.href="/"; // Ensure navigate is working
+    const result = await response.json();
 
-      } else {
-        alert(result.message || response.statusText);
-      }
-    } catch (error) {
-      console.error("Login error:", error);
+    if (response.ok) {
+      window.location.reload("/");   // ✅ Cookie already set by backend
+    } else {
+      alert(result.message || "Login failed");
     }
-  };
+
+  } catch (error) {
+    console.error("Login error:", error);
+  }
+};
 
   return (
     <div className="flex items-center justify-center h-screen w-screen bg-gray-100">

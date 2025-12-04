@@ -1,45 +1,47 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../css/Clock2.module.css";
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
 import klogo from "../assets/images/kalaayan-logo.png";
 import qrcode from "../assets/images/kalayanqr.png";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
-import axios, { getAdapter } from "axios";
+// import axios, { getAdapter } from "axios";
 import taaskata from "../assets/images/taskata24.png";
 import minkata from "../assets/images/minkata.png";
-import datefunction from "../components/dategiver.js";
+// import datefunction from "../components/dategiver.js";
 import converttime from "../components/timeconverter.js";
 import VerticalProgressBar from "./Progrressbar.js";
 import { useSelector } from "react-redux";
-import EarthRotation from "../planets/EarthRotation.js";
+// import EarthRotation from "../planets/EarthRotation.js";
 import JupiterRotation from "../planets_Ad/JupiterRotation.js";
 import KetuRotation from "../planets_Ad/KetuRotation.js";
 import MarsRotation from "../planets_Ad/MarsRotation.js";
 import RahuRotation from "../planets_Ad/RahuRotation.js";
 import MoonRotation from "../planets_Ad/MoonRotation.js";
-import NeptuneRotation from "../planets_Ad/NeptuneRotation.js";
-import UranusRotation from "../planets_Ad/UranusRotation.js";
+// import NeptuneRotation from "../planets_Ad/NeptuneRotation.js";
+// import UranusRotation from "../planets_Ad/UranusRotation.js";
+import { useCallback } from "react";
 import VenusRotation from "../planets_Ad/VenusRotation.js";
 import SunRotation from "../planets_Ad/SunRotation.js";
 import MercuryRotation from "../planets_Ad/MercuryRotation.js";
 import SaturnRotation from "../planets_Ad/SatturnRotation.js";
-import PlanetSelector from "./PlanetSelector.js";
+// import axios from "axios";
+// import PlanetSelector from "./PlanetSelector.js";
 //import vedicdatefunction from '../components/dategiver.js';
 //import vedicdatefunction from '../components/dategiver.js';
 
 const NoAdClock = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const [notify, setnotify] = useState();
   const [data, setdata] = useState([]);
-  const [time, setTime] = useState(new Date());
-  const [todaysData, setTodaysData] = useState({});
-  const [text, settext] = useState("");
-  const [planetsrotate, setplanetsrotate] = useState()
+  // const [time, setTime] = useState(new Date());
+  // const [todaysData, setTodaysData] = useState({});
+  // const [text, settext] = useState("");
+  const [planetsrotate, setplanetsrotate] = useState();
   const theme = useSelector((state) => state.theme.theme);
   //hooks for advertise
-  const [advertisements, setAdvertisements] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [adverror, advsetError] = useState(null);
+  // const [advertisements, setAdvertisements] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [adverror, advsetError] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
   const [Ring_rotation, setRotation] = useState(0);
 
@@ -53,60 +55,65 @@ const NoAdClock = () => {
   const apiKey = process.env.REACT_APP_API_KEY;
 
   //customisable date selection
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const saved = localStorage.getItem("selectedDates");
     if (saved) {
       setSelectedDates(JSON.parse(saved));
     }
   }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   const updateLanguage = () => {
+  //     const lang = localStorage.getItem("Language");
+  //     if (lang === "Hindi") {
+  //       settext("Kalayaan");
+  //     } else if (lang === "Marathi") {
+  //       settext("कालायन");
+  //     } else {
+  //       settext("कालायन");
+  //     }
+  //   };
 
-  useEffect(() => {
-    const updateLanguage = () => {
-      const lang = localStorage.getItem("Language");
-      if (lang === "Hindi") {
-        settext("Kalayaan");
-      } else if (lang === "Marathi") {
-        settext("कालायन");
-      } else {
-        settext("कालायन");
-      }
-    };
+  //   updateLanguage(); // Run on mountx`
+  // }, []);
 
-    updateLanguage(); // Run on mountx`
-  }, []);
-
-  const getdata = async () => {
+  const getdata = useCallback(async () => {
     const currentDates = new Date(); // or new Date("2025-04-21")
     const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
     const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
     const year = String(currentDates.getFullYear()).slice(-2); // Get last 2 digits of the year (e.g., '25')
 
-    // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')  
-    const formatted = `${day}/${month}/${year}`
+    // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
+    const formatted = `${day}/${month}/${year}`;
     console.log("Formatted Gregorian Date:", formatted); // Just for debugging
     try {
-      const response = await fetch(apiKey + "get_data/" + localStorage.getItem("language"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          date: formatted
-        })
-
-      });
+      const response = await fetch(
+        apiKey + "api/admin/get_data/" + localStorage.getItem("language"),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            date: formatted,
+          }),
+        }
+      );
       const result = await response.json();
 
       // Store in localStorage
-      localStorage.setItem('data', JSON.stringify(result));
-      setdata(result[0])
+      localStorage.setItem("data", JSON.stringify(result));
+      setdata(result[0]);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [apiKey]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setInterval(() => {
-      const storedData = JSON.parse(localStorage.getItem('data'));
+      const storedData = JSON.parse(localStorage.getItem("data"));
       const currentDates = new Date(); // or new Date("2025-04-21")
       const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
       const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
@@ -115,27 +122,32 @@ const NoAdClock = () => {
       // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
       const formatted = `${day}/${month}/${year}`;
       const datas = Array.isArray(storedData)
-        ? storedData.filter((name) => name.Gregorian_date == formatted)
+        ? storedData.filter((name) => name.Gregorian_date === formatted)
         : [];
 
       setdata(datas);
     }, 3000);
-
-  }, [])
-  const Notification = async () => {
+  }, []);
+  const Notification = useCallback(async () => {
     try {
-      const response = await fetch(apiKey + "Get_notification/" + localStorage.getItem('userid'));
+      const response = await fetch(apiKey + "Get_notification", {
+        credentials: "include",
+      });
       const result = await response.json();
       // setnotify(result[0]);
 
       // Store in localStorage
-      localStorage.setItem('notification', JSON.stringify(result[0]));
+      localStorage.setItem("notification", JSON.stringify(result[0]));
       const now = new Date();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-      const storedNotification = JSON.parse(localStorage.getItem('notification'));
-      const [startHour, startMinute] = storedNotification.Start_time.split(":").map(Number);
-      const [endHour, endMinute] = storedNotification.End_Time.split(":").map(Number);
+      const storedNotification = JSON.parse(
+        localStorage.getItem("notification")
+      );
+      const [startHour, startMinute] =
+        storedNotification.Start_time.split(":").map(Number);
+      const [endHour, endMinute] =
+        storedNotification.End_Time.split(":").map(Number);
 
       const startMinutes = startHour * 60 + startMinute;
       const endMinutes = endHour * 60 + endMinute;
@@ -143,72 +155,70 @@ const NoAdClock = () => {
       if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
         console.log("notify");
         setnotify(storedNotification);
-        console.log(storedNotification)
+        console.log(storedNotification);
       }
-
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [apiKey]);
 
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getdata();
     Notification();
-    console.log(notify);
-  }, []);
+  }, [getdata, Notification]);
 
-  useEffect(() => {
-    const fetchAdvertisements = async () => {
-      try {
-        const response = await axios.get(apiKey + "advertise"); // change port to 4000
-        setAdvertisements(response.data.data);
-      } catch (err) {
-        advsetError(
-          err.response
-            ? err.response.data.message
-            : "Error fetching advertisements"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAdvertisements();
-  }, []);
-  const [error, setError] = useState(null);
+  // const fetchAdvertisements = async () => {
+  //   try {
+  //     const response = await axios.get(apiKey + "advertise"); // change port to 4000
+  //     setAdvertisements(response.data.data);
+  //   } catch (err) {
+  //     advsetError(
+  //       err.response
+  //         ? err.response.data.message
+  //         : "Error fetching advertisements"
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   fetchAdvertisements();
+  // }, []);
+  // const [error, setError] = useState(null);
 
   // logic for notification change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   const timerId = setInterval(() => {
+  //     setTime(new Date());
+  //   }, 200); // Update time every second
 
-  useEffect(() => {
-    const timerId = setInterval(() => {
-      setTime(new Date());
-    }, 200); // Update time every second
+  //   return () => clearInterval(timerId); // Cleanup the interval on component unmount
+  // }, []);
 
-    return () => clearInterval(timerId); // Cleanup the interval on component unmount
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   const updateTodaysData = () => {
+  //     const now = new Date();
+  //     const todayString = now.toLocaleDateString("en-GB", {
+  //       day: "numeric",
+  //       month: "long",
+  //       year: "numeric",
+  //     });
 
+  //     const todayData =
+  //       data.find((item) => item.gregorianDate === todayString) || {};
+  //     setTodaysData(todayData);
+  //   };
 
-  useEffect(() => {
-    const updateTodaysData = () => {
-      const now = new Date();
-      const todayString = now.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
+  //   updateTodaysData(); // Call the function to get today's data
 
-      const todayData =
-        data.find((item) => item.gregorianDate === todayString) || {};
-      setTodaysData(todayData);
-    };
+  //   const dateChangeInterval = setInterval(updateTodaysData, 60 * 1000); // Update every minute
 
-    updateTodaysData(); // Call the function to get today's data
-
-    const dateChangeInterval = setInterval(updateTodaysData, 60 * 1000); // Update every minute
-
-    return () => clearInterval(dateChangeInterval);
-  }, []);
+  //   return () => clearInterval(dateChangeInterval);
+  // }, []);
 
   function isOdd(num) {
     return num % 2;
@@ -278,42 +288,40 @@ const NoAdClock = () => {
   let vipalRotation = vipalCount * (360 / 60) - 90; // 60 Vipals in 1 Pal
   // if (vipalRotation>320) {vipalRotation=0;}
 
-  let date = time.getDate();
-  if (hours < 6) {
-    date = date - 1;
-  } //ensure datechanged only at 6 am
-  let indianDate = datefunction(date)[0]; //"  25 Ashwin 1946"
-  let vedicDate = datefunction(date)[1]; //"25 Isha Maas 5126"
+  // let date = time.getDate();
+  // if (hours < 6) {
+  //   date = date - 1;
+  // }
+  //ensure datechanged only at 6 am
+  // let indianDate = datefunction(date)[0]; //"  25 Ashwin 1946"
+  // let vedicDate = datefunction(date)[1]; //"25 Isha Maas 5126"
 
-  let originX = -30; // + 20*Math.sin(seconds*6);
-  let originY = -25; //Math.sin(seconds*6);
-  //var Rangle = Number(ghatikaCount) + 30;
+  // let originX = -30; // + 20*Math.sin(seconds*6);
+  // let originY = -25; //Math.sin(seconds*6);
+  // //var Rangle = Number(ghatikaCount) + 30;
 
-  let thekaran = "विष्टी";
-  let theyog = "he";
-  let thenaxatra = "he";
+  // let thekaran = "विष्टी";
+  // let theyog = "he";
+  // let thenaxatra = "he";
 
   const gregdate = new Date().toDateString(); // This will return something like "Sun Nov 04 2024"
   const commaSeparatedDate = gregdate.split(" ").join(", "); // Splitting by spaces and joining with ', '
 
-
-
-
   //for planet selection
 
-  const [selectedPlanets, setSelectedPlanets] = useState(() => {
+  const [selectedPlanets] = useState(() => {
     const saved = localStorage.getItem("selectedPlanets");
     return saved ? JSON.parse(saved) : [];
   });
 
-  const togglePlanet = (planetKey) => {
-    setSelectedPlanets((prev) =>
-      prev.includes(planetKey)
-        ? prev.filter((k) => k !== planetKey)
-        : [...prev, planetKey]
-    );
-  };
-
+  // const togglePlanet = (planetKey) => {
+  //   setSelectedPlanets((prev) =>
+  //     prev.includes(planetKey)
+  //       ? prev.filter((k) => k !== planetKey)
+  //       : [...prev, planetKey]
+  //   );
+  // };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   // useEffect(() => {
   //   const now = new Date();
   //   const secondsSinceMidnight =
@@ -325,9 +333,9 @@ const NoAdClock = () => {
   //     console.log(initialRotation)
   //      ;
   // }, [Ring_rotation]);
-  const makeAPICall = async () => {
+  const makeAPICall = useCallback( async () => {
     try {
-      const response = await fetch(apiKey + "Nakshtra", {
+      const response = await fetch(apiKey + "api/user/Nakshtra", {
         method: "GET",
       });
 
@@ -343,7 +351,7 @@ const NoAdClock = () => {
     } catch (error) {
       console.log("❌ API call error:", error);
     }
-  };
+  },[apiKey]);
 
   // Helper to calculate how much to rotate since 5:30 AM based on time
   const applyTimeBasedRotation = (initialRotation = 0) => {
@@ -372,20 +380,26 @@ const NoAdClock = () => {
     setRotation(finalRotation);
   };
 
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     localStorage.setItem("selectedPlanets", JSON.stringify(selectedPlanets));
-  }, []);
+  }, [selectedPlanets]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     makeAPICall();
     const interval = setInterval(() => {
       const now = new Date();
-      if (now.getHours() === 14 && now.getMinutes() === 5 && now.getSeconds() === 0) {
+      if (
+        now.getHours() === 14 &&
+        now.getMinutes() === 5 &&
+        now.getSeconds() === 0
+      ) {
         makeAPICall();
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [makeAPICall]);
 
   return (
     <>
@@ -414,16 +428,18 @@ const NoAdClock = () => {
 
         <div
           style={{ position: "absolute", top: "100px", left: "5px" }}
-          className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
-            } font-bold`}
+          className={`${
+            theme === "light" ? "text-gray-100" : "text-gray-700"
+          } font-bold`}
         >
           अयन : {data?.length > 0 ? data[0].Ayan : ""}
         </div>
 
         <div
           style={{ position: "absolute", top: "100px", right: "3%" }}
-          className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
-            } font-bold`}
+          className={`${
+            theme === "light" ? "text-gray-100" : "text-gray-700"
+          } font-bold`}
         >
           ऋतु : {data?.length > 0 ? data?.[0].Rutu : ""}
         </div>
@@ -436,8 +452,7 @@ const NoAdClock = () => {
           <div className={`${styles.clock}`}>
             {/* Rotating Background Images */}
             <style>
-              {
-                `
+              {`
               @keyframes rotateClockwise {
                   from {
                     transform: rotate(${Ring_rotation + 180}deg);
@@ -445,19 +460,16 @@ const NoAdClock = () => {
                   to {
                     transform: rotate(${360 + Ring_rotation + 180}deg);
                   }
-                }`
-              } 
+                }`}
             </style>
-            <div className={`${styles.clockBackground}`} style={{
-              animation: 'rotateClockwise 86400s linear infinite',
-            }}
+            <div
+              className={`${styles.clockBackground}`}
+              style={{
+                animation: "rotateClockwise 86400s linear infinite",
+              }}
             >
-              <img
-                src={clockImage}
-                alt="Kalayan Clock Background"
-              />
-              {
-              }
+              <img src={clockImage} alt="Kalayan Clock Background" />
+              {}
             </div>
             {/* Inner Circle Image */}
             <img
@@ -495,8 +507,9 @@ const NoAdClock = () => {
               <div
                 className={`${styles.taskata}`}
                 style={{
-                  transform: `translate(-50%, 0%) rotate(${ghatikaRotation + 180
-                    }deg)`,
+                  transform: `translate(-50%, 0%) rotate(${
+                    ghatikaRotation + 180
+                  }deg)`,
                 }}
               >
                 <img src={taaskata} alt="Ghatika Hand" />
@@ -517,32 +530,73 @@ const NoAdClock = () => {
         <div className="container-fluid mb-2 mt-[-80px]">
           <div className="grid grid-cols-2 gap-4">
             <div
-              className={`font-bold text-2xl ${theme == "light" ? "text-gray-100" : "text-gray-700"
-                }`}
+              className={`font-bold text-2xl ${
+                theme === "light" ? "text-gray-100" : "text-gray-700"
+              }`}
             >
               सूर्योदय:-{data?.[0]?.Suryoday && data?.[0]?.Suryoday}
             </div>
             <div
-              className={`flex justify-end font-bold text-2xl  ${theme == "light" ? "text-gray-100" : "text-gray-700"}`}
+              className={`flex justify-end font-bold text-2xl  ${
+                theme === "light" ? "text-gray-100" : "text-gray-700"
+              }`}
             >
               सूर्यास्त:-{data?.[0]?.Suryasta && data?.[0]?.Suryasta}
             </div>
           </div>
         </div>
 
-        <JupiterRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("jupiter")} />
-        <KetuRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("ketu")} />
-        <MarsRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("mars")} />
-        <MoonRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("moon")} />
-        <RahuRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("rahu")} />
-        <MercuryRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("mercury")} />
-        <SunRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("sun")} />
-        <SaturnRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("saturn")} />
-        <VenusRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("venus")} />
+        <JupiterRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("jupiter")}
+        />
+        <KetuRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("ketu")}
+        />
+        <MarsRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("mars")}
+        />
+        <MoonRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("moon")}
+        />
+        <RahuRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("rahu")}
+        />
+        <MercuryRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("mercury")}
+        />
+        <SunRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("sun")}
+        />
+        <SaturnRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("saturn")}
+        />
+        <VenusRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("venus")}
+        />
         {/* Time Tables Section */}
 
         {/* First Table Section */}
-        <div className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[177px] max-md:flex-wrap flex-nowrap`}>
+        <div
+          className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[177px] max-md:flex-wrap flex-nowrap`}
+        >
           <table className={`${styles.table}  w-full md:w-auto`}>
             <thead className="custom-header">
               <tr>
@@ -604,7 +658,9 @@ const NoAdClock = () => {
         </div>
 
         {/* Tithi Table */}
-        <table className={`${styles.table} ${styles.tithitable} bg-[light-purple] text-white shadow-lg w-full rounded-lg mt-[13px]`}>
+        <table
+          className={`${styles.table} ${styles.tithitable} bg-[light-purple] text-white shadow-lg w-full rounded-lg mt-[13px]`}
+        >
           <tbody className="w-full h-full">
             <tr className={`${styles.customBorder}`}>
               <td className={`${styles.tithitd} py-1`}>
@@ -647,19 +703,19 @@ const NoAdClock = () => {
               </td>
             </tr>
             <tr className={`${styles.customBorder} w-full`}>
-              <td className={`${styles.tithivalue} text-left`}>
-                दिनविशेष:
-              </td>
+              <td className={`${styles.tithivalue} text-left`}>दिनविशेष:</td>
               <td></td>
               <td></td>
             </tr>
           </tbody>
-        </table>  
+        </table>
 
         {/* ind ved greg time section  */}
 
         <div className="d-flex justify-between qrindved w-full mt-[-14px]">
-          <table className={`${styles.table} ${styles.indvedgreg} table-bordered table-striped table-hover w-full max-h-[80px] m-auto`}>
+          <table
+            className={`${styles.table} ${styles.indvedgreg} table-bordered table-striped table-hover w-full max-h-[80px] m-auto`}
+          >
             <tbody>
               {selectedDates.map((key) => (
                 <tr key={key} style={{ height: "30px" }}>
@@ -677,25 +733,22 @@ const NoAdClock = () => {
           </table>
 
           <div className="bg-white h-[190px] m-auto">
-              <img
-                src={qrcode}
-                alt="Kalayan Clock Brochure"
-                className="object-cover h-full w-full"
-              />
+            <img
+              src={qrcode}
+              alt="Kalayan Clock Brochure"
+              className="object-cover h-full w-full"
+            />
           </div>
-
         </div>
 
         {/* Notification */}
         <div className="container-fluid notification  border border-success  bg-success mt-2">
-          {error && <p style={{ color: "red" }}>Error: {error}</p>}
+          {/* {error && <p style={{ color: "red" }}>Error: {error}</p>} */}
           <p className="text-white w-full text-center">
             {notify?.Marathi_text}
           </p>
         </div>
-
-       
-      </div >
+      </div>
     </>
   );
 };

@@ -93,7 +93,6 @@ const Clock = () => {
     fetchAdvertisements();
   }, []);
 
-  // hooks for notification
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
 

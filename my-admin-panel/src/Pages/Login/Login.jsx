@@ -8,12 +8,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: "POST",
+        credentials: "include", // ✅ REQUIRED
         headers: {
           "Content-Type": "application/json",
         },
@@ -23,11 +24,9 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
-        sessionStorage.setItem("userid", result.data.Id);
-        localStorage.setItem("token", "fakeToken123"); // (optional)
-        navigate("/dashboard");
+        navigate("/dashboard"); // ✅ Cookie-based auth
       } else {
-        alert(result.message || response.statusText);
+        alert(result.message || "Login failed");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -61,7 +60,10 @@ const Login = () => {
           </div>
 
           <p className="text-center mt-4">
-            <Link to="/forgot-password" className="text-blue-500 hover:underline">
+            <Link
+              to="/forgot-password"
+              className="text-blue-500 hover:underline"
+            >
               Forgot Password?
             </Link>
           </p>
