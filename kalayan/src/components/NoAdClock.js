@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../css/Clock3.module.css";
 import clockImage from "../assets/images/clock.png"; // Update the path accordingly
 import klogo from "../assets/images/kalaayan-logo.png";
 import qrcode from "../assets/images/kalayanqr.png";
 import innerClockImage from "../assets/images/D1.png"; // Update the path accordingly
-import axios, { getAdapter } from "axios";
+import axios from "axios";
 import taaskata from "../assets/images/taskata24.png";
 import minkata from "../assets/images/minkata.png";
-import datefunction from "../components/dategiver.js";
+// import datefunction from "../components/dategiver.js";
 import converttime from "../components/timeconverter.js";
 import VerticalProgressBar from "./Progrressbar.js";
 import { useSelector } from "react-redux";
-import EarthRotation from "../planets/EarthRotation.js";
+// import EarthRotation from "../planets/EarthRotation.js";
 import JupiterRotation from "../planets/JupiterRotation.js";
 import KetuRotation from "../planets/KetuRotation.js";
 import MarsRotation from "../planets/MarsRotation.js";
 import RahuRotation from "../planets/RahuRotation.js";
 import MoonRotation from "../planets/MoonRotation.js";
-import NeptuneRotation from "../planets/NeptuneRotation.js";
-import UranusRotation from "../planets/UranusRotation.js";
+// import NeptuneRotation from "../planets/NeptuneRotation.js";
+// import UranusRotation from "../planets/UranusRotation.js";
 import VenusRotation from "../planets/VenusRotation.js";
 import SunRotation from "../planets/SunRotation.js";
 import MercuryRotation from "../planets/MercuryRotation.js";
 import SaturnRotation from "../planets/SatturnRotation.js";
-import PlanetSelector from "./PlanetSelector.js";
+// import PlanetSelector from "./PlanetSelector.js";
 //import vedicdatefunction from '../components/dategiver.js';
 //import vedicdatefunction from '../components/dategiver.js';
 
@@ -32,12 +32,12 @@ const NoAdClock = () => {
   const [data, setdata] = useState([]);
   const [time, setTime] = useState(new Date());
   const [todaysData, setTodaysData] = useState({});
-  const [text, settext] = useState("");
-  const [planetsrotate, setplanetsrotate] = useState()
+  // const [text, settext] = useState("");
+  const [planetsrotate, setplanetsrotate] = useState();
   const theme = useSelector((state) => state.theme.theme);
   //hooks for advertise
-  const [advertisements, setAdvertisements] = useState([]);
-  const [adverror, advsetError] = useState(null);
+  // const [advertisements, setAdvertisements] = useState([]);
+  // const [adverror, advsetError] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
   const [Ring_rotation, setRotation] = useState(0);
 
@@ -49,7 +49,7 @@ const NoAdClock = () => {
 
   //logic for advertise
   const apiKey = process.env.REACT_APP_API_KEY;
-
+  // console.log(apiKey)
   //customisable date selection
   useEffect(() => {
     const saved = localStorage.getItem("selectedDates");
@@ -58,50 +58,53 @@ const NoAdClock = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const updateLanguage = () => {
-      const lang = localStorage.getItem("Language");
-      if (lang === "Hindi") {
-        settext("Kalayaan");
-      } else if (lang === "Marathi") {
-        settext("कालायन");
-      } else {
-        settext("कालायन");
-      }
-    };
+  // useEffect(() => {
+  //   const updateLanguage = () => {
+  //     const lang = localStorage.getItem("Language");
+  //     if (lang === "Hindi") {
+  //       settext("Kalayaan");
+  //     } else if (lang === "Marathi") {
+  //       settext("कालायन");
+  //     } else {
+  //       settext("कालायन");
+  //     }
+  //   };
 
-    updateLanguage(); // Run on mountx`
-  }, []);
+  //   updateLanguage(); // Run on mountx`
+  // }, []);
 
   const getdata = async () => {
-    const data = localStorage.getItem('language');
+    const data = localStorage.getItem("language");
     if (!data) {
-      localStorage.setItem('language', 'English');
-    }; // Exit if language is not set
+      localStorage.setItem("language", "English");
+    } // Exit if language is not set
     const currentDates = new Date(); // or new Date("2025-04-21")
     const day = String(currentDates.getDate()).padStart(2, "0"); // Get day (e.g., '28')
     const month = currentDates.toLocaleString("default", { month: "short" }); // Get abbreviated month (e.g., 'Apr')
     const year = String(currentDates.getFullYear()).slice(-2); // Get last 2 digits of the year (e.g., '25')
 
-    // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')  
-    const formatted = `${day}/${month}/${year}`
+    // Format as 'DD-MMM-YY' (e.g., '28-Apr-25')
+    const formatted = `${day}/${month}/${year}`;
     console.log("Formatted Gregorian Date:", formatted); // Just for debugging
     try {
-      const response = await fetch(apiKey + "get_data/" + localStorage.getItem("language"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          date: formatted
-        })
-
-      });
+      const response = await fetch(
+        apiKey + "/get_data/" + localStorage.getItem("language"),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            date: formatted,
+          }),
+        }
+      );
       const result = await response.json();
 
       // Store in localStorage
-      localStorage.setItem('data', JSON.stringify(result));
-      setdata(result[0])
+      localStorage.setItem("data", JSON.stringify(result));
+      setdata(result[0]);
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +114,20 @@ const NoAdClock = () => {
       const storedData = JSON.parse(localStorage.getItem("data"));
       const currentDate = new Date();
 
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
       const day = String(currentDate.getDate()).padStart(2, "0");
       const month = months[currentDate.getMonth()];
       const year = String(currentDate.getFullYear()).slice(2);
@@ -123,67 +139,82 @@ const NoAdClock = () => {
 
       setdata(datas);
     }, 3000);
-    if (!localStorage.getItem('localtime')) {
-      localStorage.setItem('localtime', '38')
+    if (!localStorage.getItem("localtime")) {
+      localStorage.setItem("localtime", "38");
     }
-    if (!localStorage.getItem('city')) {
-      localStorage.setItem('city', 'Mumbai')
+    if (!localStorage.getItem("city")) {
+      localStorage.setItem("city", "Mumbai");
     }
-  }, [])
+  }, []);
+
   const Notification = async () => {
     try {
-      const response = await fetch(apiKey + "Get_notification/" + localStorage.getItem('userid'));
+      const response = await fetch(apiKey + "/Get_notification", {
+        credentials: "include",
+      });
       const result = await response.json();
-      // setnotify(result[0]);
 
-      // Store in localStorage
-      localStorage.setItem('notification', JSON.stringify(result[0]));
+      const notification = result[0];
+
+      if (!notification) {
+        setnotify(null);
+        localStorage.removeItem("notification");
+        return;
+      }
+
       const now = new Date();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-      const storedNotification = JSON.parse(localStorage.getItem('notification')) || [];
-      const [startHour, startMinute] = storedNotification.Start_time.split(":").map(Number);
-      const [endHour, endMinute] = storedNotification.End_Time.split(":").map(Number);
+      const [startH, startM] = notification.Start_time.split(":").map(Number);
+      const [endH, endM] = notification.End_Time.split(":").map(Number);
 
-      const startMinutes = startHour * 60 + startMinute;
-      const endMinutes = endHour * 60 + endMinute;
+      const startMinutes = startH * 60 + startM;
+      const endMinutes = endH * 60 + endM;
 
       if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
-        console.log("notify");
-        setnotify(storedNotification);
-        console.log(storedNotification)
+        // VALID window → show notification
+        setnotify(notification);
+        localStorage.setItem("notification", JSON.stringify(notification));
+      } else {
+        // OUTSIDE window → clear notification
+        setnotify(null);
+        localStorage.removeItem("notification");
       }
-
     } catch (error) {
       console.log(error);
     }
   };
 
-
   useEffect(() => {
     getdata();
     Notification();
+
+    const interval = setInterval(() => {
+      Notification();
+    }, 60 * 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     const fetchAdvertisements = async () => {
       try {
-        const response = await axios.get(apiKey + "advertise"); // change port to 4000
-        setAdvertisements(response.data.data);
+        const response = await axios.get(apiKey + "/advertise"); // change port to 4000
+        // setAdvertisements(response.data.data || []);
+        console.log(response);
       } catch (err) {
-        advsetError(
-          err.response
-            ? err.response.data.message
-            : "Error fetching advertisements"
-        );
+        // advsetError(
+        //   err.response
+        //     ? err.response.data.message
+        //     : "Error fetching advertisements"
+        // );
       } finally {
-
       }
     };
 
     fetchAdvertisements();
   }, []);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
   // logic for notification change
 
@@ -194,7 +225,6 @@ const NoAdClock = () => {
 
     return () => clearInterval(timerId); // Cleanup the interval on component unmount
   }, []);
-
 
   useEffect(() => {
     const updateTodaysData = () => {
@@ -227,9 +257,9 @@ const NoAdClock = () => {
   const seconds = now.getSeconds();
 
   //diff = 1611 seconds
-  const loc_time = localStorage.getItem("localtime")
+  const loc_time = localStorage.getItem("localtime");
 
-  const timestamp = parseInt(loc_time) * 60 * 1000
+  const timestamp = parseInt(loc_time) * 60 * 1000;
   const now_loc = new Date(now - timestamp);
   const hours_loc = now_loc.getHours();
   const minutes_loc = now_loc.getMinutes();
@@ -288,26 +318,24 @@ const NoAdClock = () => {
   let vipalRotation = vipalCount * (360 / 60) - 90; // 60 Vipals in 1 Pal
   // if (vipalRotation>320) {vipalRotation=0;}
 
-  let date = time.getDate();
-  if (hours < 6) {
-    date = date - 1;
-  } //ensure datechanged only at 6 am
-  let indianDate = datefunction(date)[0]; //"  25 Ashwin 1946"
-  let vedicDate = datefunction(date)[1]; //"25 Isha Maas 5126"
+  // let date = time.getDate();
+  // if (hours < 6) {
+  //   date = date - 1;
+  // }
+  //ensure datechanged only at 6 am
+  // let indianDate = datefunction(date)[0]; //"  25 Ashwin 1946"
+  // let vedicDate = datefunction(date)[1]; //"25 Isha Maas 5126"
 
-  let originX = -30; // + 20*Math.sin(seconds*6);
-  let originY = -25; //Math.sin(seconds*6);
-  //var Rangle = Number(ghatikaCount) + 30;
+  // let originX = -30; // + 20*Math.sin(seconds*6);
+  // let originY = -25; //Math.sin(seconds*6);
+  // //var Rangle = Number(ghatikaCount) + 30;
 
-  let thekaran = "विष्टी";
-  let theyog = "he";
-  let thenaxatra = "he";
+  // let thekaran = "विष्टी";
+  // let theyog = "he";
+  // let thenaxatra = "he";
 
   const gregdate = new Date().toDateString(); // This will return something like "Sun Nov 04 2024"
   const commaSeparatedDate = gregdate.split(" ").join(", "); // Splitting by spaces and joining with ', '
-
-
-
 
   //for planet selection
 
@@ -337,8 +365,9 @@ const NoAdClock = () => {
   // }, [Ring_rotation]);
   const makeAPICall = async () => {
     try {
-      const response = await fetch(apiKey + "Nakshtra", {
+      const response = await fetch(apiKey + "/Nakshtra", {
         method: "GET",
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -382,7 +411,6 @@ const NoAdClock = () => {
     setRotation(finalRotation);
   };
 
-
   useEffect(() => {
     localStorage.setItem("selectedPlanets", JSON.stringify(selectedPlanets));
   }, []);
@@ -390,7 +418,11 @@ const NoAdClock = () => {
     makeAPICall();
     const interval = setInterval(() => {
       const now = new Date();
-      if (now.getHours() === 14 && now.getMinutes() === 5 && now.getSeconds() === 0) {
+      if (
+        now.getHours() === 14 &&
+        now.getMinutes() === 5 &&
+        now.getSeconds() === 0
+      ) {
         makeAPICall();
       }
     }, 1000);
@@ -424,16 +456,18 @@ const NoAdClock = () => {
 
         <div
           style={{ position: "absolute", top: "100px", left: "5px" }}
-          className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
-            } font-bold`}
+          className={`${
+            theme === "light" ? "text-gray-100" : "text-gray-700"
+          } font-bold`}
         >
           अयन : {data?.length > 0 ? data[0].Ayan : ""}
         </div>
 
         <div
           style={{ position: "absolute", top: "100px", right: "3%" }}
-          className={`${theme == "light" ? "text-gray-100" : "text-gray-700"
-            } font-bold`}
+          className={`${
+            theme === "light" ? "text-gray-100" : "text-gray-700"
+          } font-bold`}
         >
           ऋतु : {data?.length > 0 ? data?.[0].Rutu : ""}
         </div>
@@ -446,8 +480,7 @@ const NoAdClock = () => {
           <div className={`${styles.clock}`}>
             {/* Rotating Background Images */}
             <style>
-              {
-                `
+              {`
               @keyframes rotateClockwise {
                   from {
                     transform: rotate(${Ring_rotation + 180}deg);
@@ -455,19 +488,16 @@ const NoAdClock = () => {
                   to {
                     transform: rotate(${360 + Ring_rotation + 180}deg);
                   }
-                }`
-              }
+                }`}
             </style>
-            <div className={`${styles.clockBackground}`} style={{
-              animation: 'rotateClockwise 86400s linear infinite',
-            }}
+            <div
+              className={`${styles.clockBackground}`}
+              style={{
+                animation: "rotateClockwise 86400s linear infinite",
+              }}
             >
-              <img
-                src={clockImage}
-                alt="Kalayan Clock Background"
-              />
-              {
-              }
+              <img src={clockImage} alt="Kalayan Clock Background" />
+              {}
             </div>
             {/* Inner Circle Image */}
             <img
@@ -505,8 +535,9 @@ const NoAdClock = () => {
               <div
                 className={`${styles.taskata}`}
                 style={{
-                  transform: `translate(-50%, 0%) rotate(${ghatikaRotation + 180
-                    }deg)`,
+                  transform: `translate(-50%, 0%) rotate(${
+                    ghatikaRotation + 180
+                  }deg)`,
                 }}
               >
                 <img src={taaskata} alt="Ghatika Hand" />
@@ -527,32 +558,73 @@ const NoAdClock = () => {
         <div className="container-fluid mb-2 mt-[-80px]">
           <div className="grid grid-cols-2 gap-4">
             <div
-              className={`font-bold text-2xl ${theme == "light" ? "text-gray-100" : "text-gray-700"
-                }`}
+              className={`font-bold text-2xl ${
+                theme === "light" ? "text-gray-100" : "text-gray-700"
+              }`}
             >
               सूर्योदय:-{data?.[0]?.Suryoday && data?.[0]?.Suryoday}
             </div>
             <div
-              className={`flex justify-end font-bold text-2xl  ${theme == "light" ? "text-gray-100" : "text-gray-700"}`}
+              className={`flex justify-end font-bold text-2xl  ${
+                theme === "light" ? "text-gray-100" : "text-gray-700"
+              }`}
             >
               सूर्यास्त:-{data?.[0]?.Suryasta && data?.[0]?.Suryasta}
             </div>
           </div>
         </div>
 
-        <JupiterRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("jupiter")} />
-        <KetuRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("ketu")} />
-        <MarsRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("mars")} />
-        <MoonRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("moon")} />
-        <RahuRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("rahu")} />
-        <MercuryRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("mercury")} />
-        <SunRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("sun")} />
-        <SaturnRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("saturn")} />
-        <VenusRotation rotation={planetsrotate} mandal={Ring_rotation} isVisible={selectedPlanets.includes("venus")} />
+        <JupiterRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("jupiter")}
+        />
+        <KetuRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("ketu")}
+        />
+        <MarsRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("mars")}
+        />
+        <MoonRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("moon")}
+        />
+        <RahuRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("rahu")}
+        />
+        <MercuryRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("mercury")}
+        />
+        <SunRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("sun")}
+        />
+        <SaturnRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("saturn")}
+        />
+        <VenusRotation
+          rotation={planetsrotate}
+          mandal={Ring_rotation}
+          isVisible={selectedPlanets.includes("venus")}
+        />
         {/* Time Tables Section */}
 
         {/* First Table Section */}
-        <div className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[157px] flex-nowrap`}>
+        <div
+          className={`d-flex ${styles.vedind} gap-1 justify-content-between w-full h-[157px] flex-nowrap`}
+        >
           <table className={`${styles.table}`}>
             <thead className="custom-header">
               <tr>
@@ -617,19 +689,37 @@ const NoAdClock = () => {
         <div className="grid grid-cols-3 gap-1 shadow-lg rounded-lg  p-2 bg-pink">
           {/* Row 1 */}
           <div className="py-1 flex flex-col">
-            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>पूर्णिमांत तिथी:</strong>
+            <strong
+              className={`!text-[1.2rem] ${
+                theme === "light" ? "text-white" : "text-black"
+              }`}
+            >
+              पूर्णिमांत तिथी:
+            </strong>
             <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
               {data?.length > 0 ? data?.[0].Purnimant_tithi : ""}
             </span>
           </div>
           <div className="py-1 flex flex-col">
-            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>आमांत तिथी:</strong>
+            <strong
+              className={`!text-[1.2rem] ${
+                theme === "light" ? "text-white" : "text-black"
+              }`}
+            >
+              आमांत तिथी:
+            </strong>
             <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
               {data?.length > 0 ? data?.[0].Amant_tithi : ""}
             </span>
           </div>
           <div className="py-1 flex flex-col">
-            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>नक्षत्र:</strong>
+            <strong
+              className={`!text-[1.2rem] ${
+                theme === "light" ? "text-white" : "text-black"
+              }`}
+            >
+              नक्षत्र:
+            </strong>
             <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
               {data?.length > 0 ? data?.[0].Nakshatra : ""}
             </span>
@@ -637,19 +727,37 @@ const NoAdClock = () => {
 
           {/* Row 2 */}
           <div className="py-1 flex flex-col">
-            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>दिनकरण:</strong>
+            <strong
+              className={`!text-[1.2rem] ${
+                theme === "light" ? "text-white" : "text-black"
+              }`}
+            >
+              दिनकरण:
+            </strong>
             <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
               {data?.length > 0 ? data?.[0].DivaKaran : ""}
             </span>
           </div>
           <div className="py-1 flex flex-col">
-            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>रात्रीकरण:</strong>
+            <strong
+              className={`!text-[1.2rem] ${
+                theme === "light" ? "text-white" : "text-black"
+              }`}
+            >
+              रात्रीकरण:
+            </strong>
             <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
               {data?.length > 0 ? data?.[0].RatriKaran : ""}
             </span>
           </div>
           <div className="py-1 flex flex-col">
-            <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>योग:</strong>
+            <strong
+              className={`!text-[1.2rem] ${
+                theme === "light" ? "text-white" : "text-black"
+              }`}
+            >
+              योग:
+            </strong>
             <span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
               {data?.length > 0 ? data?.[0].Yog : ""}
             </span>
@@ -658,10 +766,18 @@ const NoAdClock = () => {
           {/* Row 3 (full width) */}
           <div className="col-span-3 text-left !text-[1.3rem]">
             <div className="py-1 flex gap-1">
-              <strong className={`!text-[1.2rem] ${theme == "light" ? "text-white" : "text-black"}`}>दिनविशेष:</strong>
+              <strong
+                className={`!text-[1.2rem] ${
+                  theme === "light" ? "text-white" : "text-black"
+                }`}
+              >
+                दिनविशेष:
+              </strong>
               {
                 // data?.[0]?.Dinvishesh ?
-                < span className={`${styles.tithivalue} !text-[1.2rem] font-bold`}>
+                <span
+                  className={`${styles.tithivalue} !text-[1.2rem] font-bold`}
+                >
                   {data?.[0]?.Dinvishesh}
                 </span>
                 //  : ""
@@ -670,12 +786,13 @@ const NoAdClock = () => {
           </div>
         </div>
 
-
         {/* ind ved greg time section  */}
 
         <div className="flex mt-2 justify-between items-center w-[100%] mx-auto gap-2">
           {/* Table */}
-          <table className={`${styles.table} ${styles.indvedgreg} table-bordered table-striped table-hover w-full max-h-[80px]`}>
+          <table
+            className={`${styles.table} ${styles.indvedgreg} table-bordered table-striped table-hover w-full max-h-[80px]`}
+          >
             <tbody>
               {selectedDates.map((key) => (
                 <tr key={key} style={{ height: "30px" }}>
@@ -702,17 +819,14 @@ const NoAdClock = () => {
           </div>
         </div>
 
-
         {/* Notification */}
         <div className="container-fluid notification  border border-success  bg-success mt-2">
-          {error && <p style={{ color: "red" }}>Error: {error}</p>}
+          {/* {error && <p style={{ color: "red" }}>Error: {error}</p>} */}
           <p className="text-white w-full text-center">
             {notify?.Marathi_text}
           </p>
         </div>
-
-
-      </div >
+      </div>
     </>
   );
 };

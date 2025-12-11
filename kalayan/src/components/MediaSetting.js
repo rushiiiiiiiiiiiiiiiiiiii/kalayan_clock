@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaUpload, FaCalendarAlt, FaPlayCircle } from "react-icons/fa";
+import {  FaCalendarAlt, FaPlayCircle } from "react-icons/fa";
 
 export default function MediaSettingsCard() {
   return (

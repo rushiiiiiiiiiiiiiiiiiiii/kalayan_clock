@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { API_ENDPOINTS } from "../../config";
 
 const NotificationForm = () => {
@@ -12,10 +12,15 @@ const NotificationForm = () => {
   const fetchHistory = async () => {
     setFetchingHistory(true);
     try {
-      const response = await fetch(API_ENDPOINTS.GET_NOTIFICATIONS);
+      const response = await fetch(API_ENDPOINTS.FETCH_STORE_NOTIFICATION, {
+        credentials: "include",
+      });
+      // console.log(response.data)
+
       const data = await response.json();
+      console.log(data)
       if (response.ok) {
-        setHistory(data.notifications || []);
+        setHistory(data || []);
       } else {
         console.error("Failed to fetch history:", data.message);
       }
@@ -36,8 +41,9 @@ const NotificationForm = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(API_ENDPOINTS.STORE_NOTIFICATION, {
+      const response = await fetch(API_ENDPOINTS.ADD_STORE_NOTIFICATION, {
         method: "POST",
+        credentials: "include", // 🔥 REQUIRED for JWT cookie
         headers: {
           "Content-Type": "application/json",
         },
@@ -45,17 +51,19 @@ const NotificationForm = () => {
       });
 
       const data = await response.json();
+
       if (response.ok) {
         setMessage("✅ Notification sent successfully!");
-        fetchHistory(); // Refresh history
+        fetchHistory();
       } else {
         setMessage(data.message || "❌ Failed to send notification.");
       }
     } catch (error) {
       setMessage("⚠️ Error sending notification. Please try again.");
+      console.log(error)
     } finally {
       setLoading(false);
-      setText(""); // Clear input
+      setText("");
     }
   };
 
@@ -63,11 +71,15 @@ const NotificationForm = () => {
     <div className="flex flex-col items-center justify-center min-h-screen w-screen bg-gray-100 p-6">
       {/* Notification Form */}
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg mb-8">
-        <h2 className="text-3xl font-semibold text-center mb-6">Notification Form</h2>
+        <h2 className="text-3xl font-semibold text-center mb-6">
+          Notification Form
+        </h2>
         {message && (
           <p
             className={`text-center mb-4 ${
-              message.includes("successfully") ? "text-green-500" : "text-red-500"
+              message.includes("successfully")
+                ? "text-green-500"
+                : "text-red-500"
             }`}
           >
             {message}
@@ -75,7 +87,9 @@ const NotificationForm = () => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium">Add Notification</label>
+            <label className="block text-sm font-medium">
+              Add Notification
+            </label>
             <input
               type="text"
               value={text}
@@ -87,7 +101,9 @@ const NotificationForm = () => {
           <button
             type="submit"
             className={`w-full py-3 text-white text-lg rounded-lg transition duration-300 ease-in-out ${
-              loading ? "bg-gray-900 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+              loading
+                ? "bg-gray-900 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
             }`}
             disabled={loading}
           >
@@ -98,16 +114,23 @@ const NotificationForm = () => {
 
       {/* Notification History */}
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold text-center mb-4">Notification History</h2>
+        <h2 className="text-2xl font-semibold text-center mb-4">
+          Notification History
+        </h2>
         {fetchingHistory ? (
           <p className="text-center text-gray-500">Loading history...</p>
         ) : history.length === 0 ? (
-          <p className="text-center text-gray-500">No notifications sent yet.</p>
+          <p className="text-center text-gray-500">
+            No notifications sent yet.
+          </p>
         ) : (
           <ul className="max-h-64 overflow-y-auto border rounded-lg p-4 bg-gray-50">
             {history.map((item, index) => (
               <li key={index} className="p-2 border-b last:border-none">
-                📢 {item.text} <span className="text-gray-500 text-sm">({item.timestamp})</span>
+                📢 {item.text}{" "}
+                {/* <span className="text-gray-500 text-sm">
+                  ({item.timestamp})
+                </span> */}
               </li>
             ))}
           </ul>

@@ -1,33 +1,33 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { BASE_URL } from "../../config";
 
-const translations = {
-  en: {
-    title: "Upload CSV/TSV File",
-    upload: "Upload",
-    selectFile: "Please select a CSV/TSV file first.",
-    success: "✅ Upload successful!",
-    fail: "❌ Upload failed.",
-    error: "⚠️ Error uploading data.",
-  },
-  hi: {
-    title: "CSV/TSV फ़ाइल अपलोड करें",
-    upload: "अपलोड करें",
-    selectFile: "कृपया पहले एक CSV/TSV फ़ाइल चुनें।",
-    success: "✅ सफलतापूर्वक अपलोड किया गया!",
-    fail: "❌ अपलोड विफल रहा।",
-    error: "⚠️ डेटा अपलोड करने में त्रुटि।",
-  },
-  mr: {
-    title: "CSV/TSV फाइल अपलोड करा",
-    upload: "अपलोड करा",
-    selectFile: "कृपया प्रथम CSV/TSV फाइल निवडा.",
-    success: "✅ यशस्वीरित्या अपलोड झाले!",
-    fail: "❌ अपलोड अयशस्वी.",
-    error: "⚠️ डेटा अपलोड करताना त्रुटी.",
-  },
-};
+// const translations = {
+//   en: {
+//     title: "Upload CSV/TSV File",
+//     upload: "Upload",
+//     selectFile: "Please select a CSV/TSV file first.",
+//     success: "✅ Upload successful!",
+//     fail: "❌ Upload failed.",
+//     error: "⚠️ Error uploading data.",
+//   },
+//   hi: {
+//     title: "CSV/TSV फ़ाइल अपलोड करें",
+//     upload: "अपलोड करें",
+//     selectFile: "कृपया पहले एक CSV/TSV फ़ाइल चुनें।",
+//     success: "✅ सफलतापूर्वक अपलोड किया गया!",
+//     fail: "❌ अपलोड विफल रहा।",
+//     error: "⚠️ डेटा अपलोड करने में त्रुटि।",
+//   },
+//   mr: {
+//     title: "CSV/TSV फाइल अपलोड करा",
+//     upload: "अपलोड करा",
+//     selectFile: "कृपया प्रथम CSV/TSV फाइल निवडा.",
+//     success: "✅ यशस्वीरित्या अपलोड झाले!",
+//     fail: "❌ अपलोड अयशस्वी.",
+//     error: "⚠️ डेटा अपलोड करताना त्रुटी.",
+//   },
+// };
 
 const UploadPlanet = () => {
   const [csvData, setCsvData] = useState([]);
@@ -77,6 +77,7 @@ const UploadPlanet = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(csvData ),
+        credentials:"include"
       });
 
       if (response.ok) {

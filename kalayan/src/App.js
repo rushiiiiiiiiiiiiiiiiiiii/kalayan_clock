@@ -18,7 +18,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // null = loading
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_KEY + "tv-check-auth", {
+    fetch(process.env.REACT_APP_API_KEY + "/tv-check-auth", {
       credentials: "include"   // ✅ SEND COOKIE
     })
       .then(res => res.json())

@@ -3,7 +3,8 @@ const conn=mysql.createConnection({
     host:"localhost",
     user:"root",
     password:"",
-    database:"Kalyan"
+    database:"Kalyan",
+    charset: "utf8mb4"
 })
 conn.connect(function (err){
     if(err){

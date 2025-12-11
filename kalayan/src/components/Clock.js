@@ -128,39 +128,39 @@ const NoAdClock = () => {
       setdata(datas);
     }, 3000);
   }, []);
-  const Notification = useCallback(async () => {
-    try {
-      const response = await fetch(apiKey + "Get_notification", {
-        credentials: "include",
-      });
-      const result = await response.json();
-      // setnotify(result[0]);
+    const Notification = useCallback(async () => {
+      try {
+        const response = await fetch(apiKey + "/Get_notification", {
+          credentials: "include",
+        });
+        const result = await response.json();
+        // setnotify(result[0]);
 
-      // Store in localStorage
-      localStorage.setItem("notification", JSON.stringify(result[0]));
-      const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        // Store in localStorage
+        localStorage.setItem("notification", JSON.stringify(result[0]));
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-      const storedNotification = JSON.parse(
-        localStorage.getItem("notification")
-      );
-      const [startHour, startMinute] =
-        storedNotification.Start_time.split(":").map(Number);
-      const [endHour, endMinute] =
-        storedNotification.End_Time.split(":").map(Number);
+        const storedNotification = JSON.parse(
+          localStorage.getItem("notification")
+        );
+        const [startHour, startMinute] =
+          storedNotification.Start_time.split(":").map(Number);
+        const [endHour, endMinute] =
+          storedNotification.End_Time.split(":").map(Number);
 
-      const startMinutes = startHour * 60 + startMinute;
-      const endMinutes = endHour * 60 + endMinute;
+        const startMinutes = startHour * 60 + startMinute;
+        const endMinutes = endHour * 60 + endMinute;
 
-      if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
-        console.log("notify");
-        setnotify(storedNotification);
-        console.log(storedNotification);
+        if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
+          console.log("notify");
+          setnotify(storedNotification);
+          console.log(storedNotification);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [apiKey]);
+    }, [apiKey]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {

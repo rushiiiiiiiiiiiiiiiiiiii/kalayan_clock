@@ -1,99 +1,138 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { API_ENDPOINTS, BASE_URL } from "../../config";
 
 const SendNotification = () => {
-  let url = "http://192.168.0.117:5100";
   const [notificationData, setNotificationData] = useState({
     Marathi_text: "",
-    Start_time: "", // Start time
-    End_time: "",   // End time
+    Start_time: "",
+    End_time: "",
   });
+
   const [TV_id, settvid] = useState();
   const [showForm, setShowForm] = useState(false);
   const [clockData, setClockData] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
 
-  const notificationOptions = ["Message 1", "Message 2", "Message 3"];
+  const fetchHistory = async () => {
+    // setFetchingHistory(true);
+    try {
+      const response = await fetch(API_ENDPOINTS.FETCH_STORE_NOTIFICATION, {
+        credentials: "include",
+      });
+      // console.log(response.data)
 
-  // 🔁 Fetch clock data from API
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        setHistory(data || []);
+      } else {
+        console.error("Failed to fetch history:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching history:", error);
+    } finally {
+      setFetchingHistory(false);
+    }
+  };
+  console.log(history);
   useEffect(() => {
-    fetch(url + "/api/clocks") // Replace with your actual endpoint
-      .then((res) => res.json())
-      .then((data) => setClockData(data))
-      .catch((error) => console.error("Error fetching clock data:", error));
+    fetchHistory();
   }, []);
-
+  // Fetch notifications
+  useEffect(() => {
+    fetch(API_ENDPOINTS.FETCH_ALL_TV, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setClockData(data);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
   const handleChange = (e) => {
-    setNotificationData({
-      ...notificationData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setNotificationData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Filter suggestions from history
+    if (name === "Marathi_text") {
+      const filtered = history.filter((item) =>
+        item.text.toLowerCase().includes(value.toLowerCase())
+      );
+      setSuggestions(filtered);
+    }
   };
 
-  const handleNotifyClick = (a) => {
-    settvid(a);
+  // // Fetch all TVs
+  // const alldata = async () => {
+  //   try {
+  //     const response = await fetch(BASE_URL + "/All_tv", {
+  //       credentials: "include",
+  //     });
+
+  //     const result = await response.json();
+  //     if (Array.isArray(result)) setClockData(result);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   alldata();
+  // }, []);
+  const handleNotifyClick = (Tv_id) => {
+    settvid(Tv_id);
     setShowForm(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    console.log("Sending to TV:", TV_id); // <-- debug
     try {
-      const send = await fetch(url + "/send_notification", {
-        method: "post",
+      await fetch(BASE_URL + "/send_notification", {
+        method: "POST",
+        credentials: "include",
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({TV_id,...notificationData}),
+        body: JSON.stringify({ TV_id, ...notificationData }),
       });
     } catch (error) {
       console.log(error);
     }
   };
-
-  const alldata = async () => {
-    try {
-      const response = await fetch(url + "/all_tv");
-      const result = await response.json();
-      setClockData(result);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    alldata();
-  }, []);
-
   return (
     <div className="min-h-screen flex flex-col items-center w-full px-6 py-10">
       <div className="w-full max-w-none mx-auto">
         {/* Clock Table */}
         <div className="w-full mx-auto p-10 bg-white rounded-lg shadow-2xl">
-          <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">List of Clocks</h2>
+          <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
+            List of Clocks
+          </h2>
           <table className="w-full border-collapse border border-gray-400 rounded-md text-lg table-fixed">
             <thead>
               <tr className="bg-indigo-500 text-white">
-                <th className="border p-4">TVID</th>
-                <th className="border p-4">Name</th>
+                <th className="border p-4">TV_ID</th>
+                <th className="border p-4">Tv Name</th>
                 <th className="border p-4">Location</th>
-                <th className="border p-4">Latitude</th>
-                <th className="border p-4">Longitude</th>
-                <th className="border p-4">Language</th>
                 <th className="border p-4">Status</th>
-                <th className="border p-4">Subscription</th>
                 <th className="border p-4">Action</th>
               </tr>
             </thead>
             <tbody>
-              {clockData.map((clock, index) => (
-                <tr key={index} className="text-center hover:bg-indigo-100 transition">
-                  <td className="border p-4 font-semibold">{clock.TVID}</td>
-                  <td className="border p-4">{clock.Name}</td>
-                  <td className="border p-4">{clock.Location}</td>
-                  <td className="border p-4">{clock.Latitude}</td>
-                  <td className="border p-4">{clock.Longitude}</td>
-                  <td className="border p-4">{clock.Language}</td>
-                  <td className="border p-4">{clock.Status}</td>
-                  <td className="border p-4">{clock.Subscription}</td>
+              {clockData?.map((clock, index) => (
+                <tr
+                  key={index}
+                  className="text-center hover:bg-indigo-100 transition"
+                >
+                  <td className="border p-4 font-semibold">{clock?.Tv_id}</td>
+                  <td className="border p-4">{clock?.Name}</td>
+                  <td className="border p-4">{clock?.Location}</td>
+                  <td className="border p-4">{clock?.Status}</td>
                   <td className="border p-4">
                     <button
                       onClick={() => handleNotifyClick(clock.Tv_id)}
@@ -111,21 +150,63 @@ const SendNotification = () => {
         {/* Notification Form */}
         {showForm && (
           <div className="w-full max-w-3xl mt-12 p-10 bg-white rounded-lg shadow-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">Send Notification</h2>
+            <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
+              Send Notification
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="text-gray-700 font-semibold text-lg mb-2 block">Notification</label>
-                <input
-                  name="Marathi_text"
-                  value={notificationData.Marathi_text}
-                  onChange={handleChange}
-                  className="w-full p-4 border border-gray-400 rounded-lg text-lg"
-                />
+                <label className="text-gray-700 font-semibold text-lg mb-2 block">
+                  Notification
+                </label>
+                <div className="relative w-full">
+                  <input
+                    name="Marathi_text"
+                    value={notificationData.Marathi_text}
+                    onChange={handleChange}
+                    className="w-full p-4 border border-gray-300 rounded-xl text-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    placeholder="Type notification..."
+                  />
+
+                  {suggestions.length > 0 && (
+                    <ul
+                      className="
+        absolute w-full mt-1 bg-white 
+        border border-gray-200 rounded-xl 
+        shadow-lg z-20
+        max-h-48 overflow-y-auto 
+        animate-fadeIn
+      "
+                    >
+                      {suggestions.map((item) => (
+                        <li
+                          key={item.id}
+                          onClick={() => {
+                            setNotificationData((prev) => ({
+                              ...prev,
+                              Marathi_text: item.text,
+                            }));
+                            setSuggestions([]);
+                          }}
+                          className="
+            px-4 py-3 cursor-pointer 
+            text-gray-700 text-[17px]
+            hover:bg-indigo-50 hover:text-indigo-600 
+            transition-all
+          "
+                        >
+                          {item.text}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
 
               {/* Start Time */}
               <div>
-                <label className="text-gray-700 font-semibold text-lg mb-2 block">Start Time</label>
+                <label className="text-gray-700 font-semibold text-lg mb-2 block">
+                  Start Time
+                </label>
                 <input
                   type="time"
                   name="Start_time"
@@ -137,7 +218,9 @@ const SendNotification = () => {
 
               {/* End Time */}
               <div>
-                <label className="text-gray-700 font-semibold text-lg mb-2 block">End Time</label>
+                <label className="text-gray-700 font-semibold text-lg mb-2 block">
+                  End Time
+                </label>
                 <input
                   type="time"
                   name="End_time"
@@ -155,7 +238,9 @@ const SendNotification = () => {
                   onChange={handleChange}
                   className="w-6 h-6 text-indigo-600"
                 />
-                <label className="ml-3 text-gray-700 font-semibold text-lg">Send to All Clocks</label>
+                <label className="ml-3 text-gray-700 font-semibold text-lg">
+                  Send to All Clocks
+                </label>
               </div>
 
               <div className="flex justify-between">

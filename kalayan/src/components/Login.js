@@ -12,7 +12,7 @@ const handleLogin = async (e) => {
   e.preventDefault();
 
   try {
-    const response = await fetch(process.env.REACT_APP_API_KEY + "Tv_login", {
+    const response = await fetch(process.env.REACT_APP_API_KEY + "/Tv_login", {
       method: "POST",
       credentials: "include", // ✅ IMPORTANT for cookies
       headers: {
@@ -24,7 +24,8 @@ const handleLogin = async (e) => {
     const result = await response.json();
 
     if (response.ok) {
-      window.location.reload("/");   // ✅ Cookie already set by backend
+      window.location.href = "/";
+   // ✅ Cookie already set by backend
     } else {
       alert(result.message || "Login failed");
     }

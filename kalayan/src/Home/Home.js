@@ -8,7 +8,7 @@ const Home = () => {
 
   const status = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}status`, {
+      const response = await fetch(process.env.REACT_APP_API_KEY + "/status", {
         method: "GET",
         credentials: "include", // SEND COOKIE TOKEN
       });
